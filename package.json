@@ -5,6 +5,8 @@
   "description": "A futuristic, customizable developer portfolio powered by Express and SQLite.",
   "main": "server.js",
   "scripts": {
+    "build": "node scripts/copy-three.js",
+    "postinstall": "node scripts/copy-three.js",
     "start": "node server.js",
     "test": "node --test"
   },
@@ -13,6 +15,7 @@
     "npm": ">=10"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
     "better-sqlite3": "^12.2.0",
     "express": "^5.1.0",
     "three": "^0.186.1"

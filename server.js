@@ -12,8 +12,8 @@ if (!Number.isInteger(port) || port < 0 || port > 65535) {
 
 app.disable("x-powered-by");
 
-app.get("/api/projects", (_request, response) => {
-  response.json(getProjects());
+app.get("/api/projects", async (_request, response) => {
+  response.json(await getProjects());
 });
 
 app.use("/api", (_request, response) => {
@@ -55,8 +55,12 @@ const server = app.listen(port, () => {
 
 function shutDown() {
   server.close(() => {
-    closeDatabase();
-    process.exit(0);
+    closeDatabase()
+      .then(() => process.exit(0))
+      .catch((error) => {
+        console.error("Failed to close the project database cleanly.", error);
+        process.exitCode = 1;
+      });
   });
 }
 

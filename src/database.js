@@ -1,17 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const Database = require("better-sqlite3");
-
-const dataDirectory = path.join(__dirname, "..", "data");
-fs.mkdirSync(dataDirectory, { recursive: true });
-
-const databasePath = process.env.PORTFOLIO_DB_PATH ||
-  path.join(dataDirectory, "portfolio.sqlite");
-fs.mkdirSync(path.dirname(databasePath), { recursive: true });
-const database = new Database(databasePath);
-database.pragma("journal_mode = WAL");
-
-database.exec(`
+const projectSchema = `
   CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY,
     slug TEXT NOT NULL UNIQUE,
@@ -21,8 +10,8 @@ database.exec(`
     description TEXT NOT NULL,
     accent TEXT NOT NULL,
     sort_order INTEGER NOT NULL DEFAULT 0
-  );
-`);
+  )
+`;
 
 const starterProjects = [
   {
@@ -63,28 +52,97 @@ const starterProjects = [
   },
 ];
 
-const insertProject = database.prepare(`
-  INSERT OR IGNORE INTO projects (slug, title, category, year, description, accent, sort_order)
-  VALUES (@slug, @title, @category, @year, @description, @accent, @sort_order)
-`);
-
-const seedProjects = database.transaction((projects) => {
-  for (const project of projects) insertProject.run(project);
-});
-seedProjects(starterProjects);
-
-const selectProjects = database.prepare(`
+const selectProjectsSql = `
   SELECT slug, title, category, year, description, accent
   FROM projects
   ORDER BY sort_order, id
-`);
+`;
 
-function getProjects() {
-  return selectProjects.all();
+const databaseUrl = process.env.TURSO_DATABASE_URL;
+const authToken = process.env.TURSO_AUTH_TOKEN;
+const hasDatabaseUrl = Boolean(databaseUrl);
+const hasAuthToken = Boolean(authToken);
+
+if (hasDatabaseUrl !== hasAuthToken) {
+  throw new Error("Set both TURSO_DATABASE_URL and TURSO_AUTH_TOKEN, or neither.");
+}
+if (process.env.VERCEL && !hasDatabaseUrl) {
+  throw new Error("Vercel deployments require TURSO_DATABASE_URL and TURSO_AUTH_TOKEN.");
 }
 
-function closeDatabase() {
-  database.close();
+let localDatabase;
+let cloudDatabase;
+let initialization = Promise.resolve();
+
+if (hasDatabaseUrl) {
+  const { createClient } = require("@libsql/client");
+  cloudDatabase = createClient({ url: databaseUrl, authToken });
+  initialization = cloudDatabase.batch(
+    [
+      projectSchema,
+      ...starterProjects.map((project) => ({
+        sql: `
+          INSERT OR IGNORE INTO projects
+            (slug, title, category, year, description, accent, sort_order)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `,
+        args: [
+          project.slug,
+          project.title,
+          project.category,
+          project.year,
+          project.description,
+          project.accent,
+          project.sort_order,
+        ],
+      })),
+    ],
+    "write",
+  );
+} else {
+  const Database = require("better-sqlite3");
+  const dataDirectory = path.join(__dirname, "..", "data");
+  fs.mkdirSync(dataDirectory, { recursive: true });
+
+  const databasePath = process.env.PORTFOLIO_DB_PATH ||
+    path.join(dataDirectory, "portfolio.sqlite");
+  fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+  localDatabase = new Database(databasePath);
+  localDatabase.pragma("journal_mode = WAL");
+  localDatabase.exec(projectSchema);
+
+  const insertProject = localDatabase.prepare(`
+    INSERT OR IGNORE INTO projects (slug, title, category, year, description, accent, sort_order)
+    VALUES (@slug, @title, @category, @year, @description, @accent, @sort_order)
+  `);
+  const seedProjects = localDatabase.transaction((projects) => {
+    for (const project of projects) insertProject.run(project);
+  });
+  seedProjects(starterProjects);
+}
+
+async function getProjects() {
+  await initialization;
+  if (cloudDatabase) {
+    const result = await cloudDatabase.execute(selectProjectsSql);
+    return result.rows.map((row) => ({
+      slug: row.slug,
+      title: row.title,
+      category: row.category,
+      year: row.year,
+      description: row.description,
+      accent: row.accent,
+    }));
+  }
+  return localDatabase.prepare(selectProjectsSql).all();
+}
+
+async function closeDatabase() {
+  if (cloudDatabase) {
+    cloudDatabase.close();
+    return;
+  }
+  localDatabase.close();
 }
 
 module.exports = { closeDatabase, getProjects };

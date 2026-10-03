@@ -11,7 +11,7 @@ A responsive portfolio with a cinematic cosmic backdrop, a replaceable character
 
 The first start creates `data/portfolio.sqlite` and adds four editable example projects, including this portfolio. The contact form is currently a front-end-only visual preview; it does not accept, email, or store submissions. Set `PORT` to change the web server port, or `PORTFOLIO_DB_PATH` to choose another SQLite file.
 
-Run `npm test` to check homepage content and in-page links, static assets and missing-asset responses, the replaceable portrait, projects API, and that the contact form is non-functional.
+The Three.js browser module is copied into the public asset directory after dependency installation; run `npm run build` to copy it again if needed. Run `npm test` to check homepage content and in-page links, static assets and missing-asset responses, the replaceable portrait, projects API, and that the contact form is non-functional.
 
 ## Deploying to a server
 
@@ -19,6 +19,16 @@ Run `npm test` to check homepage content and in-page links, static assets and mi
 - Run one application instance when using SQLite. Mount a persistent, writable disk and set `PORTFOLIO_DB_PATH` to a file on that disk (for example, `/var/lib/kunal-portfolio/portfolio.sqlite`). The parent directory is created at startup.
 - Do not store the production database on an ephemeral filesystem or a network/shared volume. Use SQLite's online backup API for live backups; for offline backups, stop the application cleanly before copying the database.
 - Keep `package-lock.json` and install with `npm ci` for reproducible dependency installation.
+
+### Deploying to Vercel
+
+Vercel runs Express as a serverless function and does not provide a persistent local SQLite file. This project uses Turso/libSQL (SQLite-compatible) for its hosted projects database and retains `better-sqlite3` for local development.
+
+1. Create a Turso database and an auth token.
+2. In the Vercel project's **Settings → Environment Variables**, set `TURSO_DATABASE_URL` to the database URL and `TURSO_AUTH_TOKEN` to the token for Production and Preview. Do not commit these values or paste the token into source files.
+3. Set the Vercel project root to the repository root and the install command to `npm ci`. `vercel.json` sets the build command to `npm run build`, which copies Three.js into `public/` for Vercel's static asset hosting. Do not set the output directory to the repository root; the Express entry point is `server.js`.
+
+On first request, the app creates the projects table and seeds the four starter projects in Turso. If the two Turso environment variables are missing or invalid, the API returns an error instead of silently using temporary storage.
 
 ## Portfolio profile
 

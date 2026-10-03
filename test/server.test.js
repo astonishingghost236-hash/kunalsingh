@@ -1,5 +1,5 @@
 const assert = require("node:assert/strict");
-const { spawn } = require("node:child_process");
+const { spawn, spawnSync } = require("node:child_process");
 const { once } = require("node:events");
 const fs = require("node:fs");
 const os = require("node:os");
@@ -14,6 +14,9 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
       ...process.env,
       PORT: "0",
       PORTFOLIO_DB_PATH: databasePath,
+      TURSO_DATABASE_URL: "",
+      TURSO_AUTH_TOKEN: "",
+      VERCEL: "",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -162,4 +165,24 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(projectScript, /card\.href = "\/"/);
   assert.match(projectScript, /card\.target = "_blank"/);
 
+});
+
+test("requires persistent Turso credentials when deployed to Vercel", () => {
+  const result = spawnSync(
+    process.execPath,
+    ["-e", "require('./src/database')"],
+    {
+      cwd: path.join(__dirname, ".."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        VERCEL: "1",
+        TURSO_DATABASE_URL: "",
+        TURSO_AUTH_TOKEN: "",
+      },
+    },
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Vercel deployments require TURSO_DATABASE_URL and TURSO_AUTH_TOKEN/);
 });
