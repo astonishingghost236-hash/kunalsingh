@@ -1,6 +1,6 @@
 # Kunal Singh — developer portfolio
 
-A responsive portfolio with a cinematic cosmic backdrop, a replaceable character portrait, a Node.js/Express server, and persistent SQLite project data. The frontend uses vanilla HTML, CSS, and JavaScript modules; no React is used.
+A responsive portfolio with a cinematic cosmic backdrop, a replaceable character portrait, a Node.js/Express server, and SQLite-compatible project data. The frontend uses vanilla HTML, CSS, and JavaScript modules; no React is used.
 
 ## Start the site
 
@@ -22,7 +22,7 @@ The Three.js browser module is copied into the public asset directory after depe
 
 ### Deploying to Vercel
 
-Vercel runs Express as a serverless function and does not provide a persistent local SQLite file. The Express app is exported for Vercel Functions; it does not open a standalone server in the function. Local development continues to use `better-sqlite3`.
+Vercel runs Express as a serverless function and does not provide a persistent local SQLite file. The Express app is exported for Vercel Functions; it does not open a standalone server in the function. `@libsql/client` accesses the local SQLite file in development and Turso/libSQL remotely when configured, avoiding native SQLite build scripts.
 
 1. Set the Vercel project root to the repository root and the install command to `npm ci`. `vercel.json` sets the build command to `npm run build`, which copies Three.js into `public/` for Vercel's static asset hosting. Do not set the output directory to the repository root; the Express entry point is `server.js`.
 2. For a persistent hosted projects database, create a Turso database and auth token, then set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in the Vercel project's environment variables. Never commit these values.

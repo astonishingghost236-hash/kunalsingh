@@ -1,5 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const { pathToFileURL } = require("node:url");
+const { createClient } = require("@libsql/client");
 const projectSchema = `
   CREATE TABLE IF NOT EXISTS projects (
     id INTEGER PRIMARY KEY,
@@ -66,15 +68,29 @@ const hasAuthToken = Boolean(authToken);
 if (hasDatabaseUrl !== hasAuthToken) {
   throw new Error("Set both TURSO_DATABASE_URL and TURSO_AUTH_TOKEN, or neither.");
 }
-let localDatabase;
-let cloudDatabase;
+let databaseClient;
 let useStarterProjects = false;
 let initialization = Promise.resolve();
 
 if (hasDatabaseUrl) {
-  const { createClient } = require("@libsql/client");
-  cloudDatabase = createClient({ url: databaseUrl, authToken });
-  initialization = cloudDatabase.batch(
+  databaseClient = createClient({ url: databaseUrl, authToken });
+} else if (process.env.VERCEL) {
+  useStarterProjects = true;
+  console.warn(
+    "Turso is not configured. Vercel is serving the built-in read-only project list.",
+  );
+} else {
+  const dataDirectory = path.join(__dirname, "..", "data");
+  fs.mkdirSync(dataDirectory, { recursive: true });
+
+  const databasePath = process.env.PORTFOLIO_DB_PATH ||
+    path.join(dataDirectory, "portfolio.sqlite");
+  fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+  databaseClient = createClient({ url: pathToFileURL(databasePath).href });
+}
+
+if (databaseClient) {
+  initialization = databaseClient.batch(
     [
       projectSchema,
       ...starterProjects.map((project) => ({
@@ -96,37 +112,12 @@ if (hasDatabaseUrl) {
     ],
     "write",
   );
-} else if (process.env.VERCEL) {
-  useStarterProjects = true;
-  console.warn(
-    "Turso is not configured. Vercel is serving the built-in read-only project list.",
-  );
-} else {
-  const Database = require("better-sqlite3");
-  const dataDirectory = path.join(__dirname, "..", "data");
-  fs.mkdirSync(dataDirectory, { recursive: true });
-
-  const databasePath = process.env.PORTFOLIO_DB_PATH ||
-    path.join(dataDirectory, "portfolio.sqlite");
-  fs.mkdirSync(path.dirname(databasePath), { recursive: true });
-  localDatabase = new Database(databasePath);
-  localDatabase.pragma("journal_mode = WAL");
-  localDatabase.exec(projectSchema);
-
-  const insertProject = localDatabase.prepare(`
-    INSERT OR IGNORE INTO projects (slug, title, category, year, description, accent, sort_order)
-    VALUES (@slug, @title, @category, @year, @description, @accent, @sort_order)
-  `);
-  const seedProjects = localDatabase.transaction((projects) => {
-    for (const project of projects) insertProject.run(project);
-  });
-  seedProjects(starterProjects);
 }
 
 async function getProjects() {
   await initialization;
-  if (cloudDatabase) {
-    const result = await cloudDatabase.execute(selectProjectsSql);
+  if (databaseClient) {
+    const result = await databaseClient.execute(selectProjectsSql);
     return result.rows.map((row) => ({
       slug: row.slug,
       title: row.title,
@@ -139,15 +130,11 @@ async function getProjects() {
   if (useStarterProjects) {
     return starterProjects.map(({ sort_order: _sortOrder, ...project }) => project);
   }
-  return localDatabase.prepare(selectProjectsSql).all();
+  throw new Error("Project database is not configured.");
 }
 
 async function closeDatabase() {
-  if (cloudDatabase) {
-    cloudDatabase.close();
-    return;
-  }
-  if (localDatabase) localDatabase.close();
+  if (databaseClient) databaseClient.close();
 }
 
 module.exports = { closeDatabase, getProjects };
