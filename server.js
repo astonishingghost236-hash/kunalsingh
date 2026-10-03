@@ -49,20 +49,26 @@ app.use((error, _request, response, _next) => {
   response.status(status).json({ error: message });
 });
 
-const server = app.listen(port, () => {
-  console.log(`Portfolio available at http://localhost:${server.address().port}`);
-});
-
-function shutDown() {
-  server.close(() => {
-    closeDatabase()
-      .then(() => process.exit(0))
-      .catch((error) => {
-        console.error("Failed to close the project database cleanly.", error);
-        process.exitCode = 1;
-      });
+if (require.main === module && !process.env.VERCEL) {
+  const server = app.listen(port, () => {
+    const address = server.address();
+    const listeningPort = typeof address === "object" && address ? address.port : port;
+    console.log(`Portfolio available at http://localhost:${listeningPort}`);
   });
+
+  function shutDown() {
+    server.close(() => {
+      closeDatabase()
+        .then(() => process.exit(0))
+        .catch((error) => {
+          console.error("Failed to close the project database cleanly.", error);
+          process.exitCode = 1;
+        });
+    });
+  }
+
+  process.on("SIGINT", shutDown);
+  process.on("SIGTERM", shutDown);
 }
 
-process.on("SIGINT", shutDown);
-process.on("SIGTERM", shutDown);
+module.exports = app;

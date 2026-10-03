@@ -66,12 +66,9 @@ const hasAuthToken = Boolean(authToken);
 if (hasDatabaseUrl !== hasAuthToken) {
   throw new Error("Set both TURSO_DATABASE_URL and TURSO_AUTH_TOKEN, or neither.");
 }
-if (process.env.VERCEL && !hasDatabaseUrl) {
-  throw new Error("Vercel deployments require TURSO_DATABASE_URL and TURSO_AUTH_TOKEN.");
-}
-
 let localDatabase;
 let cloudDatabase;
+let useStarterProjects = false;
 let initialization = Promise.resolve();
 
 if (hasDatabaseUrl) {
@@ -98,6 +95,11 @@ if (hasDatabaseUrl) {
       })),
     ],
     "write",
+  );
+} else if (process.env.VERCEL) {
+  useStarterProjects = true;
+  console.warn(
+    "Turso is not configured. Vercel is serving the built-in read-only project list.",
   );
 } else {
   const Database = require("better-sqlite3");
@@ -134,6 +136,9 @@ async function getProjects() {
       accent: row.accent,
     }));
   }
+  if (useStarterProjects) {
+    return starterProjects.map(({ sort_order: _sortOrder, ...project }) => project);
+  }
   return localDatabase.prepare(selectProjectsSql).all();
 }
 
@@ -142,7 +147,7 @@ async function closeDatabase() {
     cloudDatabase.close();
     return;
   }
-  localDatabase.close();
+  if (localDatabase) localDatabase.close();
 }
 
 module.exports = { closeDatabase, getProjects };

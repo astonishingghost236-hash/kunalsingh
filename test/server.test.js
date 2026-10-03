@@ -167,10 +167,13 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
 
 });
 
-test("requires persistent Turso credentials when deployed to Vercel", () => {
+test("exports a working Vercel app without Turso credentials", () => {
   const result = spawnSync(
     process.execPath,
-    ["-e", "require('./src/database')"],
+    [
+      "-e",
+      "(async () => { const app = require('./server'); const server = app.listen(0, async () => { try { const base = `http://127.0.0.1:${server.address().port}`; const home = await fetch(base); const projectsResponse = await fetch(`${base}/api/projects`); const projects = await projectsResponse.json(); if (home.status !== 200 || !(await home.text()).includes('Kunal Singh')) throw new Error('Vercel homepage failed'); if (projectsResponse.status !== 200 || projects.length !== 4) throw new Error('Vercel project API failed'); server.close(); } catch (error) { console.error(error); server.close(() => process.exitCode = 1); } }); })().catch(error => { console.error(error); process.exitCode = 1; })",
+    ],
     {
       cwd: path.join(__dirname, ".."),
       encoding: "utf8",
@@ -183,6 +186,6 @@ test("requires persistent Turso credentials when deployed to Vercel", () => {
     },
   );
 
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /Vercel deployments require TURSO_DATABASE_URL and TURSO_AUTH_TOKEN/);
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stderr, /Turso is not configured/);
 });
