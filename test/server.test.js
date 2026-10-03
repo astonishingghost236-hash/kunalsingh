@@ -1,21 +1,14 @@
 const assert = require("node:assert/strict");
 const { spawn, spawnSync } = require("node:child_process");
 const { once } = require("node:events");
-const fs = require("node:fs");
-const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
 
 test("serves the portfolio, lists projects and keeps the contact form visual-only", async (t) => {
-  const temporaryDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "portfolio-test-"));
-  const databasePath = path.join(temporaryDirectory, "database", "nested", "portfolio.sqlite");
   const serverProcess = spawn(process.execPath, [path.join(__dirname, "..", "server.js")], {
     env: {
       ...process.env,
       PORT: "0",
-      PORTFOLIO_DB_PATH: databasePath,
-      TURSO_DATABASE_URL: "",
-      TURSO_AUTH_TOKEN: "",
       VERCEL: "",
     },
     stdio: ["ignore", "pipe", "pipe"],
@@ -27,7 +20,6 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
       serverProcess.kill();
       await exited;
     }
-    fs.rmSync(temporaryDirectory, { recursive: true, force: true });
   });
 
   let output = "";
@@ -106,7 +98,7 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(technologyCards[1], /<title id="react-logo-title">React logo<\/title>/);
   assert.match(technologyCards[2], /<title id="python-logo-title">Python logo<\/title>/);
   assert.match(technologyCards[3], /<title id="node-logo-title">Node\.js logo<\/title>/);
-  for (const excludedCategory of ["Frontend", "Backend", "Programming</", "Full-stack development", "Creative problem solving", "Express", "SQLite", "REST APIs", "HTML &amp; CSS", "Git", "GitHub", "Three.js"]) {
+  for (const excludedCategory of ["Frontend", "Backend", "Programming</", "Full-stack development", "Creative problem solving", "Express", "REST APIs", "HTML &amp; CSS", "Git", "GitHub", "Three.js"]) {
     assert.ok(!skillsSection.includes(excludedCategory), `${excludedCategory} should not appear in the Skills section`);
   }
   const fragmentLinks = [...homeHtml.matchAll(/href="#([^"]+)"/g)].map((match) => match[1]);
@@ -155,7 +147,6 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   const projects = await projectsResponse.json();
   assert.equal(projects.length, 4);
   assert.ok(projects.every((project) => project.slug && project.title && project.accent));
-  assert.doesNotMatch(JSON.stringify(projects), /SQLite-backed contact form/);
   const portfolioProject = projects.find((project) => project.slug === "kunal-singh-portfolio");
   assert.ok(portfolioProject, "The portfolio project should be available through the projects API");
   assert.equal(portfolioProject.title, "Kunal Singh Portfolio");
@@ -167,7 +158,7 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
 
 });
 
-test("exports a working Vercel app without Turso credentials", () => {
+test("exports a working Vercel app without a database", () => {
   const result = spawnSync(
     process.execPath,
     [
@@ -180,12 +171,10 @@ test("exports a working Vercel app without Turso credentials", () => {
       env: {
         ...process.env,
         VERCEL: "1",
-        TURSO_DATABASE_URL: "",
-        TURSO_AUTH_TOKEN: "",
       },
     },
   );
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stderr, /Turso is not configured/);
+  assert.equal(result.stderr, "");
 });

@@ -1,6 +1,6 @@
 const path = require("node:path");
 const express = require("express");
-const { closeDatabase, getProjects } = require("./src/database");
+const projects = require("./src/projects");
 
 const app = express();
 const publicDirectory = path.join(__dirname, "public");
@@ -12,8 +12,8 @@ if (!Number.isInteger(port) || port < 0 || port > 65535) {
 
 app.disable("x-powered-by");
 
-app.get("/api/projects", async (_request, response) => {
-  response.json(await getProjects());
+app.get("/api/projects", (_request, response) => {
+  response.json(projects);
 });
 
 app.use("/api", (_request, response) => {
@@ -58,12 +58,7 @@ if (require.main === module && !process.env.VERCEL) {
 
   function shutDown() {
     server.close(() => {
-      closeDatabase()
-        .then(() => process.exit(0))
-        .catch((error) => {
-          console.error("Failed to close the project database cleanly.", error);
-          process.exitCode = 1;
-        });
+      process.exit(0);
     });
   }
 

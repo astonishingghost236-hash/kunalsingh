@@ -2,7 +2,7 @@
   "name": "cosmic-developer-portfolio",
   "version": "1.0.0",
   "private": true,
-  "description": "A futuristic, customizable developer portfolio powered by Express and SQLite.",
+  "description": "A futuristic, customizable developer portfolio powered by Express.",
   "main": "server.js",
   "scripts": {
     "build": "node scripts/copy-three.js",
@@ -15,7 +15,6 @@
     "npm": ">=10"
   },
   "dependencies": {
-    "@libsql/client": "^0.18.0",
     "express": "^5.1.0",
     "three": "^0.186.1"
   }
