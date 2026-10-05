@@ -96,12 +96,17 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.equal((contactSection.match(/\sdisabled(?=\s|>)/g) ?? []).length, 5);
   const educationSection = homeHtml.match(/<section class="section education-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(educationSection, "Education section should be present");
-  const educationCards = [...educationSection.matchAll(/<article class="education-card[\s\S]*?<\/article>/g)].map((match) => match[0]);
+  const educationCards = [...educationSection.matchAll(/<(?:article|a) class="education-card[\s\S]*?<\/(?:article|a)>/g)].map((match) => match[0]);
   assert.equal(educationCards.length, 3);
   assert.match(educationCards[0], /B\.Tech — Computer Science &amp; Engineering/);
   assert.match(educationCards[0], /CURRENTLY PURSUING/);
   assert.match(educationCards[1], /CLASS XII · SCIENCE/);
+  assert.match(educationCards[1], /href="\/results\/class-xii-result-2246968\.pdf"/);
+  assert.match(educationCards[1], /aria-label="Open Class XII marksheet PDF"/);
   assert.match(educationCards[2], /S\.B\.V\.M/);
+  assert.match(educationCards[2], /href="\/results\/class-x-result-12221369\.pdf"/);
+  assert.match(educationCards[2], /aria-label="Open Class X marksheet PDF"/);
+  assert.doesNotMatch(educationCards[1] + educationCards[2], /target="_blank"/);
   assert.doesNotMatch(homeHtml, /Y\/N/);
   const skillsSection = homeHtml.match(/<section class="section skills-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(skillsSection, "Skills section should be present");
@@ -129,6 +134,19 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   const portrait = await fetch(`${baseUrl}/assets/character.png`);
   assert.equal(portrait.status, 200);
   assert.match(portrait.headers.get("content-type"), /image\/png/);
+
+  for (const resultPath of [
+    "/results/class-xii-result-2246968.pdf",
+    "/results/class-x-result-12221369.pdf",
+  ]) {
+    const result = await fetch(`${baseUrl}${resultPath}`, {
+      headers: { Range: "bytes=0-4" },
+    });
+    assert.equal(result.status, 206, `${resultPath} should support quick partial PDF loading`);
+    assert.match(result.headers.get("content-type"), /application\/pdf/);
+    assert.match(result.headers.get("content-range"), /^bytes 0-4\/\d+$/);
+    assert.equal(Buffer.from(await result.arrayBuffer()).toString("ascii"), "%PDF-");
+  }
 
   const missingAsset = await fetch(`${baseUrl}/assets/missing-image.png`);
   assert.equal(missingAsset.status, 404);
