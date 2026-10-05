@@ -82,12 +82,12 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .hero__location { display: flex; align-items: center; gap: 9px; margin-top: 39px; color: #777584; font-size: 8px; }
 .location-pulse { width: 5px; height: 5px; }
 
-.hero__visual { position: relative; width: 100%; max-width: 590px; height: 610px; justify-self: center; }
+.hero__visual { position: relative; width: 100%; max-width: 590px; height: min(680px, calc(100svh - 160px)); justify-self: center; }
 .hero__halo { position: absolute; top: 8%; left: 12%; width: 77%; height: 83%; border-radius: 50%; background: radial-gradient(ellipse, rgba(115,94,168,.22), rgba(45,44,76,.07) 48%, transparent 72%); filter: blur(22px); }
-.hero__orbit { position: absolute; top: 48%; left: 50%; border: 1px solid rgba(206,197,244,.15); border-radius: 50%; transform: translate(-50%,-50%) rotate(-26deg); }
-.hero__orbit--outer { width: 88%; height: auto; aspect-ratio: 1.57; }
-.hero__orbit--inner { width: 73%; height: auto; aspect-ratio: 1.74; transform: translate(-50%,-50%) rotate(29deg); border-color: rgba(206,197,244,.1); }
-.hero__orbit--additional { width: 61%; height: auto; aspect-ratio: 1.62; transform: translate(-50%,-50%) rotate(-10deg); border-color: rgba(206,197,244,.08); }
+.hero__orbit { position: absolute; top: 48%; left: 50%; border: 1px solid rgba(206,197,244,.15); border-radius: 50%; transform: translate(-50%,-50%) rotate(-10deg); }
+.hero__orbit--outer { width: 87%; height: auto; aspect-ratio: 1.57; }
+.hero__orbit--inner { width: 78%; height: auto; aspect-ratio: 1.74; transform: translate(-50%,-50%) rotate(29deg); border-color: rgba(206,197,244,.1); }
+.hero__orbit--additional { width: 65%; height: auto; aspect-ratio: 1.62; transform: translate(-50%,-50%) rotate(-10deg); border-color: rgba(206,197,244,.08); }
 .hero__orbit::after { position: absolute; top: 17%; left: 11%; width: 5px; height: 5px; border-radius: 50%; background: #d5c8ff; box-shadow: 0 0 16px 4px rgba(177,150,247,.54); content: ""; }
 .hero__orbit--inner::after { top: auto; right: 8%; bottom: 21%; left: auto; width: 4px; height: 4px; }
 .hero__orbit--additional::after { top: 20%; right: 10%; left: auto; width: 3px; height: 3px; opacity: .75; }

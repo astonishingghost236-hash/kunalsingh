@@ -156,9 +156,14 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
     const asset = await fetch(`${baseUrl}${localPath}`);
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
+  const portfolioStyles = await (await fetch(`${baseUrl}/css/style.css`)).text();
+  assert.match(portfolioStyles, /\.hero__orbit--outer\s*\{\s*width:\s*87%;/);
+  assert.match(portfolioStyles, /height:\s*min\(680px,\s*calc\(100svh - 160px\)\)/);
   const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
-  assert.match(responsiveStyles, /grid-template-columns:\s*1fr;\s*grid-template-rows:\s*auto 1fr/);
+  assert.match(responsiveStyles, /height:\s*min\(840px,\s*calc\(100svh - 120px\)\)/);
+  assert.match(responsiveStyles, /grid-template-columns:\s*1fr;\s*grid-template-rows:\s*auto minmax\(0,1fr\)/);
   assert.match(responsiveStyles, /height:\s*100vh;\s*height:\s*100svh/);
+  assert.match(responsiveStyles, /padding-bottom:\s*24px/);
 
   const threeModule = await fetch(`${baseUrl}/vendor/three/three.module.js`);
   assert.equal(threeModule.status, 200);
