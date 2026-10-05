@@ -53,10 +53,21 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(heroSection, /FULL STACK WEB DEVELOPER/);
   assert.match(heroSection, /class="hero__character" src="\/assets\/character\.png"/);
   assert.doesNotMatch(heroSection, /hero__intro|hero__actions|hero__caption|hero__scroll/);
-  assert.match(homeHtml, /currently pursuing B\.Tech in Computer Science &amp; Engineering at Maharshi Dayanand University \(MDU\)/);
-  assert.match(homeHtml, /graduation is expected in 2028/);
-  assert.match(homeHtml, /Python, JavaScript, React and Node\.js/);
-  assert.match(homeHtml, /My development journey is driven by learning through coding and building projects/);
+  assert.match(homeHtml, /pursuing a B\.Tech in Computer Science &amp; Engineering at Maharshi Dayanand University \(MDU\)/);
+  assert.match(homeHtml, /started in 2024 and expect to graduate in 2028/);
+  assert.match(homeHtml, /learning Python, JavaScript, React and Node\.js through coding and building web projects/);
+  assert.match(homeHtml, /This portfolio is one of them/);
+  const navigation = homeHtml.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)?.[0];
+  assert.ok(navigation, "Section navigation drawer should be present");
+  assert.equal((navigation.match(/class="site-nav__link/g) ?? []).length, 7);
+  assert.equal((navigation.match(/<svg viewBox="0 0 24 24" aria-hidden="true">/g) ?? []).length, 7);
+  assert.match(navigation, /href="#home"/);
+  assert.match(navigation, /href="#about"/);
+  assert.match(navigation, /href="#education"/);
+  assert.match(navigation, /href="#skills"/);
+  assert.match(navigation, /href="#projects"/);
+  assert.match(navigation, /href="#experience"/);
+  assert.match(navigation, /href="#contact"/);
   assert.doesNotMatch(homeHtml, /class="brand"/);
   assert.doesNotMatch(homeHtml, /hero__float-card|Curiosity|drives everything/);
   assert.equal((homeHtml.match(/class="hero__orbit-travel /g) ?? []).length, 6);
@@ -146,7 +157,8 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
   const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
-  assert.match(responsiveStyles, /min-height:\s*100vh;\s*min-height:\s*100svh/);
+  assert.match(responsiveStyles, /grid-template-columns:\s*1fr;\s*grid-template-rows:\s*auto 1fr/);
+  assert.match(responsiveStyles, /height:\s*100vh;\s*height:\s*100svh/);
 
   const threeModule = await fetch(`${baseUrl}/vendor/three/three.module.js`);
   assert.equal(threeModule.status, 200);

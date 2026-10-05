@@ -1,13 +1,16 @@
 export function initNavigation() {
   const toggle = document.querySelector(".menu-toggle");
   const navigation = document.querySelector(".site-nav");
+  const backdrop = document.querySelector(".nav-backdrop");
   const links = document.querySelectorAll(".site-nav__link");
 
-  if (!toggle || !navigation) return;
+  if (!toggle || !navigation || !backdrop) return;
 
   function closeMenu() {
     toggle.setAttribute("aria-expanded", "false");
     navigation.classList.remove("is-open");
+    navigation.inert = true;
+    backdrop.setAttribute("aria-hidden", "true");
     document.body.classList.remove("menu-open");
   }
 
@@ -15,8 +18,12 @@ export function initNavigation() {
     const isExpanded = toggle.getAttribute("aria-expanded") === "true";
     toggle.setAttribute("aria-expanded", String(!isExpanded));
     navigation.classList.toggle("is-open", !isExpanded);
+    navigation.inert = isExpanded;
+    backdrop.setAttribute("aria-hidden", String(isExpanded));
     document.body.classList.toggle("menu-open", !isExpanded);
   });
+
+  backdrop.addEventListener("click", closeMenu);
 
   navigation.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", closeMenu);
@@ -27,9 +34,6 @@ export function initNavigation() {
     closeMenu();
     toggle.focus();
   });
-
-  const desktopNavigation = window.matchMedia("(min-width: 901px)");
-  desktopNavigation.addEventListener("change", closeMenu);
 
   const sections = [...document.querySelectorAll("main section[id]")];
   if ("IntersectionObserver" in window) {
