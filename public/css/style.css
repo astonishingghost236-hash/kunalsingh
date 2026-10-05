@@ -49,10 +49,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .site-nav__contact span { margin-left: 8px; color: #c2afff; }
 .menu-toggle { display: none; }
 
-.hero { position: relative; display: grid; width: min(1200px, calc(100% - 80px)); min-height: 790px; grid-template-columns: .94fr 1.06fr; align-items: center; overflow: clip; margin: 0 auto; padding-top: 96px; }
-.hero__copy { position: relative; z-index: 2; padding: 0 0 30px 14px; }
+.hero { position: relative; display: grid; width: min(1200px, calc(100% - 80px)); min-height: 790px; grid-template-columns: 1fr; grid-template-rows: auto 1fr; align-items: center; justify-items: center; overflow: clip; margin: 0 auto; padding-top: 96px; }
+.hero__copy { position: relative; z-index: 2; align-self: end; padding: 0; }
 .eyebrow, .hero__location, .hero__caption, .hero__scroll, .fact-label, .experience-row__tag, .site-footer p, .footer-top, .contact-form label, .optional { font-family: var(--mono); font-size: 9px; font-weight: 400; letter-spacing: .095em; }
-.hero__eyebrow { display: flex; align-items: center; gap: 9px; margin: 0 0 25px; color: #a6a1b6; }
+.hero__eyebrow { display: flex; align-items: center; justify-content: center; gap: 9px; margin: 0; color: #a6a1b6; }
 .status-dot, .location-pulse { position: relative; width: 6px; height: 6px; border-radius: 50%; background: #9ae3c1; box-shadow: 0 0 13px rgba(135,232,183,.63); }
 .hero h1, .section-heading h2, .contact-copy h2 { margin: 0; font-family: var(--display); font-size: clamp(50px, 6.1vw, 79px); font-weight: 600; line-height: 1.08; letter-spacing: -.075em; }
 .hero h1 { max-width: 610px; }
@@ -70,7 +70,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .hero__location { display: flex; align-items: center; gap: 9px; margin-top: 39px; color: #777584; font-size: 8px; }
 .location-pulse { width: 5px; height: 5px; }
 
-.hero__visual { position: relative; width: 100%; max-width: 590px; height: 610px; justify-self: end; }
+.hero__visual { position: relative; width: 100%; max-width: 590px; height: 610px; justify-self: center; }
 .hero__halo { position: absolute; top: 8%; left: 12%; width: 77%; height: 83%; border-radius: 50%; background: radial-gradient(ellipse, rgba(115,94,168,.22), rgba(45,44,76,.07) 48%, transparent 72%); filter: blur(22px); }
 .hero__orbit { position: absolute; top: 48%; left: 50%; border: 1px solid rgba(206,197,244,.15); border-radius: 50%; transform: translate(-50%,-50%) rotate(-26deg); }
 .hero__orbit--outer { width: 88%; height: auto; aspect-ratio: 1.57; }

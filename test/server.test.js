@@ -45,9 +45,18 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   const home = await fetch(baseUrl);
   assert.equal(home.status, 200);
   const homeHtml = await home.text();
-  assert.match(homeHtml, /Making the digital feel/);
+  assert.doesNotMatch(homeHtml, /Making the digital feel|Explore my work|A little about me/);
   assert.match(homeHtml, /Kunal Singh/);
   assert.match(homeHtml, /<title>Kunal Singh<\/title>/);
+  const heroSection = homeHtml.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(heroSection, "Hero section should be present");
+  assert.match(heroSection, /FULL STACK WEB DEVELOPER/);
+  assert.match(heroSection, /class="hero__character" src="\/assets\/character\.png"/);
+  assert.doesNotMatch(heroSection, /hero__intro|hero__actions|hero__caption|hero__scroll/);
+  assert.match(homeHtml, /currently pursuing B\.Tech in Computer Science &amp; Engineering at Maharshi Dayanand University \(MDU\)/);
+  assert.match(homeHtml, /graduation is expected in 2028/);
+  assert.match(homeHtml, /Python, JavaScript, React and Node\.js/);
+  assert.match(homeHtml, /My development journey is driven by learning through coding and building projects/);
   assert.doesNotMatch(homeHtml, /class="brand"/);
   assert.doesNotMatch(homeHtml, /hero__float-card|Curiosity|drives everything/);
   assert.equal((homeHtml.match(/class="hero__orbit-travel /g) ?? []).length, 6);
@@ -59,8 +68,8 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(homeHtml, /cosmic-scene__twinkles/);
   assert.doesNotMatch(homeHtml, /brand__mark|section-number|education-card__index|experience-row__number/);
   assert.doesNotMatch(homeHtml, /Your Name|Independent by nature|Intentional by design|INDEPENDENTLY WORKING|AVAILABLE ONLINE|FIG\. 01|BUILT WITH CURIOSITY|AND A LOT OF CARE/);
-  assert.match(homeHtml, /Full Stack Web Developer/);
-  assert.match(homeHtml, /Computer Science &amp; Engineering student/);
+  assert.match(homeHtml, /B\.Tech Computer Science &amp; Engineering student at MDU \(2024–2028\)/);
+  assert.match(homeHtml, /Full Stack Developer/);
   assert.match(homeHtml, /Computer Science &amp; Engineering/);
   assert.match(homeHtml, /astonishing\.ghost\.236@gmail\.com/);
   assert.match(homeHtml, /id="education"/);
@@ -136,6 +145,8 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
     const asset = await fetch(`${baseUrl}${localPath}`);
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
+  const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
+  assert.match(responsiveStyles, /min-height:\s*100vh;\s*min-height:\s*100svh/);
 
   const threeModule = await fetch(`${baseUrl}/vendor/three/three.module.js`);
   assert.equal(threeModule.status, 200);
