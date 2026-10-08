@@ -111,9 +111,9 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   const certificateSection = homeHtml.match(/<section class="section certificates-section" id="certificates"[\s\S]*?<\/section>/)?.[0];
   assert.ok(certificateSection, "Certificates section should be present");
   assert.ok(homeHtml.indexOf(educationSection) < homeHtml.indexOf(certificateSection), "Certificates should follow education");
-  assert.match(certificateSection, /class="certificate-card"/);
-  assert.match(certificateSection, /Certificate details coming soon/);
-  assert.match(certificateSection, /Add the certificate title, issuer and verification link here/);
+  assert.equal((certificateSection.match(/class="certificate-card"/g) ?? []).length, 4);
+  assert.match(certificateSection, /class="certificate-cards" aria-hidden="true"/);
+  assert.doesNotMatch(certificateSection, /READY TO UPDATE|Certificate details|title, issuer|TITLE · ISSUER/);
   assert.ok(homeHtml.indexOf(certificateSection) < homeHtml.indexOf('id="skills"'), "Certificates should precede skills");
   assert.doesNotMatch(homeHtml, /Y\/N/);
   const skillsSection = homeHtml.match(/<section class="section skills-section"[\s\S]*?<\/section>/)?.[0];
