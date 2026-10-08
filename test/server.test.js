@@ -51,7 +51,7 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   const heroSection = homeHtml.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0];
   assert.ok(heroSection, "Hero section should be present");
   assert.match(heroSection, /FULL STACK WEB DEVELOPER/);
-  assert.match(heroSection, /class="hero__character" src="\/assets\/character\.png"/);
+  assert.match(heroSection, /class="hero__character" src="\/assets\/kunal-hero\.png"/);
   assert.doesNotMatch(heroSection, /hero__intro|hero__actions|hero__caption|hero__scroll/);
   assert.match(homeHtml, /pursuing a B\.Tech in Computer Science &amp; Engineering at Maharshi Dayanand University \(MDU\)/);
   assert.match(homeHtml, /started in 2024 and expect to graduate in 2028/);
@@ -59,11 +59,12 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(homeHtml, /This portfolio is one of them/);
   const navigation = homeHtml.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)?.[0];
   assert.ok(navigation, "Section navigation drawer should be present");
-  assert.equal((navigation.match(/class="site-nav__link/g) ?? []).length, 7);
-  assert.equal((navigation.match(/<svg viewBox="0 0 24 24" aria-hidden="true">/g) ?? []).length, 7);
+  assert.equal((navigation.match(/class="site-nav__link/g) ?? []).length, 8);
+  assert.equal((navigation.match(/<svg viewBox="0 0 24 24" aria-hidden="true">/g) ?? []).length, 8);
   assert.match(navigation, /href="#home"/);
   assert.match(navigation, /href="#about"/);
   assert.match(navigation, /href="#education"/);
+  assert.match(navigation, /href="#certificates"/);
   assert.match(navigation, /href="#skills"/);
   assert.match(navigation, /href="#projects"/);
   assert.match(navigation, /href="#experience"/);
@@ -107,6 +108,13 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(educationCards[2], /href="\/results\/class-x-result-12221369\.pdf"/);
   assert.match(educationCards[2], /aria-label="Open Class X marksheet PDF"/);
   assert.doesNotMatch(educationCards[1] + educationCards[2], /target="_blank"/);
+  const certificateSection = homeHtml.match(/<section class="section certificates-section" id="certificates"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(certificateSection, "Certificates section should be present");
+  assert.ok(homeHtml.indexOf(educationSection) < homeHtml.indexOf(certificateSection), "Certificates should follow education");
+  assert.match(certificateSection, /class="certificate-card"/);
+  assert.match(certificateSection, /Certificate details coming soon/);
+  assert.match(certificateSection, /Add the certificate title, issuer and verification link here/);
+  assert.ok(homeHtml.indexOf(certificateSection) < homeHtml.indexOf('id="skills"'), "Certificates should precede skills");
   assert.doesNotMatch(homeHtml, /Y\/N/);
   const skillsSection = homeHtml.match(/<section class="section skills-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(skillsSection, "Skills section should be present");
@@ -131,7 +139,7 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
     assert.match(homeHtml, new RegExp(`id="${fragment}"`), `Missing in-page target #${fragment}`);
   }
 
-  const portrait = await fetch(`${baseUrl}/assets/character.png`);
+  const portrait = await fetch(`${baseUrl}/assets/kunal-hero.png`);
   assert.equal(portrait.status, 200);
   assert.match(portrait.headers.get("content-type"), /image\/png/);
 
