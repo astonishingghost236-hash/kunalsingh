@@ -4,8 +4,8 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 
 ## Start the site
 
-1. Install Node.js 22 or newer.
-2. Run `npm install`.
+1. Install Node.js 24.x and npm 10 or newer.
+2. Run `npm ci`.
 3. Run `npm start`.
 4. Open [http://localhost:3000](http://localhost:3000).
 
