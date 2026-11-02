@@ -113,6 +113,8 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.ok(homeHtml.indexOf(educationSection) < homeHtml.indexOf(certificateSection), "Certificates should follow education");
   assert.equal((certificateSection.match(/class="certificate-card"/g) ?? []).length, 4);
   assert.match(certificateSection, /class="certificate-cards" aria-hidden="true"/);
+  assert.equal((certificateSection.match(/<svg viewBox="0 0 64 64">/g) ?? []).length, 4);
+  assert.doesNotMatch(certificateSection, /data-reveal/);
   assert.doesNotMatch(certificateSection, /READY TO UPDATE|Certificate details|title, issuer|TITLE · ISSUER/);
   assert.ok(homeHtml.indexOf(certificateSection) < homeHtml.indexOf('id="skills"'), "Certificates should precede skills");
   assert.doesNotMatch(homeHtml, /Y\/N/);
@@ -184,6 +186,8 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   }
   const portfolioStyles = await (await fetch(`${baseUrl}/css/style.css`)).text();
   assert.match(portfolioStyles, /\.hero__orbit--outer\s*\{\s*width:\s*87%;/);
+  assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*2;/);
+  assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*8px;[^}]*height:\s*8px;/);
   assert.match(portfolioStyles, /height:\s*min\(680px,\s*calc\(100svh - 160px\)\)/);
   const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
   assert.match(responsiveStyles, /height:\s*min\(840px,\s*calc\(100svh - 120px\)\)/);

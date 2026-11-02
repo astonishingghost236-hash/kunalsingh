@@ -84,14 +84,15 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 
 .hero__visual { position: relative; width: 100%; max-width: 590px; height: min(680px, calc(100svh - 160px)); justify-self: center; }
 .hero__halo { position: absolute; top: 8%; left: 12%; width: 77%; height: 83%; border-radius: 50%; background: radial-gradient(ellipse, rgba(115,94,168,.22), rgba(45,44,76,.07) 48%, transparent 72%); filter: blur(22px); }
-.hero__orbit { position: absolute; top: 48%; left: 50%; border: 1px solid rgba(206,197,244,.15); border-radius: 50%; transform: translate(-50%,-50%) rotate(-10deg); }
+.hero__orbit { position: absolute; top: 48%; left: 50%; border-radius: 50%; --orbit-angle: -10deg; --orbit-color: rgba(206,197,244,.15); transform: translate(-50%,-50%); }
 .hero__orbit--outer { width: 87%; height: auto; aspect-ratio: 1.57; }
-.hero__orbit--inner { width: 78%; height: auto; aspect-ratio: 1.74; transform: translate(-50%,-50%) rotate(29deg); border-color: rgba(206,197,244,.1); }
-.hero__orbit--additional { width: 65%; height: auto; aspect-ratio: 1.62; transform: translate(-50%,-50%) rotate(-10deg); border-color: rgba(206,197,244,.08); }
+.hero__orbit--inner { width: 78%; height: auto; aspect-ratio: 1.74; --orbit-angle: 29deg; --orbit-color: rgba(206,197,244,.1); }
+.hero__orbit--additional { width: 65%; height: auto; aspect-ratio: 1.62; --orbit-color: rgba(206,197,244,.08); }
+.hero__orbit::before { position: absolute; inset: 0; border: 1px solid var(--orbit-color); border-radius: inherit; transform: rotate(var(--orbit-angle)); content: ""; pointer-events: none; }
 .hero__orbit::after { position: absolute; top: 17%; left: 11%; width: 5px; height: 5px; border-radius: 50%; background: #d5c8ff; box-shadow: 0 0 16px 4px rgba(177,150,247,.54); content: ""; }
 .hero__orbit--inner::after { top: auto; right: 8%; bottom: 21%; left: auto; width: 4px; height: 4px; }
 .hero__orbit--additional::after { top: 20%; right: 10%; left: auto; width: 3px; height: 3px; opacity: .75; }
-.hero__orbit-travel { position: absolute; inset: -1.25px; transform-origin: center; animation: orbit-travel 30s linear infinite; }
+.hero__orbit-travel { position: absolute; z-index: 2; inset: -1.25px; transform-origin: center; animation: orbit-travel 30s linear infinite; }
 .hero__orbit-travel { --orbit-stretch: 1; --orbit-counter-scale: 1; }
 .hero__orbit-travel--js { animation-duration: 29s; }
 .hero__orbit-travel--react { animation-duration: 37s; }
@@ -100,7 +101,7 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .hero__orbit-travel--copy.hero__orbit-travel--python { animation-duration: 28s; }
 .hero__orbit-travel--copy.hero__orbit-travel--node { animation-duration: 32s; }
 .hero__orbit--inner .hero__orbit-travel { animation-direction: reverse; }
-.hero__orbit-logo { position: absolute; top: 0; left: 50%; display: block; width: 8px; height: 8px; overflow: visible; transform: translate(-50%,-50%) scaleX(var(--orbit-counter-scale)); filter: drop-shadow(0 0 3px rgba(208,194,255,.6)); }
+.hero__orbit-logo { position: absolute; top: 0; left: 50%; display: block; width: 8px; height: 8px; overflow: visible; padding: 1px; border: 1px solid rgba(206,197,244,.28); border-radius: 50%; background: rgba(12,13,22,.94); box-shadow: 0 1px 5px rgba(0,0,0,.4); transform: translate(-50%,-50%) scaleX(var(--orbit-counter-scale)); filter: drop-shadow(0 0 2px rgba(208,194,255,.6)); }
 .hero__character-wrap { position: absolute; inset: 3% 10% 1%; display: flex; align-items: center; justify-content: center; }
 .hero__character { position: relative; z-index: 1; display: block; width: auto; max-width: 95%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 22px 43px rgba(0,0,0,.44)); animation: character-arrive .9s .08s both cubic-bezier(.2,.75,.25,1); }
 .hero__caption { position: absolute; z-index: 2; right: 2%; left: 2%; display: flex; justify-content: space-between; color: rgba(220,215,237,.48); font-size: 8px; }
@@ -146,7 +147,6 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .certificate-card::before { position: absolute; inset: 12px; border: 1px solid rgba(234,230,255,.055); border-radius: 11px; content: ""; pointer-events: none; }
 .certificate-card::after { position: absolute; top: 0; left: 18%; width: 64%; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,185,255,.3), transparent); content: ""; }
 .certificate-card:hover { transform: translateY(-5px); border-color: rgba(201,185,255,.3); box-shadow: 0 16px 42px rgba(7,6,14,.2), 0 0 30px rgba(164,139,226,.08), inset 0 1px rgba(255,255,255,.045); }
-.certificate-card[data-reveal].is-visible:hover { transform: translateY(-5px); }
 .certificate-card__paper { display: grid; width: 59%; aspect-ratio: 1.28; place-items: center; border: 1px solid rgba(193,178,246,.19); border-radius: 8px; background: linear-gradient(145deg, rgba(193,178,246,.07), rgba(255,255,255,.012)); box-shadow: 0 12px 32px rgba(0,0,0,.16), inset 0 1px rgba(255,255,255,.05); transform: rotate(-4deg); transition: transform .35s cubic-bezier(.2,.65,.25,1), border-color .35s ease; }
 .certificate-card:nth-child(even) .certificate-card__paper { transform: rotate(4deg); }
 .certificate-card:hover .certificate-card__paper { transform: rotate(0) scale(1.04); border-color: rgba(193,178,246,.36); }
@@ -286,4 +286,10 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition-duration: .01ms !important; }
   [data-reveal] { opacity: 1; transform: none; }
   .cosmic-scene__twinkle { opacity: .4; }
+  .hero__orbit-travel--js { transform: scaleX(var(--orbit-stretch)) rotate(45deg) !important; }
+  .hero__orbit-travel--react { transform: scaleX(var(--orbit-stretch)) rotate(225deg) !important; }
+  .hero__orbit--inner .hero__orbit-travel--python { transform: scaleX(var(--orbit-stretch)) rotate(135deg) !important; }
+  .hero__orbit--inner .hero__orbit-travel--node { transform: scaleX(var(--orbit-stretch)) rotate(315deg) !important; }
+  .hero__orbit--additional .hero__orbit-travel--python { transform: scaleX(var(--orbit-stretch)) rotate(45deg) !important; }
+  .hero__orbit--additional .hero__orbit-travel--node { transform: scaleX(var(--orbit-stretch)) rotate(225deg) !important; }
 }

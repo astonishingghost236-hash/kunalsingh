@@ -1,6 +1,6 @@
 # Kunal Singh — developer portfolio
 
-A responsive portfolio with a cinematic cosmic backdrop, a replaceable character portrait, and a Node.js/Express server. The frontend uses vanilla HTML, CSS, and JavaScript modules; no React or SQL database is used.
+A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and technology orbit illustration, and a Node.js/Express server. The frontend uses vanilla HTML, CSS, and JavaScript modules; no React or SQL database is used.
 
 ## Start the site
 
@@ -11,7 +11,7 @@ A responsive portfolio with a cinematic cosmic backdrop, a replaceable character
 
 Four example projects, including this portfolio, are served from `src/projects.js`. The contact form is currently a front-end-only visual preview; it does not accept, email, or store submissions. Set `PORT` to change the web server port.
 
-The Three.js browser module is copied into the public asset directory after dependency installation; run `npm run build` to copy it again if needed. Run `npm test` to check homepage content and in-page links, static assets and missing-asset responses, the replaceable portrait, projects API, and that the contact form is non-functional.
+The Three.js browser module is copied into the public asset directory after dependency installation; run `npm run build` to copy it again if needed. Run `npm test` to check homepage content and in-page links, static assets and missing-asset responses, the hero portrait, projects API, and that the contact form is non-functional.
 
 ## Deploying to a server
 
@@ -34,7 +34,7 @@ Set the Vercel project root to the repository root and the install command to `n
 
 ## Make it yours
 
-- Replace `public/assets/character.png` with your own transparent PNG. Keep the same filename or update the image path in `public/index.html`.
+- Replace `public/assets/kunal-hero.png` with your own transparent PNG; keep the same filename or update the image path in `public/index.html`.
 - Edit the profile content, availability, role, skills, education, and contact details in `public/index.html`.
 - Update project content and colours in `src/projects.js`.
 - Adjust your skills and working approach in `public/index.html`; styling lives in `public/css/style.css` and `public/css/responsive.css`.
