@@ -221,12 +221,6 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .contact-form input, .contact-form textarea { width: 100%; padding: 11px 0; border: 0; border-bottom: 1px solid rgba(235,231,255,.15); border-radius: 0; outline: 0; background: transparent; font-size: 11px; resize: vertical; }
 .contact-form input:focus, .contact-form textarea:focus { border-color: rgba(204,188,255,.65); }
 .contact-form input::placeholder, .contact-form textarea::placeholder { color: #666373; }
-.contact-form input[type="file"] { padding: 10px 0; color: #a6a1b3; font-size: 10px; cursor: pointer; }
-.contact-form input[type="file"]::file-selector-button { margin-right: 11px; padding: 8px 11px; border: 1px solid rgba(235,231,255,.15); border-radius: 8px; color: #ded9e9; background: rgba(255,255,255,.04); font: inherit; cursor: pointer; }
-.attachment-help { margin: 8px 0 0; color: #777383; font-size: 9px; line-height: 1.6; }
-.attachment-preview { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 9px; border: 1px solid rgba(235,231,255,.12); border-radius: 10px; color: #c8c3d2; font-size: 10px; overflow-wrap: anywhere; }
-.attachment-preview[hidden] { display: none; }
-.attachment-preview img { width: 58px; height: 58px; flex: 0 0 58px; border-radius: 7px; object-fit: cover; }
 .optional { color: #676371; font-size: 7px; }
 .contact-submit { align-self: start; margin-top: 19px; }
 .form-status { min-height: 18px; margin: 12px 0 0; color: #abebca; font-size: 10px; line-height: 1.5; }

@@ -341,24 +341,16 @@
         <section class="section contact-section" id="contact" aria-labelledby="contact-title">
           <div class="contact-glow" aria-hidden="true"></div>
           <div class="contact-copy"><p class="eyebrow">THE NEXT CHAPTER</p><h2 id="contact-title">Have a good<br>one <span>in mind?</span></h2><p>The best projects start with a conversation. Tell me what you're dreaming up.</p><a class="contact-email" href="mailto:astonishing.ghost.236@gmail.com">astonishing.ghost.236@gmail.com</a></div>
-          <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+          <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
             <input type="hidden" name="access_key" value="42b80d09-1d02-4158-acd9-ca392cd6a5e8">
             <input type="hidden" name="subject" value="New portfolio contact request">
             <input type="checkbox" name="botcheck" class="sr-only" tabindex="-1" autocomplete="off">
             <label for="contact-name">YOUR NAME</label><input id="contact-name" name="name" type="text" autocomplete="name" maxlength="100" placeholder="How should I call you?" required>
             <label for="contact-email">EMAIL ADDRESS</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@somewhere.com" required>
-            <label for="contact-phone">PHONE NUMBER <span class="optional">(OPTIONAL — FOR SMS REPLIES)</span></label><input id="contact-phone" name="phone" type="tel" autocomplete="tel" maxlength="30" placeholder="+1 555 123 4567">
             <label for="contact-project">WHAT ARE YOU THINKING ABOUT? <span class="optional">(OPTIONAL)</span></label><input id="contact-project" name="project" type="text" maxlength="120" autocomplete="off" placeholder="A new idea, a collaboration…">
             <label for="contact-message">A LITTLE MORE ABOUT IT</label><textarea id="contact-message" name="message" rows="3" maxlength="5000" placeholder="A few details to get us started…" required></textarea>
-            <label for="contact-attachment">SHARE A REQUIREMENTS IMAGE <span class="optional">(OPTIONAL · MAX 1 MB)</span></label>
-            <input id="contact-attachment" name="attachment" type="file" accept="image/jpeg,image/png,image/webp">
-            <p class="attachment-help">Add one JPG, PNG, or WebP image to help explain your project.</p>
-            <div class="attachment-preview" id="attachment-preview" hidden>
-              <img id="attachment-preview-image" alt="Preview of the selected requirements image">
-              <span id="attachment-preview-name"></span>
-            </div>
             <button class="button button--primary contact-submit" type="submit"><span data-submit-label>Send a message</span><span aria-hidden="true">↗</span></button>
-            <p class="form-status" id="contact-status" role="status" aria-live="polite">Your enquiry and optional image will be sent to email through Web3Forms. Web3Forms does not send SMS; include a phone number if you want to be contacted by text.</p>
+            <p class="form-status" id="contact-status" role="status" aria-live="polite">Your enquiry will be sent to email through Web3Forms.</p>
           </form>
         </section>
       </main>

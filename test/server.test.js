@@ -99,8 +99,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.ok(contactSection, "Contact section should be present");
   assert.match(contactSection, /<form\b[^>]*action="https:\/\/api\.web3forms\.com\/submit"/);
   assert.match(contactSection, /name="access_key" value="42b80d09-1d02-4158-acd9-ca392cd6a5e8"/);
-  assert.match(contactSection, /name="attachment" type="file" accept="image\/jpeg,image\/png,image\/webp"/);
-  assert.match(contactSection, /Web3Forms does not send SMS/);
+  assert.doesNotMatch(contactSection, /type="file"|name="phone"|PHONE NUMBER/);
   const educationSection = homeHtml.match(/<section class="section education-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(educationSection, "Education section should be present");
   const educationCards = [...educationSection.matchAll(/<(?:article|a) class="education-card[\s\S]*?<\/(?:article|a)>/g)].map((match) => match[0]);

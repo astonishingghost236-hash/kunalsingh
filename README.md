@@ -9,7 +9,7 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 3. Run `npm start`.
 4. Open [http://localhost:3000](http://localhost:3000).
 
-Four example projects, including this portfolio, are served from `src/projects.js`. The contact form submits enquiries to Web3Forms and supports one JPG, PNG, or WebP requirements image up to 1 MB. Its access key is a public Web3Forms form key, intended for client-side use. Web3Forms sends email notifications; SMS sending requires a separate SMS provider and credentials. The optional phone field lets a visitor share a number for an SMS reply, but does not send a text message. Set `PORT` to change the web server port.
+Four example projects, including this portfolio, are served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
 
 The Three.js browser module is copied into the public asset directory after dependency installation; run `npm run build` to copy it again if needed. Run `npm test` to check homepage content and in-page links, static assets and missing-asset responses, the hero portrait, projects API, and the Web3Forms contact form markup.
 
