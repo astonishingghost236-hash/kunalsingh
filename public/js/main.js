@@ -3,12 +3,14 @@ import { loadProjects } from "./projects.js";
 import { initCosmicBackground } from "./cosmic-background.js";
 import { initSkillOrbit } from "./skill-orbit.js";
 import { initThemeSwitcher } from "./themes.js";
+import { initContactForm } from "./contact.js";
 
 initNavigation();
 initThemeSwitcher();
 loadProjects();
 initCosmicBackground();
 initSkillOrbit();
+initContactForm();
 
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 let revealObserver;

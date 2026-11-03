@@ -4,7 +4,7 @@ const { once } = require("node:events");
 const path = require("node:path");
 const test = require("node:test");
 
-test("serves the portfolio, lists projects and keeps the contact form visual-only", async (t) => {
+test("serves the portfolio, lists projects and enables the Web3Forms contact form", async (t) => {
   const serverProcess = spawn(process.execPath, [path.join(__dirname, "..", "server.js")], {
     env: {
       ...process.env,
@@ -96,10 +96,11 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(homeHtml, /58%/);
   assert.match(homeHtml, /68%/);
   const contactSection = homeHtml.match(/<section class="section contact-section"[\s\S]*?<\/section>/)?.[0];
-  assert.ok(contactSection, "Contact section preview should be present");
-  assert.doesNotMatch(contactSection, /<form\b|name="(name|email|project|message)"|type="submit"/);
-  assert.match(contactSection, /Contact form preview — submissions are currently disabled\./);
-  assert.equal((contactSection.match(/\sdisabled(?=\s|>)/g) ?? []).length, 5);
+  assert.ok(contactSection, "Contact section should be present");
+  assert.match(contactSection, /<form\b[^>]*action="https:\/\/api\.web3forms\.com\/submit"/);
+  assert.match(contactSection, /name="access_key" value="42b80d09-1d02-4158-acd9-ca392cd6a5e8"/);
+  assert.match(contactSection, /name="attachment" type="file" accept="image\/jpeg,image\/png,image\/webp"/);
+  assert.match(contactSection, /Web3Forms does not send SMS/);
   const educationSection = homeHtml.match(/<section class="section education-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(educationSection, "Education section should be present");
   const educationCards = [...educationSection.matchAll(/<(?:article|a) class="education-card[\s\S]*?<\/(?:article|a)>/g)].map((match) => match[0]);
@@ -185,7 +186,7 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   });
   assert.equal(disabledContactEndpoint.status, 404);
 
-  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/cosmic-background.js", "/js/skill-orbit.js"]) {
+  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/cosmic-background.js", "/js/skill-orbit.js", "/js/contact.js"]) {
     const asset = await fetch(`${baseUrl}${localPath}`);
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
