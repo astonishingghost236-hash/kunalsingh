@@ -14,8 +14,8 @@ function createProjectCard(project) {
 
   const art = document.createElement("div");
   art.className = "project-card__art";
-  art.style.setProperty("--project-accent", project.accent);
-  art.style.setProperty("--art-bg", `radial-gradient(ellipse at 50% 44%, ${project.accent}20, transparent 65%), #11111a`);
+  art.style.setProperty("--project-accent", "var(--accent)");
+  art.style.setProperty("--art-bg", "radial-gradient(ellipse at 50% 44%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 65%), var(--surface)");
 
   const kicker = document.createElement("span");
   kicker.className = "project-card__art-kicker";

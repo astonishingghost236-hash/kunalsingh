@@ -2,8 +2,10 @@ import { initNavigation } from "./navigation.js";
 import { loadProjects } from "./projects.js";
 import { initCosmicBackground } from "./cosmic-background.js";
 import { initSkillOrbit } from "./skill-orbit.js";
+import { initThemeSwitcher } from "./themes.js";
 
 initNavigation();
+initThemeSwitcher();
 loadProjects();
 initCosmicBackground();
 initSkillOrbit();

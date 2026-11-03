@@ -45,14 +45,19 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   const home = await fetch(baseUrl);
   assert.equal(home.status, 200);
   const homeHtml = await home.text();
-  assert.doesNotMatch(homeHtml, /Making the digital feel|Explore my work|A little about me/);
+  assert.doesNotMatch(homeHtml, /Making the digital feel|A little about me/);
   assert.match(homeHtml, /Kunal Singh/);
   assert.match(homeHtml, /<title>Kunal Singh<\/title>/);
   const heroSection = homeHtml.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0];
   assert.ok(heroSection, "Hero section should be present");
   assert.match(heroSection, /FULL STACK WEB DEVELOPER/);
+  assert.match(heroSection, /<h1 id="hero-title">Kunal <span>Singh<\/span><\/h1>/);
+  assert.match(heroSection, /Maharshi Dayanand University \(MDU\)/);
+  assert.match(heroSection, /class="hero__starfield"/);
+  assert.match(heroSection, /class="hero__glass"/);
   assert.match(heroSection, /class="hero__character" src="\/assets\/kunal-hero\.png"/);
-  assert.doesNotMatch(heroSection, /hero__intro|hero__actions|hero__caption|hero__scroll/);
+  assert.match(heroSection, /class="hero__intro"/);
+  assert.match(heroSection, /class="hero__actions"/);
   assert.match(homeHtml, /pursuing a B\.Tech in Computer Science &amp; Engineering at Maharshi Dayanand University \(MDU\)/);
   assert.match(homeHtml, /started in 2024 and expect to graduate in 2028/);
   assert.match(homeHtml, /learning Python, JavaScript, React and Node\.js through coding and building web projects/);
@@ -80,7 +85,7 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(homeHtml, /cosmic-scene__twinkles/);
   assert.doesNotMatch(homeHtml, /brand__mark|section-number|education-card__index|experience-row__number/);
   assert.doesNotMatch(homeHtml, /Your Name|Independent by nature|Intentional by design|INDEPENDENTLY WORKING|AVAILABLE ONLINE|FIG\. 01|BUILT WITH CURIOSITY|AND A LOT OF CARE/);
-  assert.match(homeHtml, /B\.Tech Computer Science &amp; Engineering student at MDU \(2024–2028\)/);
+  assert.match(homeHtml, /Kunal Singh, Full Stack Web Developer and B\.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University \(MDU\)/);
   assert.match(homeHtml, /Full Stack Developer/);
   assert.match(homeHtml, /Computer Science &amp; Engineering/);
   assert.match(homeHtml, /astonishing\.ghost\.236@gmail\.com/);
@@ -188,12 +193,12 @@ test("serves the portfolio, lists projects and keeps the contact form visual-onl
   assert.match(portfolioStyles, /\.hero__orbit--outer\s*\{\s*width:\s*87%;/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*2;/);
   assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*8px;[^}]*height:\s*8px;/);
-  assert.match(portfolioStyles, /height:\s*min\(680px,\s*calc\(100svh - 160px\)\)/);
+  assert.match(portfolioStyles, /height:\s*min\(700px,\s*calc\(100svh - 150px\)\)/);
   const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
-  assert.match(responsiveStyles, /height:\s*min\(840px,\s*calc\(100svh - 120px\)\)/);
-  assert.match(responsiveStyles, /grid-template-columns:\s*1fr;\s*grid-template-rows:\s*auto minmax\(0,1fr\)/);
-  assert.match(responsiveStyles, /height:\s*100vh;\s*height:\s*100svh/);
-  assert.match(responsiveStyles, /padding-bottom:\s*24px/);
+  assert.match(responsiveStyles, /height:\s*min\(680px,\s*calc\(100svh - 150px\)\)/);
+  assert.match(responsiveStyles, /grid-template-columns:\s*minmax\(0,\s*1fr\);\s*grid-template-rows:\s*auto minmax\(390px,\s*1fr\)/);
+  assert.match(responsiveStyles, /height:\s*auto;\s*min-height:\s*max\(740px,\s*100svh\)/);
+  assert.match(responsiveStyles, /padding:\s*max\(82px,\s*calc\(env\(safe-area-inset-top\) \+ 72px\)\)\s+18px\s+26px/);
 
   const threeModule = await fetch(`${baseUrl}/vendor/three/three.module.js`);
   assert.equal(threeModule.status, 200);

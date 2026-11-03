@@ -19,13 +19,38 @@ function addTwinklingStars() {
   twinkleLayer.append(fragment);
 }
 
+function addHeroTwinkles() {
+  const twinkleLayer = document.querySelector(".hero__twinkles");
+  if (!twinkleLayer || reducedMotion.matches) return;
+
+  const fragment = document.createDocumentFragment();
+  const starCount = window.matchMedia("(max-width: 760px)").matches ? 48 : 88;
+  for (let index = 0; index < starCount; index += 1) {
+    const star = document.createElement("span");
+    star.className = "hero__twinkle";
+    star.style.setProperty("--twinkle-x", `${Math.random() * 100}%`);
+    star.style.setProperty("--twinkle-y", `${Math.random() * 100}%`);
+    star.style.setProperty("--twinkle-size", `${0.7 + Math.random() * 1.4}px`);
+    star.style.setProperty("--twinkle-duration", `${1.8 + Math.random() * 4}s`);
+    star.style.setProperty("--twinkle-delay", `${-Math.random() * 5}s`);
+    fragment.append(star);
+  }
+  twinkleLayer.append(fragment);
+}
+
 export async function initCosmicBackground() {
   addTwinklingStars();
+  addHeroTwinkles();
   if (!canvas || reducedMotion.matches) return;
 
   try {
     const THREE = await import("/vendor/three/three.module.js");
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: false,
+      powerPreference: "low-power",
+    });
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
     camera.position.z = 25;
@@ -33,18 +58,18 @@ export async function initCosmicBackground() {
     const points = [];
     const colors = [];
     const sizes = [];
-    const palette = [
-      new THREE.Color("#aaa0d3"),
-      new THREE.Color("#e3dff0"),
-      new THREE.Color("#8e9bbd"),
-    ];
+    const palette = ["--accent", "--chrome", "--accent-secondary"];
+    const paletteStyle = getComputedStyle(document.documentElement);
+    const themeColors = palette.map((property) => new THREE.Color(paletteStyle.getPropertyValue(property).trim()));
+    const isSmallScreen = window.matchMedia("(max-width: 760px)").matches;
+    const starCount = isSmallScreen ? 90 : 180;
 
-    for (let index = 0; index < 300; index += 1) {
+    while (points.length / 3 < starCount) {
       const x = (Math.random() - 0.5) * 46;
       const y = (Math.random() - 0.5) * 40;
       if (x < -5 && y > 1 && y < 13) continue;
       points.push(x, y, (Math.random() - 0.5) * 18);
-      const color = palette[Math.floor(Math.random() * palette.length)];
+      const color = themeColors[Math.floor(Math.random() * themeColors.length)];
       colors.push(color.r, color.g, color.b);
       sizes.push(Math.random() > 0.96 ? 1.6 : 0.7);
     }
@@ -53,6 +78,19 @@ export async function initCosmicBackground() {
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(points, 3));
     geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
     geometry.setAttribute("size", new THREE.Float32BufferAttribute(sizes, 1));
+
+    const colorAttribute = geometry.getAttribute("color");
+    const updateStarColors = () => {
+      const activeThemeColors = palette.map((property) => new THREE.Color(
+        getComputedStyle(document.documentElement).getPropertyValue(property).trim(),
+      ));
+      for (let index = 0; index < colorAttribute.count; index += 1) {
+        const color = activeThemeColors[Math.floor(Math.random() * activeThemeColors.length)];
+        colorAttribute.setXYZ(index, color.r, color.g, color.b);
+      }
+      colorAttribute.needsUpdate = true;
+    };
+    document.addEventListener("portfolio:theme-change", updateStarColors);
 
     const material = new THREE.PointsMaterial({
       size: 0.12,
@@ -70,7 +108,7 @@ export async function initCosmicBackground() {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       if (!width || !height) return;
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmallScreen ? 1 : 1.25));
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -84,24 +122,31 @@ export async function initCosmicBackground() {
     let animationFrame = 0;
     let sceneVisible = true;
     let pageVisible = !document.hidden;
+    let lastRenderTime = 0;
+    const frameInterval = 1000 / 30;
     window.addEventListener("pointermove", (event) => {
       pointerX = (event.clientX / window.innerWidth - 0.5) * 0.28;
       pointerY = (event.clientY / window.innerHeight - 0.5) * 0.18;
     }, { passive: true });
 
-    const animate = () => {
+    const animate = (timestamp = performance.now()) => {
       if (!sceneVisible || !pageVisible) return;
+      animationFrame = window.requestAnimationFrame(animate);
+      if (timestamp - lastRenderTime < frameInterval) return;
+      lastRenderTime = timestamp;
       stars.rotation.y += 0.00012;
       camera.position.x += (pointerX - camera.position.x) * 0.018;
       camera.position.y += (-pointerY - camera.position.y) * 0.018;
       renderer.render(scene, camera);
-      animationFrame = window.requestAnimationFrame(animate);
     };
 
     document.addEventListener("visibilitychange", () => {
       pageVisible = !document.hidden;
       if (!pageVisible) window.cancelAnimationFrame(animationFrame);
-      else animate();
+      else {
+        lastRenderTime = 0;
+        animate();
+      }
     });
 
     if ("IntersectionObserver" in window) {
@@ -118,7 +163,10 @@ export async function initCosmicBackground() {
         const isVisible = window.scrollY < canvas.clientHeight;
         if (isVisible === sceneVisible) return;
         sceneVisible = isVisible;
-        if (sceneVisible) animate();
+        if (sceneVisible) {
+          lastRenderTime = 0;
+          animate();
+        }
         else window.cancelAnimationFrame(animationFrame);
       }, { passive: true });
     }

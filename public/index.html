@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="obsidian">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#080910">
-    <meta name="description" content="Kunal Singh — B.Tech Computer Science &amp; Engineering student at MDU (2024–2028), developing skills in full-stack web development.">
+    <meta name="theme-color" content="#080808">
+    <meta name="description" content="Kunal Singh, Full Stack Web Developer and B.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University (MDU).">
     <title>Kunal Singh</title>
     <meta name="color-scheme" content="dark">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,14 +65,46 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 7l8 6 8-6"/></svg>
             <span>Let's talk</span><span class="site-nav__arrow" aria-hidden="true">↗</span>
           </a>
+          <section class="theme-switcher" aria-labelledby="theme-switcher-title">
+            <h2 class="site-nav__heading" id="theme-switcher-title">COLOR THEMES</h2>
+            <button class="theme-option" type="button" data-theme-option="jet" aria-pressed="false">
+              <span class="theme-option__swatches" aria-hidden="true"><span></span><span></span><span></span></span>
+              <span class="theme-option__copy"><strong>Jet Black</strong><small>Cerulean Blue · Neon Rose</small></span>
+              <span class="theme-option__check" aria-hidden="true">✓</span>
+            </button>
+            <button class="theme-option" type="button" data-theme-option="midnight" aria-pressed="false">
+              <span class="theme-option__swatches" aria-hidden="true"><span></span><span></span><span></span></span>
+              <span class="theme-option__copy"><strong>Midnight Black</strong><small>Electric Cobalt Blue · Acid Lime</small></span>
+              <span class="theme-option__check" aria-hidden="true">✓</span>
+            </button>
+            <button class="theme-option" type="button" data-theme-option="charcoal" aria-pressed="false">
+              <span class="theme-option__swatches" aria-hidden="true"><span></span><span></span><span></span></span>
+              <span class="theme-option__copy"><strong>Charcoal Black</strong><small>Forest Green · Crimson Red</small></span>
+              <span class="theme-option__check" aria-hidden="true">✓</span>
+            </button>
+            <button class="theme-option" type="button" data-theme-option="obsidian" aria-pressed="true">
+              <span class="theme-option__swatches" aria-hidden="true"><span></span><span></span><span></span></span>
+              <span class="theme-option__copy"><strong>Obsidian Studio</strong><small>Silver · Sapphire · Warm Brass</small></span>
+              <span class="theme-option__check" aria-hidden="true">✓</span>
+            </button>
+          </section>
         </nav>
       </header>
 
       <main id="main-content">
         <section class="hero" id="home" aria-labelledby="hero-title">
+          <div class="hero__starfield" aria-hidden="true"></div>
+          <div class="hero__twinkles" aria-hidden="true"></div>
+          <div class="hero__glass" aria-hidden="true"></div>
           <div class="hero__copy">
-            <h1 class="sr-only" id="hero-title">Kunal Singh — Full Stack Developer</h1>
-            <p class="eyebrow hero__eyebrow"><span class="status-dot"></span><span class="hero__eyebrow-copy">FULL STACK WEB DEVELOPER <span class="hero__eyebrow-divider" aria-hidden="true">·</span> COMPUTER SCIENCE &amp; ENGINEERING STUDENT</span></p>
+            <p class="eyebrow hero__eyebrow"><span class="status-dot" aria-hidden="true"></span><span class="hero__eyebrow-copy">FULL STACK WEB DEVELOPER <span class="hero__eyebrow-divider" aria-hidden="true">·</span> B.TECH STUDENT</span></p>
+            <h1 id="hero-title">Kunal <span>Singh</span></h1>
+            <p class="hero__role">Building for the <span>web.</span></p>
+            <p class="hero__intro">I’m a <strong>Full Stack Web Developer</strong> and B.Tech Computer Science &amp; Engineering student at <strong>Maharshi Dayanand University (MDU)</strong>.</p>
+            <div class="hero__actions">
+              <a class="button button--primary" href="#projects">Explore my work <span aria-hidden="true">↗</span></a>
+              <a class="button button--quiet" href="#contact">Get in touch</a>
+            </div>
           </div>
 
           <div class="hero__visual">

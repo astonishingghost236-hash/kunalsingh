@@ -36,7 +36,7 @@ Set the Vercel project root to the repository root and the install command to `n
 
 - Replace `public/assets/kunal-hero.png` with your own transparent PNG; keep the same filename or update the image path in `public/index.html`.
 - Edit the profile content, availability, role, skills, education, and contact details in `public/index.html`.
-- Update project content and colours in `src/projects.js`.
-- Adjust your skills and working approach in `public/index.html`; styling lives in `public/css/style.css` and `public/css/responsive.css`.
+- Update project content in `src/projects.js`.
+- Visitors can choose one of four saved color themes from the navigation menu. Theme palettes are defined in `public/css/style.css`; layout styling lives in `public/css/style.css` and `public/css/responsive.css`.
 
 The star canvas loads the installed Three.js module from the same Express server, without relying on a runtime CDN. If WebGL or the module is unavailable, the independent CSS space background and all portfolio features still work.
