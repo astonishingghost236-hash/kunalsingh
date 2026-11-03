@@ -88,7 +88,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(homeHtml, /Kunal Singh, Full Stack Web Developer and B\.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University \(MDU\)/);
   assert.match(homeHtml, /Full Stack Developer/);
   assert.match(homeHtml, /Computer Science &amp; Engineering/);
-  assert.match(homeHtml, /astonishing\.ghost\.236@gmail\.com/);
+  assert.doesNotMatch(homeHtml, /astonishing\.ghost\.236@gmail\.com|mailto:/);
   assert.match(homeHtml, /id="education"/);
   assert.match(homeHtml, /B\.Tech — Computer Science &amp; Engineering/);
   assert.match(homeHtml, /M\.M\.I\.C/);
@@ -193,6 +193,9 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(portfolioStyles, /\.hero__orbit--outer\s*\{\s*width:\s*87%;/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*2;/);
   assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*8px;[^}]*height:\s*8px;/);
+  assert.match(portfolioStyles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.hero__orbit-travel \{\s*animation: orbit-travel var\(--orbit-duration\) linear infinite !important;/);
+  const skillOrbitScript = await (await fetch(`${baseUrl}/js/skill-orbit.js`)).text();
+  assert.doesNotMatch(skillOrbitScript, /prefers-reduced-motion/);
   assert.match(portfolioStyles, /height:\s*min\(700px,\s*calc\(100svh - 150px\)\)/);
   const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
   assert.match(responsiveStyles, /height:\s*min\(680px,\s*calc\(100svh - 150px\)\)/);

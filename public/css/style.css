@@ -294,12 +294,9 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition-duration: .01ms !important; }
   [data-reveal] { opacity: 1; transform: none; }
   .cosmic-scene__twinkle { opacity: .4; }
-  .hero__orbit-travel--js, .hero__orbit-travel--copy.hero__orbit-travel--python { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(45deg) !important; }
-  .hero__orbit-travel--react, .hero__orbit-travel--node, .hero__orbit-travel--copy.hero__orbit-travel--node { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(225deg) !important; }
-  .hero__orbit--inner .hero__orbit-travel--python { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(135deg) !important; }
-  .hero__orbit--inner .hero__orbit-travel--node { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(315deg) !important; }
-  .hero__orbit--additional .hero__orbit-travel--python { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(45deg) !important; }
-  .hero__orbit--additional .hero__orbit-travel--node { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(225deg) !important; }
+  .hero__orbit-travel { animation: orbit-travel var(--orbit-duration) linear infinite !important; }
+  .hero__orbit--inner .hero__orbit-travel { animation-direction: reverse !important; }
+  .skill-orbit-ready .hero__orbit-travel { animation: none !important; }
 }
 
 :root[data-theme="jet"] {

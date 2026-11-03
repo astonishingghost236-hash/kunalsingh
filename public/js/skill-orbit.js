@@ -1,5 +1,3 @@
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
 export function initSkillOrbit() {
   if (typeof Element.prototype.animate !== "function") return;
 
@@ -32,8 +30,9 @@ export function initSkillOrbit() {
     orbiter.style.animation = "none";
     return { animation, logoAnimation, orbit, orbiter, counterclockwise };
   });
+  document.documentElement.classList.add("skill-orbit-ready");
 
-  let stopped = document.hidden || reducedMotion.matches;
+  let stopped = document.hidden;
   const resizeObserver = new ResizeObserver((entries) => {
     for (const entry of entries) {
       for (const item of animations) {
@@ -75,7 +74,7 @@ export function initSkillOrbit() {
   }
 
   function updateAnimationState() {
-    stopped = document.hidden || reducedMotion.matches;
+    stopped = document.hidden;
     if (stopped) {
       animations.forEach(({ animation, logoAnimation }) => {
         animation.pause();
@@ -89,8 +88,7 @@ export function initSkillOrbit() {
       logoAnimation?.play();
     });
   }
-
   document.addEventListener("visibilitychange", updateAnimationState);
-  reducedMotion.addEventListener("change", updateAnimationState);
+  document.addEventListener("visibilitychange", updateAnimationState);
   updateAnimationState();
 }
