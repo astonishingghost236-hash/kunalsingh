@@ -1,6 +1,5 @@
 @media (max-width: 1024px) {
   .hero { width: 100%; }
-  .site-footer { width: calc(100% - 56px); }
   .hero { min-height: max(700px, 100svh); grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-rows: 1fr; align-content: stretch; justify-items: stretch; gap: 12px; padding-right: 22px; padding-left: 22px; }
   .hero__visual { width: 100%; height: min(680px, calc(100svh - 150px)); align-self: center; justify-self: center; }
   .hero__character-wrap { inset: 0; }
@@ -16,17 +15,16 @@
   .intro-screen__content { width: min(100%, 520px); }
   .intro-screen__eyebrow { margin-bottom: 4px; text-align: center; }
   .intro-screen__layout { grid-template-columns: 1fr; justify-items: center; gap: 0; }
-  .intro-lamp { width: 100%; height: 276px; }
-  .intro-lamp__icon { width: 156px; height: 255px; }
-  .intro-lamp__glow { top: 37px; width: 195px; }
-  .intro-lamp__beam { top: 145px; width: min(85vw, 390px); height: 150px; }
-  .intro-lamp__projection { top: 205px; font-size: 25px; }
+  .intro-lamp { width: 100%; height: 310px; }
+  .intro-lamp__icon { width: min(280px, 85vw); height: min(280px, 85vw); }
+  .intro-lamp__glow { top: 55px; width: 220px; }
+  .intro-lamp__beam { top: 172px; width: min(85vw, 390px); height: 135px; }
+  .intro-lamp__projection { top: 255px; font-size: 25px; }
   .intro-screen__copy { align-items: center; text-align: center; }
   .intro-screen h1 { font-size: clamp(36px, 10vw, 50px); }
   .intro-screen__hint { max-width: 320px; margin: 12px 0 14px; font-size: 12px; }
-  .lamp-cord { min-height: 77px; padding-bottom: 0; }
-  .lamp-cord__line { height: 35px; }
-  .lamp-cord__grip, .lamp-cord__grip svg { height: 34px; }
+  .lamp-cord { min-height: 170px; padding-bottom: 0; }
+  .lamp-cord__line { width: 54px; height: 150px; }
   .site-header { top: max(13px, env(safe-area-inset-top)); left: 15px; }
   .menu-toggle { width: 42px; height: 42px; }
   .hero { width: 100%; height: auto; min-height: max(740px, 100svh); grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(390px, 1fr); align-content: stretch; justify-items: stretch; gap: 0; padding: max(82px, calc(env(safe-area-inset-top) + 72px)) 18px 26px; }
@@ -78,18 +76,10 @@
   .contact-section { grid-template-columns: 1fr; gap: 29px; min-height: 0; margin-bottom: 35px; padding: 32px 23px; }
   .contact-copy h2 { font-size: clamp(44px, 10vw, 60px); }
   .contact-form label { margin-top: 13px; }
-  .site-footer { width: calc(100% - 42px); min-height: 0; padding: 23px 0 18px; }
-  .site-footer__main { grid-template-columns: 1fr; gap: 15px 12px; padding-bottom: 18px; }
-  .footer-nav { gap: 12px 17px; }
-  .footer-nav a { font-size: 10px; }
-  .site-footer__meta { flex-direction: column; gap: 11px; font-size: 7px; }
   .project-card__category { font-size: 7px; }
 }
 
 @media (max-width: 380px) {
-  .site-footer { width: calc(100% - 30px); }
-  .site-footer__main { column-gap: 8px; }
-  .footer-nav { gap: 11px; }
   .technology-cards { grid-template-columns: 1fr; }
   .technology-card { min-height: 190px; }
 }

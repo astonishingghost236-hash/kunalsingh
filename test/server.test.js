@@ -49,10 +49,14 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(homeHtml, /Kunal Singh/);
   assert.match(homeHtml, /<title>Kunal Singh<\/title>/);
   assert.match(homeHtml, /Welcome To<br>My <span>Portfolio\.<\/span>/);
-  assert.doesNotMatch(homeHtml, /class="footer-top"/);
+  assert.doesNotMatch(homeHtml, /<footer\b|site-footer|footer-nav|footer-top/);
   assert.match(homeHtml, /Pull the cord to switch on the light and see my resume\./);
   assert.match(homeHtml, /id="lamp-cord"/);
+  assert.match(homeHtml, /class="lamp-cord__rope-strand"/);
+  assert.match(homeHtml, /class="lamp-cord__bulb"/);
   assert.match(homeHtml, /class="intro-lamp__projection"[^>]*>Kunal Singh<\/p>/);
+  assert.match(homeHtml, /class="intro-lamp__shade"/);
+  assert.match(homeHtml, /class="intro-lamp__shade-rim"/);
   assert.doesNotMatch(homeHtml, /data-theme|theme-switcher|theme-option/);
   assert.doesNotMatch(homeHtml, /id="intro-switch"/);
   const heroSection = homeHtml.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0];
@@ -112,6 +116,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(styles, /\.contact-section\s*\{[^}]*border:\s*0/);
   assert.match(styles, /\.button--primary\s*\{[^}]*background:\s*#7aa9dc/);
   assert.match(styles, /\.intro-screen\.is-lit \.intro-lamp__bulb-glass\s*\{[^}]*fill:\s*#ffd58a/);
+  assert.doesNotMatch(styles, /\.intro-screen\.is-lit \.lamp-cord(?:__line|__bulb)/);
   const introScriptResponse = await fetch(`${baseUrl}/js/intro.js`);
   assert.equal(introScriptResponse.status, 200);
   const introScript = await introScriptResponse.text();
