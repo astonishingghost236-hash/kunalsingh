@@ -145,9 +145,16 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const certificateSection = homeHtml.match(/<section class="section certificates-section" id="certificates"[\s\S]*?<\/section>/)?.[0];
   assert.ok(certificateSection, "Certificates section should be present");
   assert.ok(homeHtml.indexOf(educationSection) < homeHtml.indexOf(certificateSection), "Certificates should follow education");
-  assert.equal((certificateSection.match(/class="certificate-card"/g) ?? []).length, 4);
-  assert.match(certificateSection, /class="certificate-cards" aria-hidden="true"/);
-  assert.equal((certificateSection.match(/<svg viewBox="0 0 64 64">/g) ?? []).length, 4);
+  const certificates = [...certificateSection.matchAll(/<a class="certificate-card certificate-card--link" href="([^"]+)" target="_blank" rel="noopener noreferrer" aria-label="([^"]+)">[\s\S]*?<span class="certificate-card__label">([^<]+)<\/span>[\s\S]*?<\/a>/g)];
+  assert.deepEqual(certificates.map(([, href, label, title]) => [href, label, title]), [
+    ["https://drive.google.com/file/d/1lmUdCuLreICUH0HPzBlwqLJuda7Qzxs4/view?usp=sharing", "Open 10th High School Certificate PDF in a new tab", "10th High School Certificate"],
+    ["https://drive.google.com/file/d/1EIIQJFxlrnnmQAgBf5nDebs1Qh_wJZ1L/view?usp=sharing", "Open 12th Intermediate Certificate PDF in a new tab", "12th Intermediate Certificate"],
+    ["https://drive.google.com/file/d/1uc32mrxNyYVAFxccMNyO49RDRJ_NEnBd/view?usp=sharing", "Open Scout Guide Training certificate in a new tab", "Scout Guide Training"],
+    ["https://drive.google.com/file/d/1reqRhDri1a_wfd-rppODPnKvDZ5SC8oo/view?usp=sharing", "Open AI Agentic Certificate in a new tab", "AI Agentic Certificate"],
+    ["https://drive.google.com/file/d/14JAkcHnFNWWIWbK0snQTroaA9jGv9PUZ/view?usp=sharing", "Open MKCL Certificate in a new tab", "MKCL Certificate"],
+    ["https://drive.google.com/file/d/1Hexq_sMDiVHIzqN2dz6Dn1Yz6b1nBdzb/view?usp=sharing", "Open Astrovega Robotics Certificate in a new tab", "Astrovega Robotics Certificate"],
+  ]);
+  assert.equal((certificateSection.match(/class="certificate-card certificate-card--link"/g) ?? []).length, 6);
   assert.doesNotMatch(certificateSection, /data-reveal/);
   assert.doesNotMatch(certificateSection, /READY TO UPDATE|Certificate details|title, issuer|TITLE · ISSUER/);
   assert.ok(homeHtml.indexOf(certificateSection) < homeHtml.indexOf('id="skills"'), "Certificates should precede skills");
