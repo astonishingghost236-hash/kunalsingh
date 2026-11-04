@@ -6,7 +6,7 @@ function addTwinklingStars() {
   if (!twinkleLayer || reducedMotion.matches) return;
 
   const fragment = document.createDocumentFragment();
-  for (let index = 0; index < 32; index += 1) {
+  for (let index = 0; index < 16; index += 1) {
     const star = document.createElement("span");
     star.className = "cosmic-scene__twinkle";
     star.style.setProperty("--twinkle-x", `${Math.random() * 100}%`);
@@ -24,7 +24,7 @@ function addHeroTwinkles() {
   if (!twinkleLayer || reducedMotion.matches) return;
 
   const fragment = document.createDocumentFragment();
-  const starCount = window.matchMedia("(max-width: 760px)").matches ? 48 : 88;
+  const starCount = window.matchMedia("(max-width: 760px)").matches ? 16 : 30;
   for (let index = 0; index < starCount; index += 1) {
     const star = document.createElement("span");
     star.className = "hero__twinkle";
@@ -62,7 +62,7 @@ export async function initCosmicBackground() {
     const paletteStyle = getComputedStyle(document.documentElement);
     const themeColors = palette.map((property) => new THREE.Color(paletteStyle.getPropertyValue(property).trim()));
     const isSmallScreen = window.matchMedia("(max-width: 760px)").matches;
-    const starCount = isSmallScreen ? 90 : 180;
+    const starCount = isSmallScreen ? 45 : 90;
 
     while (points.length / 3 < starCount) {
       const x = (Math.random() - 0.5) * 46;
@@ -79,25 +79,12 @@ export async function initCosmicBackground() {
     geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
     geometry.setAttribute("size", new THREE.Float32BufferAttribute(sizes, 1));
 
-    const colorAttribute = geometry.getAttribute("color");
-    const updateStarColors = () => {
-      const activeThemeColors = palette.map((property) => new THREE.Color(
-        getComputedStyle(document.documentElement).getPropertyValue(property).trim(),
-      ));
-      for (let index = 0; index < colorAttribute.count; index += 1) {
-        const color = activeThemeColors[Math.floor(Math.random() * activeThemeColors.length)];
-        colorAttribute.setXYZ(index, color.r, color.g, color.b);
-      }
-      colorAttribute.needsUpdate = true;
-    };
-    document.addEventListener("portfolio:theme-change", updateStarColors);
-
     const material = new THREE.PointsMaterial({
       size: 0.12,
       sizeAttenuation: true,
       vertexColors: true,
       transparent: true,
-      opacity: 0.63,
+      opacity: 0.4,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     });

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-theme="obsidian">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#080808">
+    <meta name="theme-color" content="#0a0d11">
     <meta name="description" content="Kunal Singh, Full Stack Web Developer and B.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University (MDU).">
     <title>Kunal Singh</title>
     <meta name="color-scheme" content="dark">
@@ -16,6 +16,39 @@
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
+    <section class="intro-screen" id="intro-screen" role="dialog" aria-modal="true" aria-labelledby="intro-title" tabindex="-1">
+      <div class="intro-screen__content">
+        <p class="intro-screen__eyebrow">KUNAL SINGH · PORTFOLIO</p>
+        <div class="intro-screen__layout">
+          <div class="intro-lamp">
+            <div class="intro-lamp__glow"></div>
+            <div class="intro-lamp__beam"></div>
+            <svg class="intro-lamp__icon" viewBox="0 0 180 300" fill="none" aria-hidden="true">
+              <path class="intro-lamp__wire" d="M90 0v58"/>
+              <path class="intro-lamp__bulb-glass" d="M75 59h30l3 17c20 13 28 34 21 53l-10 24H61l-10-24c-7-19 1-40 21-53l3-17Z"/>
+              <path class="intro-lamp__bulb-base" d="M64 153h52m-48 9h44m-38 9h32"/>
+              <path class="intro-lamp__filament" d="m78 139 12-15 12 15"/>
+            </svg>
+            <p class="intro-lamp__projection" aria-live="polite">Kunal Singh</p>
+          </div>
+          <div class="intro-screen__copy">
+            <h1 id="intro-title">Welcome To<br>My <span>Portfolio.</span></h1>
+            <p class="intro-screen__hint">Pull the cord to switch on the light and see my resume.</p>
+            <button class="lamp-cord" id="lamp-cord" type="button" aria-label="Pull the cord to turn on the light and see my resume">
+              <span class="lamp-cord__line" aria-hidden="true"></span>
+              <span class="lamp-cord__grip" aria-hidden="true">
+                <svg viewBox="0 0 40 48" fill="none">
+                  <path d="M14 43c-2-2-3-5-4-8L6 25c-1-3 3-5 5-2l3 5-3-14c-.5-3 4-4 5-1l3 10-1-14c-.2-3.5 4-4 4-.5l1 14 2-10c.5-3.2 4.7-2.6 4.2.7l-2 14 3-6c1.7-3 5.2-.5 3.6 2.4l-6 13c-1 2.3-3.4 4.4-6.4 5.4Z"/>
+                  <path d="m9 29 5 7m5-13 1 7m4-8-1 7m5-4-2 7"/>
+                </svg>
+              </span>
+              <span class="lamp-cord__label">PULL TO SWITCH ON</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <noscript><style>.intro-screen { display: none !important; }</style></noscript>
     <div class="site-shell">
       <div class="cosmic-scene" aria-hidden="true">
         <div class="cosmic-scene__wash"></div>
@@ -57,41 +90,14 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="8" height="7" rx="1.5"/><rect x="13" y="4" width="8" height="7" rx="1.5"/><rect x="3" y="13" width="8" height="7" rx="1.5"/><rect x="13" y="13" width="8" height="7" rx="1.5"/></svg>
             <span>Projects</span>
           </a>
-          <a class="site-nav__link" href="#experience">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2"/></svg>
-            <span>Experience</span>
-          </a>
           <a class="site-nav__link site-nav__contact" href="#contact">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 7l8 6 8-6"/></svg>
             <span>Let's talk</span><span class="site-nav__arrow" aria-hidden="true">↗</span>
           </a>
-          <section class="theme-switcher" aria-labelledby="theme-switcher-title">
-            <h2 class="site-nav__heading" id="theme-switcher-title">COLOR THEMES</h2>
-            <button class="theme-option" type="button" data-theme-option="jet" aria-pressed="false">
-              <span class="theme-option__swatches" aria-hidden="true"><span></span><span></span><span></span></span>
-              <span class="theme-option__copy"><strong>Jet Black</strong><small>Cerulean Blue · Neon Rose</small></span>
-              <span class="theme-option__check" aria-hidden="true">✓</span>
-            </button>
-            <button class="theme-option" type="button" data-theme-option="midnight" aria-pressed="false">
-              <span class="theme-option__swatches" aria-hidden="true"><span></span><span></span><span></span></span>
-              <span class="theme-option__copy"><strong>Midnight Black</strong><small>Electric Cobalt Blue · Acid Lime</small></span>
-              <span class="theme-option__check" aria-hidden="true">✓</span>
-            </button>
-            <button class="theme-option" type="button" data-theme-option="charcoal" aria-pressed="false">
-              <span class="theme-option__swatches" aria-hidden="true"><span></span><span></span><span></span></span>
-              <span class="theme-option__copy"><strong>Charcoal Black</strong><small>Forest Green · Crimson Red</small></span>
-              <span class="theme-option__check" aria-hidden="true">✓</span>
-            </button>
-            <button class="theme-option" type="button" data-theme-option="obsidian" aria-pressed="true">
-              <span class="theme-option__swatches" aria-hidden="true"><span></span><span></span><span></span></span>
-              <span class="theme-option__copy"><strong>Obsidian Studio</strong><small>Silver · Sapphire · Warm Brass</small></span>
-              <span class="theme-option__check" aria-hidden="true">✓</span>
-            </button>
-          </section>
         </nav>
       </header>
 
-      <main id="main-content">
+      <main id="main-content" tabindex="-1">
         <section class="hero" id="home" aria-labelledby="hero-title">
           <div class="hero__starfield" aria-hidden="true"></div>
           <div class="hero__twinkles" aria-hidden="true"></div>
@@ -317,27 +323,6 @@
           </div>
         </section>
 
-        <section class="section experience-section" id="experience" aria-labelledby="experience-title">
-          <div class="section-heading section-heading--inline">
-            <div><p class="eyebrow">HOW I WORK</p><h2 id="experience-title">From first thought<br>to <span>the real thing.</span></h2></div>
-            <p class="section-aside">A little structure to make space<br>for the unexpected.</p>
-          </div>
-          <div class="experience-list" aria-label="A considered approach to every project">
-            <article class="experience-row">
-              <div class="experience-row__content"><h3>Listen &amp; discover</h3><p>Start with the people, the problem, and what a better outcome should feel like.</p></div>
-              <span class="experience-row__tag">CLARITY BEFORE CODE</span>
-            </article>
-            <article class="experience-row">
-              <div class="experience-row__content"><h3>Design the feeling</h3><p>Give the idea a shape: clear flows, considered details, and room to experiment.</p></div>
-              <span class="experience-row__tag">MAKE IT TANGIBLE</span>
-            </article>
-            <article class="experience-row">
-              <div class="experience-row__content"><h3>Build, refine, launch</h3><p>Make it real, make it work beautifully, then keep making it better.</p></div>
-              <span class="experience-row__tag">DETAILS MATTER</span>
-            </article>
-          </div>
-        </section>
-
         <section class="section contact-section" id="contact" aria-labelledby="contact-title">
           <div class="contact-glow" aria-hidden="true"></div>
           <div class="contact-copy"><p class="eyebrow">THE NEXT CHAPTER</p><h2 id="contact-title">Have a good<br>one <span>in mind?</span></h2><p>The best projects start with a conversation. Tell me what you're dreaming up.</p></div>
@@ -358,9 +343,8 @@
       <footer class="site-footer">
         <div class="site-footer__main">
           <nav class="footer-nav" aria-label="Footer navigation">
-            <a href="#about">About</a><a href="#education">Education</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#experience">Approach</a>
+            <a href="#about">About</a><a href="#education">Education</a><a href="#skills">Skills</a><a href="#projects">Projects</a>
           </nav>
-          <a href="#home" class="footer-top">BACK TO THE TOP <span aria-hidden="true">↑</span></a>
         </div>
         <div class="site-footer__meta">
           <a href="#contact">SAY HELLO ↗</a>

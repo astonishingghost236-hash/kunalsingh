@@ -2,22 +2,38 @@ import { initNavigation } from "./navigation.js";
 import { loadProjects } from "./projects.js";
 import { initCosmicBackground } from "./cosmic-background.js";
 import { initSkillOrbit } from "./skill-orbit.js";
-import { initThemeSwitcher } from "./themes.js";
 import { initContactForm } from "./contact.js";
+import { initWelcomeIntro } from "./intro.js";
 
+initWelcomeIntro();
 initNavigation();
-initThemeSwitcher();
 loadProjects();
 initCosmicBackground();
 initSkillOrbit();
 initContactForm();
+
+function addNeonFrames() {
+  document.querySelectorAll(
+    ".education-card, .certificate-card, .technology-card, .project-card__art",
+  ).forEach((frame) => {
+    if (frame.querySelector(":scope > .neon-frame")) return;
+
+    const neonFrame = document.createElement("span");
+    neonFrame.className = "neon-frame";
+    neonFrame.setAttribute("aria-hidden", "true");
+    frame.append(neonFrame);
+  });
+}
+
+addNeonFrames();
+document.addEventListener("portfolio:content-ready", addNeonFrames);
 
 const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 let revealObserver;
 
 function observeReveals() {
   const revealTargets = document.querySelectorAll(
-    ".section-heading, .about-grid, .about-facts, .education-card, .technology-card, .experience-row, .contact-section, .project-card",
+    ".section-heading, .about-grid, .about-facts, .education-card, .technology-card, .project-card",
   );
 
   if (reducedMotionQuery.matches || !("IntersectionObserver" in window)) {
