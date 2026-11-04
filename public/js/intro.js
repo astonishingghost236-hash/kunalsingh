@@ -29,9 +29,11 @@ export function initWelcomeIntro() {
     lampCord.disabled = true;
     introScreen.focus({ preventScroll: true });
     introScreen.classList.add("is-lit");
-    void lampAudio.play().catch((error) => {
-      console.warn("Unable to play the lamp voice-over.", error);
-    });
+    window.setTimeout(() => {
+      void lampAudio.play().catch((error) => {
+        console.warn("Unable to play the lamp voice-over.", error);
+      });
+    }, 2000);
 
     window.setTimeout(() => {
       introScreen.classList.add("is-leaving");
