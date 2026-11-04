@@ -31,15 +31,11 @@ export function initContactForm() {
       });
       const result = await response.json();
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.message || "Your message could not be sent. Please try again.");
-      }
+      if (!response.ok || !result.success) throw new Error("The message could not be sent.");
       form.reset();
-      status.textContent = "";
-    } catch (error) {
-      status.textContent = error instanceof Error
-        ? error.message
-        : "Something went wrong. Please try again.";
+      status.textContent = "Thanks — your message has been sent.";
+    } catch {
+      status.textContent = "We couldn't send your message. Please try again later.";
       status.classList.add("is-error");
     } finally {
       submitButton.disabled = false;

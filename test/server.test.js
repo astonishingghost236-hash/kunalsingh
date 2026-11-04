@@ -104,6 +104,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(homeHtml, /68%/);
   const contactSection = homeHtml.match(/<section class="section contact-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(contactSection, "Contact section should be present");
+  assert.match(contactSection, /<p class="form-status" id="contact-status" role="status" aria-live="polite"><\/p>/);
+  assert.doesNotMatch(contactSection, /Your enquiry will be sent|Web3Forms/);
   const stylesResponse = await fetch(`${baseUrl}/css/style.css`);
   assert.equal(stylesResponse.status, 200);
   const styles = await stylesResponse.text();
@@ -117,6 +119,11 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(contactSection, /<form\b[^>]*action="https:\/\/api\.web3forms\.com\/submit"/);
   assert.match(contactSection, /name="access_key" value="42b80d09-1d02-4158-acd9-ca392cd6a5e8"/);
   assert.doesNotMatch(contactSection, /type="file"|name="phone"|PHONE NUMBER/);
+  const contactScriptResponse = await fetch(`${baseUrl}/js/contact.js`);
+  assert.equal(contactScriptResponse.status, 200);
+  const contactScript = await contactScriptResponse.text();
+  assert.doesNotMatch(contactScript, /result\.message/);
+  assert.match(contactScript, /We couldn't send your message\. Please try again later\./);
   const educationSection = homeHtml.match(/<section class="section education-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(educationSection, "Education section should be present");
   const educationCards = [...educationSection.matchAll(/<(?:article|a) class="education-card[\s\S]*?<\/(?:article|a)>/g)].map((match) => match[0]);
