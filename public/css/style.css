@@ -171,7 +171,7 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .section-heading h2, .contact-copy h2 { font-size: clamp(39px, 5vw, 57px); line-height: 1.17; }
 .about-grid { display: grid; grid-template-columns: 1fr .84fr; gap: 100px; align-items: start; }
 .about-grid--single { grid-template-columns: 1fr; gap: 24px; }
-.about-lead { max-width: 100%; margin: 0; color: #dfe5f0; font-family: var(--display); font-size: clamp(24px, 2.8vw, 46px); font-weight: 500; line-height: 1.42; letter-spacing: -.04em; }
+.about-lead { max-width: 100%; margin: 0; color: #dfe5f0; font-family: var(--body); font-size: 14px; line-height: 1.9; }
 .about-lead .highlight { color: var(--accent); font-weight: 700; }
 .about-detail p { margin: 0; color: #a19eac; font-size: 13px; line-height: 1.95; }
 .text-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 0; padding-bottom: 5px; border-bottom: 1px solid rgba(204,190,246,.35); color: #d8d1ea; font-size: 11px; }
