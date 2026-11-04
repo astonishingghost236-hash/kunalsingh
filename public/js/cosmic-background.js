@@ -12,8 +12,8 @@ function addTwinklingStars() {
     star.style.setProperty("--twinkle-x", `${Math.random() * 100}%`);
     star.style.setProperty("--twinkle-y", `${Math.random() * 100}%`);
     star.style.setProperty("--twinkle-size", `${0.8 + Math.random() * 1.2}px`);
-    star.style.setProperty("--twinkle-duration", `${2 + Math.random() * 4}s`);
-    star.style.setProperty("--twinkle-delay", `${-Math.random() * 6}s`);
+    star.style.setProperty("--twinkle-duration", `${7 + Math.random() * 7}s`);
+    star.style.setProperty("--twinkle-delay", `${-Math.random() * 14}s`);
     fragment.append(star);
   }
   twinkleLayer.append(fragment);
@@ -31,8 +31,8 @@ function addHeroTwinkles() {
     star.style.setProperty("--twinkle-x", `${Math.random() * 100}%`);
     star.style.setProperty("--twinkle-y", `${Math.random() * 100}%`);
     star.style.setProperty("--twinkle-size", `${0.7 + Math.random() * 1.4}px`);
-    star.style.setProperty("--twinkle-duration", `${1.8 + Math.random() * 4}s`);
-    star.style.setProperty("--twinkle-delay", `${-Math.random() * 5}s`);
+    star.style.setProperty("--twinkle-duration", `${7 + Math.random() * 7}s`);
+    star.style.setProperty("--twinkle-delay", `${-Math.random() * 14}s`);
     fragment.append(star);
   }
   twinkleLayer.append(fragment);
