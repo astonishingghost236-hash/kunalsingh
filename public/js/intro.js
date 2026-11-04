@@ -3,6 +3,8 @@ const lampCord = document.querySelector("#lamp-cord");
 const siteShell = document.querySelector(".site-shell");
 const mainContent = document.querySelector("#main-content");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const lampAudio = new Audio("/assets/playht-voice-over.mp3");
+lampAudio.preload = "auto";
 
 export function initWelcomeIntro() {
   if (!introScreen || !lampCord || !siteShell || !mainContent) return;
@@ -27,7 +29,9 @@ export function initWelcomeIntro() {
     lampCord.disabled = true;
     introScreen.focus({ preventScroll: true });
     introScreen.classList.add("is-lit");
-    playSwitchSound();
+    void lampAudio.play().catch((error) => {
+      console.warn("Unable to play the lamp voice-over.", error);
+    });
 
     window.setTimeout(() => {
       introScreen.classList.add("is-leaving");
@@ -65,31 +69,4 @@ export function initWelcomeIntro() {
   lampCord.addEventListener("pointerup", releaseCord);
   lampCord.addEventListener("pointercancel", releaseCord);
   lampCord.addEventListener("click", turnOnLamp);
-}
-
-function playSwitchSound() {
-  const AudioContext = window.AudioContext;
-  if (!AudioContext) return;
-
-  const audioContext = new AudioContext();
-  void audioContext.resume().then(() => {
-    const now = audioContext.currentTime;
-    const oscillator = audioContext.createOscillator();
-    const volume = audioContext.createGain();
-
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(420, now);
-    oscillator.frequency.exponentialRampToValueAtTime(660, now + 0.18);
-    volume.gain.setValueAtTime(0.0001, now);
-    volume.gain.exponentialRampToValueAtTime(0.09, now + 0.025);
-    volume.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
-    oscillator.connect(volume);
-    volume.connect(audioContext.destination);
-    oscillator.onended = () => audioContext.close();
-    oscillator.start(now);
-    oscillator.stop(now + 0.43);
-  }).catch((error) => {
-    console.warn("Unable to play the lamp switch sound.", error);
-    void audioContext.close();
-  });
 }

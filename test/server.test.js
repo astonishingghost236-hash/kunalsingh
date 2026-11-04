@@ -120,7 +120,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const introScriptResponse = await fetch(`${baseUrl}/js/intro.js`);
   assert.equal(introScriptResponse.status, 200);
   const introScript = await introScriptResponse.text();
-  assert.match(introScript, /new AudioContext\(\)/);
+  assert.match(introScript, /new Audio\("\/assets\/playht-voice-over\.mp3"\)/);
+  assert.match(introScript, /lampAudio\.play\(\)/);
   assert.match(contactSection, /<form\b[^>]*action="https:\/\/api\.web3forms\.com\/submit"/);
   assert.match(contactSection, /name="access_key" value="42b80d09-1d02-4158-acd9-ca392cd6a5e8"/);
   assert.doesNotMatch(contactSection, /type="file"|name="phone"|PHONE NUMBER/);
@@ -185,6 +186,11 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const portrait = await fetch(`${baseUrl}/assets/kunal-hero.png`);
   assert.equal(portrait.status, 200);
   assert.match(portrait.headers.get("content-type"), /image\/png/);
+
+  const lampAudio = await fetch(`${baseUrl}/assets/playht-voice-over.mp3`);
+  assert.equal(lampAudio.status, 200);
+  assert.match(lampAudio.headers.get("content-type"), /audio\/mpeg/);
+  assert.ok(Number(lampAudio.headers.get("content-length")) > 0);
 
   for (const resultPath of [
     "/results/class-xii-result-2246968.pdf",
