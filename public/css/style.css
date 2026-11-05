@@ -131,6 +131,13 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 11px; }
 .button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 13px; padding: 0 18px; border: 1px solid transparent; border-radius: 12px; font-size: 11px; font-weight: 600; transition: transform .2s ease, background .2s ease, border-color .2s ease; cursor: pointer; }
 .button:hover { transform: translateY(-2px); }
+.hero__socials { display: flex; align-items: center; gap: 6px; }
+.hero__social-link { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); background: rgba(255,255,255,.025); transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease; }
+.hero__social-link:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--accent) 55%, transparent); color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.hero__social-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.hero__social-link svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+.hero__social-link .hero__social-fill { fill: currentColor; stroke: none; }
+.hero__social-link .hero__social-dot { fill: currentColor; stroke: none; }
 .button--primary { color: #0a0d11; background: #7aa9dc; box-shadow: 0 7px 24px rgba(122,169,220,.2); }
 .button--primary:hover { background: #7aa9dc; }
 .button--primary span { font-size: 14px; }
