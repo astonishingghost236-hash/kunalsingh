@@ -114,6 +114,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const stylesResponse = await fetch(`${baseUrl}/css/style.css`);
   assert.equal(stylesResponse.status, 200);
   const styles = await stylesResponse.text();
+  assert.match(styles, /\.certificate-card--inactive\s*\{\s*pointer-events:\s*none;/);
   assert.match(styles, /\.contact-section\s*\{[^}]*border:\s*0/);
   assert.match(styles, /\.button--primary\s*\{[^}]*background:\s*#7aa9dc/);
   assert.match(styles, /\.intro-screen\.is-lit \.intro-lamp__bulb-glass\s*\{[^}]*fill:\s*#ffd58a/);
