@@ -99,7 +99,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(homeHtml, /Kunal Singh, Full Stack Web Developer and B\.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University \(MDU\)/);
   assert.match(homeHtml, /Full Stack Developer/);
   assert.match(homeHtml, /Computer Science &amp; Engineering/);
-  assert.doesNotMatch(homeHtml, /astonishing\.ghost\.236@gmail\.com|mailto:/);
+  assert.match(homeHtml, /href="mailto:astonishing\.ghost\.236@gmail\.com"/);
   assert.match(homeHtml, /id="education"/);
   assert.match(homeHtml, /B\.Tech — Computer Science &amp; Engineering/);
   assert.match(homeHtml, /M\.M\.I\.C/);
