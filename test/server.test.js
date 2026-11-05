@@ -46,15 +46,15 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.equal(home.status, 200);
   const homeHtml = await home.text();
   assert.doesNotMatch(homeHtml, /Making the digital feel|A little about me/);
-  assert.match(homeHtml, /Kunal Singh/);
-  assert.match(homeHtml, /<title>Kunal Singh<\/title>/);
+  assert.match(homeHtml, /Gautam Singh/);
+  assert.match(homeHtml, /<title>Gautam Singh<\/title>/);
   assert.match(homeHtml, /Welcome To<br>My <span>Portfolio\.<\/span>/);
   assert.doesNotMatch(homeHtml, /<footer\b|site-footer|footer-nav|footer-top/);
   assert.match(homeHtml, /Pull the cord to switch on the light and see my resume\./);
   assert.match(homeHtml, /id="lamp-cord"/);
   assert.match(homeHtml, /class="lamp-cord__rope-strand"/);
   assert.match(homeHtml, /class="lamp-cord__bulb"/);
-  assert.match(homeHtml, /class="intro-lamp__projection"[^>]*>Kunal Singh<\/p>/);
+  assert.match(homeHtml, /class="intro-lamp__projection"[^>]*>Gautam Singh<\/p>/);
   assert.match(homeHtml, /class="intro-lamp__shade"/);
   assert.match(homeHtml, /class="intro-lamp__shade-rim"/);
   assert.doesNotMatch(homeHtml, /data-theme|theme-switcher|theme-option/);
@@ -62,11 +62,12 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const heroSection = homeHtml.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0];
   assert.ok(heroSection, "Hero section should be present");
   assert.match(heroSection, /FULL STACK WEB DEVELOPER/);
-  assert.match(heroSection, /<h1 id="hero-title">Kunal <span>Singh<\/span><\/h1>/);
+  assert.match(heroSection, /<h1 id="hero-title">Gautam <span>Singh<\/span><\/h1>/);
   assert.match(heroSection, /Maharshi Dayanand University \(MDU\)/);
   assert.match(heroSection, /class="hero__starfield"/);
   assert.match(heroSection, /class="hero__glass"/);
-  assert.match(heroSection, /class="hero__character" src="\/assets\/kunal-hero\.png"/);
+  assert.match(heroSection, /class="hero__character" src="\/assets\/gautam-hero\.png"/);
+  assert.match(heroSection, /alt="Portrait of Gautam Singh wearing a black suit and sunglasses"/);
   assert.match(heroSection, /class="hero__intro"/);
   assert.match(heroSection, /class="hero__actions"/);
   assert.match(homeHtml, /pursuing a B\.Tech in Computer Science &amp; Engineering at Maharshi Dayanand University \(MDU\)/);
@@ -96,7 +97,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(homeHtml, /cosmic-scene__twinkles/);
   assert.doesNotMatch(homeHtml, /brand__mark|section-number|education-card__index|experience-row__number/);
   assert.doesNotMatch(homeHtml, /Your Name|Independent by nature|Intentional by design|INDEPENDENTLY WORKING|AVAILABLE ONLINE|FIG\. 01|BUILT WITH CURIOSITY|AND A LOT OF CARE/);
-  assert.match(homeHtml, /Kunal Singh, Full Stack Web Developer and B\.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University \(MDU\)/);
+  assert.match(homeHtml, /Gautam Singh, Full Stack Web Developer and B\.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University \(MDU\)/);
   assert.match(homeHtml, /Full Stack Developer/);
   assert.match(homeHtml, /Computer Science &amp; Engineering/);
   assert.match(homeHtml, /href="mailto:astonishing\.ghost\.236@gmail\.com"/);
@@ -146,16 +147,18 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const certificateSection = homeHtml.match(/<section class="section certificates-section" id="certificates"[\s\S]*?<\/section>/)?.[0];
   assert.ok(certificateSection, "Certificates section should be present");
   assert.ok(homeHtml.indexOf(educationSection) < homeHtml.indexOf(certificateSection), "Certificates should follow education");
-  const certificates = [...certificateSection.matchAll(/<a class="certificate-card certificate-card--link" href="([^"]+)" target="_blank" rel="noopener noreferrer" aria-label="([^"]+)">[\s\S]*?<span class="certificate-card__label">([^<]+)<\/span>[\s\S]*?<\/a>/g)];
-  assert.deepEqual(certificates.map(([, href, label, title]) => [href, label, title]), [
-    ["https://drive.google.com/file/d/1lmUdCuLreICUH0HPzBlwqLJuda7Qzxs4/view?usp=sharing", "Open 10th High School Certificate PDF in a new tab", "10th High School Certificate"],
-    ["https://drive.google.com/file/d/1EIIQJFxlrnnmQAgBf5nDebs1Qh_wJZ1L/view?usp=sharing", "Open 12th Intermediate Certificate PDF in a new tab", "12th Intermediate Certificate"],
-    ["https://drive.google.com/file/d/1uc32mrxNyYVAFxccMNyO49RDRJ_NEnBd/view?usp=sharing", "Open Scout Guide Training certificate in a new tab", "Scout Guide Training"],
-    ["https://drive.google.com/file/d/1reqRhDri1a_wfd-rppODPnKvDZ5SC8oo/view?usp=sharing", "Open AI Agentic Certificate in a new tab", "AI Agentic Certificate"],
-    ["https://drive.google.com/file/d/14JAkcHnFNWWIWbK0snQTroaA9jGv9PUZ/view?usp=sharing", "Open MKCL Certificate in a new tab", "MKCL Certificate"],
-    ["https://drive.google.com/file/d/1Hexq_sMDiVHIzqN2dz6Dn1Yz6b1nBdzb/view?usp=sharing", "Open Astrovega Robotics Certificate in a new tab", "Astrovega Robotics Certificate"],
+  const certificates = [...certificateSection.matchAll(/<article class="certificate-card certificate-card--inactive" aria-disabled="true">[\s\S]*?<span class="certificate-card__label">([^<]+)<\/span>[\s\S]*?<\/article>/g)];
+  assert.deepEqual(certificates.map(([, title]) => title), [
+    "10th High School Certificate",
+    "12th Intermediate Certificate",
+    "Scout Guide Training",
+    "AI Agentic Certificate",
+    "MKCL Certificate",
+    "Astrovega Robotics Certificate",
   ]);
-  assert.equal((certificateSection.match(/class="certificate-card certificate-card--link"/g) ?? []).length, 6);
+  assert.match(certificateSection, /Certificate links are temporarily unavailable\./);
+  assert.doesNotMatch(certificateSection, /<a\b|href=/);
+  assert.equal((certificateSection.match(/class="certificate-card certificate-card--inactive"/g) ?? []).length, 6);
   assert.doesNotMatch(certificateSection, /data-reveal/);
   assert.doesNotMatch(certificateSection, /READY TO UPDATE|Certificate details|title, issuer|TITLE · ISSUER/);
   assert.ok(homeHtml.indexOf(certificateSection) < homeHtml.indexOf('id="skills"'), "Certificates should precede skills");
@@ -183,7 +186,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     assert.match(homeHtml, new RegExp(`id="${fragment}"`), `Missing in-page target #${fragment}`);
   }
 
-  const portrait = await fetch(`${baseUrl}/assets/kunal-hero.png`);
+  const portrait = await fetch(`${baseUrl}/assets/gautam-hero.png`);
   assert.equal(portrait.status, 200);
   assert.match(portrait.headers.get("content-type"), /image\/png/);
 
@@ -255,12 +258,12 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const projects = await projectsResponse.json();
   assert.equal(projects.length, 4);
   assert.ok(projects.every((project) => project.slug && project.title && project.accent));
-  const portfolioProject = projects.find((project) => project.slug === "kunal-singh-portfolio");
+  const portfolioProject = projects.find((project) => project.slug === "gautam-singh-portfolio");
   assert.ok(portfolioProject, "The portfolio project should be available through the projects API");
-  assert.equal(portfolioProject.title, "Kunal Singh Portfolio");
+  assert.equal(portfolioProject.title, "Gautam Singh Portfolio");
   assert.match(portfolioProject.description, /animated skill orbits/);
   const projectScript = await (await fetch(`${baseUrl}/js/projects.js`)).text();
-  assert.match(projectScript, /project\.slug === "kunal-singh-portfolio"/);
+  assert.match(projectScript, /project\.slug === "gautam-singh-portfolio"/);
   assert.match(projectScript, /card\.href = "\/"/);
   assert.match(projectScript, /card\.target = "_blank"/);
 
@@ -271,7 +274,7 @@ test("exports a working Vercel app without a database", () => {
     process.execPath,
     [
       "-e",
-      "(async () => { const app = require('./server'); const server = app.listen(0, async () => { try { const base = `http://127.0.0.1:${server.address().port}`; const home = await fetch(base); const projectsResponse = await fetch(`${base}/api/projects`); const projects = await projectsResponse.json(); if (home.status !== 200 || !(await home.text()).includes('Kunal Singh')) throw new Error('Vercel homepage failed'); if (projectsResponse.status !== 200 || projects.length !== 4) throw new Error('Vercel project API failed'); server.close(); } catch (error) { console.error(error); server.close(() => process.exitCode = 1); } }); })().catch(error => { console.error(error); process.exitCode = 1; })",
+      "(async () => { const app = require('./server'); const server = app.listen(0, async () => { try { const base = `http://127.0.0.1:${server.address().port}`; const home = await fetch(base); const projectsResponse = await fetch(`${base}/api/projects`); const projects = await projectsResponse.json(); if (home.status !== 200 || !(await home.text()).includes('Gautam Singh')) throw new Error('Vercel homepage failed'); if (projectsResponse.status !== 200 || projects.length !== 4) throw new Error('Vercel project API failed'); server.close(); } catch (error) { console.error(error); server.close(() => process.exitCode = 1); } }); })().catch(error => { console.error(error); process.exitCode = 1; })",
     ],
     {
       cwd: path.join(__dirname, ".."),

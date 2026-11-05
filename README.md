@@ -1,4 +1,4 @@
-# Kunal Singh — developer portfolio
+# Gautam Singh — developer portfolio
 
 A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and technology orbit illustration, and a Node.js/Express server. The frontend uses vanilla HTML, CSS, and JavaScript modules; no React or SQL database is used.
 
@@ -10,6 +10,8 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 4. Open [http://localhost:3000](http://localhost:3000).
 
 Four example projects, including this portfolio, are served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
+
+Certificate cards remain visible, but their links are temporarily disabled.
 
 The Three.js browser module is copied into the public asset directory after dependency installation; run `npm run build` to copy it again if needed. Run `npm test` to check homepage content and in-page links, static assets and missing-asset responses, the hero portrait, projects API, and the Web3Forms contact form markup.
 
@@ -26,7 +28,7 @@ Set the Vercel project root to the repository root and the install command to `n
 
 ## Portfolio profile
 
-- Name: Kunal Singh
+- Name: Gautam Singh
 - Role: Full Stack Web Developer; Computer Science & Engineering student
 - Email: astonishing.ghost.236@gmail.com
 - Education: B.Tech — Computer Science & Engineering (currently pursuing); Class XII — PCM, M.M.I.C (58%); Class X, S.B.V.M (68%).
@@ -34,7 +36,7 @@ Set the Vercel project root to the repository root and the install command to `n
 
 ## Make it yours
 
-- Replace `public/assets/kunal-hero.png` with your own transparent PNG; keep the same filename or update the image path in `public/index.html`.
+- Replace `public/assets/gautam-hero.png` with your own transparent PNG; keep the same filename or update the image path in `public/index.html`.
 - Edit the profile content, availability, role, skills, education, and contact details in `public/index.html`.
 - Update project content in `src/projects.js`.
 - Visitors can choose one of four saved color themes from the navigation menu. Theme palettes are defined in `public/css/style.css`; layout styling lives in `public/css/style.css` and `public/css/responsive.css`.
