@@ -114,6 +114,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const stylesResponse = await fetch(`${baseUrl}/css/style.css`);
   assert.equal(stylesResponse.status, 200);
   const styles = await stylesResponse.text();
+  assert.match(styles, /\.education-card--inactive\s*\{\s*pointer-events:\s*none;/);
   assert.match(styles, /\.certificate-card--inactive\s*\{\s*pointer-events:\s*none;/);
   assert.match(styles, /\.contact-section\s*\{[^}]*border:\s*0/);
   assert.match(styles, /\.button--primary\s*\{[^}]*background:\s*#7aa9dc/);
@@ -139,12 +140,10 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(educationCards[0], /B\.Tech — Computer Science &amp; Engineering/);
   assert.match(educationCards[0], /CURRENTLY PURSUING/);
   assert.match(educationCards[1], /CLASS XII · SCIENCE/);
-  assert.match(educationCards[1], /href="\/results\/class-xii-result-2246968\.pdf"/);
-  assert.match(educationCards[1], /aria-label="Open Class XII marksheet PDF"/);
+  assert.match(educationCards[1], /<article class="education-card education-card--inactive" aria-disabled="true"/);
   assert.match(educationCards[2], /S\.B\.V\.M/);
-  assert.match(educationCards[2], /href="\/results\/class-x-result-12221369\.pdf"/);
-  assert.match(educationCards[2], /aria-label="Open Class X marksheet PDF"/);
-  assert.doesNotMatch(educationCards[1] + educationCards[2], /target="_blank"/);
+  assert.match(educationCards[2], /<article class="education-card education-card--inactive" aria-disabled="true"/);
+  assert.doesNotMatch(educationCards[1] + educationCards[2], /<a\b|href=|target="_blank"/);
   const certificateSection = homeHtml.match(/<section class="section certificates-section" id="certificates"[\s\S]*?<\/section>/)?.[0];
   assert.ok(certificateSection, "Certificates section should be present");
   assert.ok(homeHtml.indexOf(educationSection) < homeHtml.indexOf(certificateSection), "Certificates should follow education");
