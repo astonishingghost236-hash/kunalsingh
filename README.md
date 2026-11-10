@@ -1,4 +1,4 @@
-# Gautam Singh — developer portfolio
+# Kunal Singh — developer portfolio
 
 A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and technology orbit illustration, and a Node.js/Express server. The frontend uses vanilla HTML, CSS, and JavaScript modules; no React or SQL database is used.
 
@@ -11,7 +11,7 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 
 Four example projects, including this portfolio, are served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
 
-The Class X and Class XII certificate cards open a six-digit PIN prompt. Set a private `CERTIFICATE_PIN` environment variable on the server (the same six digits for both documents) before enabling access. Certificate PDFs are stored outside `public/` and are only returned after the server validates the PIN. The four other certificate cards remain unavailable until their documents are added.
+All six certificate cards open a six-digit PIN prompt. Set a private `CERTIFICATE_PIN` environment variable on the server before enabling access. Certificate PDFs are stored outside `public/` and are only returned after the server validates the PIN.
 
 For local development, set `CERTIFICATE_PIN=123456` in your ignored `.env` file before running `npm start`, replacing the example with your own six-digit PIN. Put the PDF files in `private/certificates/`; PDFs in that folder are ignored by Git and must never be committed. `npm start` loads the local `.env`; an environment variable already set by the shell takes precedence. Configure the PIN as a deployment secret in production; never add it to frontend code or commit it.
 
@@ -32,7 +32,7 @@ Set the Vercel project root to the repository root and the install command to `n
 
 ## Portfolio profile
 
-- Name: Gautam Singh
+- Name: Kunal Singh
 - Role: Full Stack Web Developer; Computer Science & Engineering student
 - Email: astonishing.ghost.236@gmail.com
 - Education: B.Tech — Computer Science & Engineering (currently pursuing); Class XII — PCM, M.M.I.C (58%); Class X, S.B.V.M (68%).

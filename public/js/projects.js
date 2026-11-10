@@ -1,7 +1,7 @@
 const projectGrid = document.querySelector("#projects-grid");
 
 function createProjectCard(project) {
-  const opensPortfolio = project.slug === "gautam-singh-portfolio";
+  const opensPortfolio = project.slug === "kunal-singh-portfolio";
   const card = document.createElement(opensPortfolio ? "a" : "article");
   card.className = "project-card";
   card.dataset.reveal = "";
@@ -9,7 +9,7 @@ function createProjectCard(project) {
     card.href = "/";
     card.target = "_blank";
     card.rel = "noopener noreferrer";
-    card.setAttribute("aria-label", "Open Gautam Singh Portfolio website in a new tab");
+    card.setAttribute("aria-label", "Open Kunal Singh Portfolio website in a new tab");
   }
 
   const art = document.createElement("div");

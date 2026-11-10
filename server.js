@@ -9,6 +9,10 @@ const publicDirectory = path.join(__dirname, "public");
 const certificateFiles = {
   "class-x": path.join(__dirname, "private", "certificates", "class-x-result-12221369.pdf"),
   "class-xii": path.join(__dirname, "private", "certificates", "class-xii-result-2246968.pdf"),
+  "scout-guide": path.join(__dirname, "private", "certificates", "scout-guide.pdf"),
+  "ai-agentic": path.join(__dirname, "private", "certificates", "ai-agentic.pdf"),
+  mkcl: path.join(__dirname, "private", "certificates", "mkcl.pdf"),
+  astrovega: path.join(__dirname, "private", "certificates", "astrovega.pdf"),
 };
 const certificateTokenLifetime = 120;
 const port = process.env.PORT === undefined ? 3000 : Number(process.env.PORT);
