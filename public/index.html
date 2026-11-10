@@ -243,19 +243,19 @@
               <p class="eyebrow">CERTIFICATES</p>
               <h2 id="certificates-title">Proof of <span>practice.</span></h2>
             </div>
-            <p class="section-aside" role="status">Certificate links are temporarily unavailable.</p>
+            <p class="section-aside" role="status">Choose a certificate and enter the six-digit PIN to view it.</p>
           </div>
           <div class="certificate-cards">
-            <article class="certificate-card certificate-card--inactive" aria-disabled="true">
-              <div class="certificate-card__paper">
+            <button class="certificate-card" type="button" data-certificate-id="class-x" aria-label="View 10th High School Certificate">
+              <span class="certificate-card__paper">
                 <span class="certificate-card__label">10th High School Certificate</span>
-              </div>
-            </article>
-            <article class="certificate-card certificate-card--inactive" aria-disabled="true">
-              <div class="certificate-card__paper">
+              </span>
+            </button>
+            <button class="certificate-card" type="button" data-certificate-id="class-xii" aria-label="View 12th Intermediate Certificate">
+              <span class="certificate-card__paper">
                 <span class="certificate-card__label">12th Intermediate Certificate</span>
-              </div>
-            </article>
+              </span>
+            </button>
             <article class="certificate-card certificate-card--inactive" aria-disabled="true">
               <div class="certificate-card__paper">
                 <span class="certificate-card__label">Scout Guide Training</span>
@@ -351,6 +351,31 @@
           </form>
         </section>
       </main>
+
+      <dialog class="certificate-dialog" id="certificate-dialog" aria-labelledby="certificate-dialog-title">
+        <div class="certificate-dialog__body">
+          <button class="certificate-dialog__close" type="button" aria-label="Close certificate viewer">×</button>
+          <section class="certificate-pin-view" id="certificate-pin-view">
+            <p class="eyebrow">PRIVATE DOCUMENT</p>
+            <h2 id="certificate-dialog-title">Enter your <span>PIN.</span></h2>
+            <p class="certificate-dialog__hint">Enter the six-digit PIN to view this certificate.</p>
+            <form class="certificate-pin-form" id="certificate-pin-form" novalidate>
+              <div class="certificate-pin-inputs" id="certificate-pin-inputs" aria-label="Six-digit PIN">
+                <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="PIN digit 1" required>
+                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 2" required>
+                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 3" required>
+                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 4" required>
+                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 5" required>
+                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 6" required>
+              </div>
+              <p class="certificate-pin-status" id="certificate-pin-status" role="status" aria-live="polite"></p>
+            </form>
+          </section>
+          <section class="certificate-document-view" id="certificate-document-view" hidden>
+            <iframe class="certificate-document" id="certificate-document" title="Certificate document"></iframe>
+          </section>
+        </div>
+      </dialog>
 
     </div>
   </body>

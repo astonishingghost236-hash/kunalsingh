@@ -10,6 +10,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
       ...process.env,
       PORT: "0",
       VERCEL: "",
+      CERTIFICATE_PIN: "135790",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -147,7 +148,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const certificateSection = homeHtml.match(/<section class="section certificates-section" id="certificates"[\s\S]*?<\/section>/)?.[0];
   assert.ok(certificateSection, "Certificates section should be present");
   assert.ok(homeHtml.indexOf(educationSection) < homeHtml.indexOf(certificateSection), "Certificates should follow education");
-  const certificates = [...certificateSection.matchAll(/<article class="certificate-card certificate-card--inactive" aria-disabled="true">[\s\S]*?<span class="certificate-card__label">([^<]+)<\/span>[\s\S]*?<\/article>/g)];
+  const certificates = [...certificateSection.matchAll(/<(?:article|button) class="certificate-card(?: certificate-card--inactive)?"[^>]*>[\s\S]*?<span class="certificate-card__label">([^<]+)<\/span>[\s\S]*?<\/(?:article|button)>/g)];
   assert.deepEqual(certificates.map(([, title]) => title), [
     "10th High School Certificate",
     "12th Intermediate Certificate",
@@ -156,11 +157,15 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     "MKCL Certificate",
     "Astrovega Robotics Certificate",
   ]);
-  assert.match(certificateSection, /Certificate links are temporarily unavailable\./);
-  assert.doesNotMatch(certificateSection, /<a\b|href=/);
-  assert.equal((certificateSection.match(/class="certificate-card certificate-card--inactive"/g) ?? []).length, 6);
+  assert.match(certificateSection, /Choose a certificate and enter the six-digit PIN to view it\./);
+  assert.match(certificateSection, /data-certificate-id="class-x"/);
+  assert.match(certificateSection, /data-certificate-id="class-xii"/);
+  assert.equal((certificateSection.match(/class="certificate-card certificate-card--inactive" aria-disabled="true"/g) ?? []).length, 4);
+  assert.match(homeHtml, /id="certificate-dialog"/);
+  assert.equal((homeHtml.match(/aria-label="PIN digit \d"/g) ?? []).length, 6);
+  assert.equal((certificateSection.match(/class="certificate-card certificate-card--inactive"/g) ?? []).length, 4);
   assert.doesNotMatch(certificateSection, /data-reveal/);
-  assert.doesNotMatch(certificateSection, /READY TO UPDATE|Certificate details|title, issuer|TITLE · ISSUER/);
+  assert.doesNotMatch(certificateSection, /READY TO UPDATE|Certificate details|title, issuer|TITLE · ISSUER|href=/);
   assert.ok(homeHtml.indexOf(certificateSection) < homeHtml.indexOf('id="skills"'), "Certificates should precede skills");
   assert.doesNotMatch(homeHtml, /Y\/N/);
   const skillsSection = homeHtml.match(/<section class="section skills-section"[\s\S]*?<\/section>/)?.[0];
@@ -199,13 +204,52 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     "/results/class-xii-result-2246968.pdf",
     "/results/class-x-result-12221369.pdf",
   ]) {
-    const result = await fetch(`${baseUrl}${resultPath}`, {
-      headers: { Range: "bytes=0-4" },
+    const result = await fetch(`${baseUrl}${resultPath}`);
+    assert.equal(result.status, 404, `${resultPath} must not be publicly accessible`);
+  }
+
+  const invalidCertificatePin = await fetch(`${baseUrl}/api/certificates/class-x`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pin: "000000" }),
+  });
+  assert.equal(invalidCertificatePin.status, 401);
+  assert.match((await invalidCertificatePin.json()).error, /incorrect/i);
+
+  const malformedCertificatePin = await fetch(`${baseUrl}/api/certificates/class-x`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pin: "12345" }),
+  });
+  assert.equal(malformedCertificatePin.status, 400);
+
+  const missingCertificate = await fetch(`${baseUrl}/api/certificates/constructor`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pin: "135790" }),
+  });
+  assert.equal(missingCertificate.status, 404);
+
+  for (const certificateId of ["class-x", "class-xii"]) {
+    const accessResponse = await fetch(`${baseUrl}/api/certificates/${certificateId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pin: "135790" }),
     });
-    assert.equal(result.status, 206, `${resultPath} should support quick partial PDF loading`);
-    assert.match(result.headers.get("content-type"), /application\/pdf/);
-    assert.match(result.headers.get("content-range"), /^bytes 0-4\/\d+$/);
-    assert.equal(Buffer.from(await result.arrayBuffer()).toString("ascii"), "%PDF-");
+    assert.equal(accessResponse.status, 200);
+    assert.equal(accessResponse.headers.get("cache-control"), "no-store");
+    const { documentUrl } = await accessResponse.json();
+    assert.match(documentUrl, new RegExp(`^/api/certificates/${certificateId}/document\\?token=\\d{10}\\.[A-Za-z0-9_-]{43}$`));
+
+    const certificate = await fetch(`${baseUrl}${documentUrl}`);
+    assert.equal(certificate.status, 200);
+    assert.match(certificate.headers.get("content-type"), /application\/pdf/);
+    assert.equal(certificate.headers.get("cache-control"), "no-store");
+    assert.equal(certificate.headers.get("content-disposition"), "inline");
+    assert.equal(Buffer.from(await certificate.arrayBuffer()).toString("ascii", 0, 5), "%PDF-");
+
+    const forgedDocument = await fetch(`${baseUrl}/api/certificates/${certificateId}/document?token=1999999999.${"A".repeat(43)}`);
+    assert.equal(forgedDocument.status, 404);
   }
 
   const missingAsset = await fetch(`${baseUrl}/assets/missing-image.png`);
@@ -230,7 +274,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   });
   assert.equal(disabledContactEndpoint.status, 404);
 
-  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/cosmic-background.js", "/js/skill-orbit.js", "/js/contact.js"]) {
+  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/cosmic-background.js", "/js/skill-orbit.js", "/js/contact.js", "/js/certificate-access.js"]) {
     const asset = await fetch(`${baseUrl}${localPath}`);
     assert.equal(asset.status, 200, `${localPath} should load`);
   }

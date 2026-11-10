@@ -11,7 +11,11 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 
 Four example projects, including this portfolio, are served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
 
-Certificate cards remain visible, but their links are temporarily disabled.
+The Class X and Class XII certificate cards open a six-digit PIN prompt. Set a private `CERTIFICATE_PIN` environment variable on the server (the same six digits for both documents) before enabling access. Certificate PDFs are stored outside `public/` and are only returned after the server validates the PIN. The four other certificate cards remain unavailable until their documents are added.
+
+For local development, set `CERTIFICATE_PIN=123456` in your ignored `.env` file before running `npm start`, replacing the example with your own six-digit PIN. Put the PDF files in `private/certificates/`; PDFs in that folder are ignored by Git and must never be committed. `npm start` loads the local `.env`; an environment variable already set by the shell takes precedence. Configure the PIN as a deployment secret in production; never add it to frontend code or commit it.
+
+The public-repository release intentionally excludes the certificate PDFs. As a result, certificate viewing on a deployment returns an explicit unavailable message until private document storage is configured for that server. Do not add personal certificate PDFs to a public GitHub repository.
 
 The Three.js browser module is copied into the public asset directory after dependency installation; run `npm run build` to copy it again if needed. Run `npm test` to check homepage content and in-page links, static assets and missing-asset responses, the hero portrait, projects API, and the Web3Forms contact form markup.
 
@@ -24,7 +28,7 @@ The Three.js browser module is copied into the public asset directory after depe
 
 Vercel runs Express as a serverless function. The Express app is exported for Vercel Functions; it does not open a standalone server in the function. Projects are plain JavaScript data, so no database add-on or database environment variables are needed.
 
-Set the Vercel project root to the repository root and the install command to `npm ci`. `vercel.json` sets the build command to `npm run build`, which copies Three.js into `public/` for Vercel's static asset hosting. Do not set the output directory to the repository root; the Express entry point is `server.js`.
+Set the Vercel project root to the repository root and the install command to `npm ci`. `vercel.json` sets the build command to `npm run build`, which copies Three.js into `public/` for Vercel's static asset hosting. Certificate PDFs are not included in the public deployment; connect a private document store before enabling certificate viewing there. Do not set the output directory to the repository root; the Express entry point is `server.js`.
 
 ## Portfolio profile
 

@@ -7,7 +7,7 @@
   "scripts": {
     "build": "node scripts/copy-three.js",
     "postinstall": "node scripts/copy-three.js",
-    "start": "node server.js",
+    "start": "node --env-file-if-exists=.env server.js",
     "test": "node --test"
   },
   "engines": {
