@@ -172,8 +172,10 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.doesNotMatch(certificateStyles, /data-certificate-id="class-x"[^}]*>\s*\.neon-frame,\s*#certificates \.certificate-card\[data-certificate-id="class-xii"\] > \.neon-frame \{\s*opacity: 1;/);
   assert.match(certificateStyles, /\.certificate-card:focus-visible > \.neon-frame,\s*\.certificate-card:active > \.neon-frame \{\s*opacity: 1;/);
   assert.match(certificateStyles, /\.certificate-card:focus-visible > \.neon-frame::after,\s*\.certificate-card:active > \.neon-frame::after \{\s*animation: neon-trail 2\.4s linear infinite;/);
-  assert.match(certificateStyles, /data-certificate-id="mkcl"[^}]*--neon-color: #ff4d5a; border-color: rgba\(255,77,90/);
-  assert.match(certificateStyles, /data-certificate-id="astrovega"[^}]*--neon-color: #ff9b45; border-color: rgba\(255,155,69/);
+  assert.match(certificateStyles, /data-certificate-id="mkcl"[^}]*--neon-color: #ff4d5a;/);
+  assert.match(certificateStyles, /data-certificate-id="mkcl"\]:is\(:hover, :focus-visible, :active\) \{\s*border-color: rgba\(255,77,90/);
+  assert.match(certificateStyles, /data-certificate-id="astrovega"[^}]*--neon-color: #ff9b45;/);
+  assert.match(certificateStyles, /data-certificate-id="astrovega"\]:is\(:hover, :focus-visible, :active\) \{\s*border-color: rgba\(255,155,69/);
   assert.equal((certificateSection.match(/class="certificate-card certificate-card--inactive" aria-disabled="true"/g) ?? []).length, 0);
   assert.match(homeHtml, /id="certificate-dialog"/);
   assert.match(homeHtml, /<h2 id="certificate-dialog-title">Protected Certificate<\/h2>/);
