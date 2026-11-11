@@ -11,9 +11,11 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 
 Four example projects, including this portfolio, are served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
 
-All six certificate cards open a six-digit PIN prompt. Set a private `CERTIFICATE_PIN` environment variable on the server before enabling access. Certificate PDFs are stored outside `public/` and are only returned after the server validates the PIN.
+The WebGL starfield starts after the welcome intro and pauses whenever the hero is offscreen or the tab is hidden. Intro audio loads only after the visitor activates the welcome screen. Animated skill orbits pause when the tab is hidden or reduced motion is enabled.
 
-For local development, set `CERTIFICATE_PIN=123456` in your ignored `.env` file before running `npm start`, replacing the example with your own six-digit PIN. Put the PDF files in `private/certificates/`; PDFs in that folder are ignored by Git and must never be committed. `npm start` loads the local `.env`; an environment variable already set by the shell takes precedence. Configure the PIN as a deployment secret in production; never add it to frontend code or commit it.
+All six certificate cards open a four-digit PIN prompt. Set a private `CERTIFICATE_PIN` environment variable on the server before enabling access. Certificate PDFs are stored outside `public/` and are only returned after the server validates the PIN. The PIN is never embedded in frontend code. A four-digit PIN offers limited protection and should not be treated as strong authentication for highly sensitive documents.
+
+For local development, set `CERTIFICATE_PIN=1234` in your ignored `.env` file before running `npm start`, replacing the example with your own four-digit PIN. Put the PDF files in `private/certificates/`; PDFs in that folder are ignored by Git and must never be committed. `npm start` loads the local `.env`; an environment variable already set by the shell takes precedence. Configure the PIN as a deployment secret in production; never add it to frontend code or commit it.
 
 The public-repository release intentionally excludes the certificate PDFs. As a result, certificate viewing on a deployment returns an explicit unavailable message until private document storage is configured for that server. Do not add personal certificate PDFs to a public GitHub repository.
 
@@ -40,7 +42,7 @@ Set the Vercel project root to the repository root and the install command to `n
 
 ## Make it yours
 
-- Replace `public/assets/gautam-hero.png` with your own transparent PNG; keep the same filename or update the image path in `public/index.html`.
+- Replace the hero portrait asset with your own transparent PNG; keep its existing filename or update the image path in `public/index.html`.
 - Edit the profile content, availability, role, skills, education, and contact details in `public/index.html`.
 - Update project content in `src/projects.js`.
 - Visitors can choose one of four saved color themes from the navigation menu. Theme palettes are defined in `public/css/style.css`; layout styling lives in `public/css/style.css` and `public/css/responsive.css`.

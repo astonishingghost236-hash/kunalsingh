@@ -4,7 +4,7 @@ const siteShell = document.querySelector(".site-shell");
 const mainContent = document.querySelector("#main-content");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const lampAudio = new Audio("/assets/playht-voice-over.mp3");
-lampAudio.preload = "auto";
+lampAudio.preload = "none";
 
 export function initWelcomeIntro() {
   if (!introScreen || !lampCord || !siteShell || !mainContent) return;
@@ -42,6 +42,7 @@ export function initWelcomeIntro() {
         document.body.classList.remove("intro-open");
         siteShell.inert = false;
         mainContent.focus({ preventScroll: true });
+        document.dispatchEvent(new Event("portfolio:intro-complete"));
       }, reducedMotion.matches ? 0 : 650);
     }, reducedMotion.matches ? 3000 : 2350);
   };

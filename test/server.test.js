@@ -10,7 +10,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
       ...process.env,
       PORT: "0",
       VERCEL: "",
-      CERTIFICATE_PIN: "135790",
+      CERTIFICATE_PIN: "1357",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -49,6 +49,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.doesNotMatch(homeHtml, /Making the digital feel|A little about me/);
   assert.match(homeHtml, /Kunal Singh/);
   assert.match(homeHtml, /<title>Kunal Singh<\/title>/);
+  assert.match(homeHtml, /KUNAL SINGH · PORTFOLIO/);
+  assert.doesNotMatch(homeHtml, /GAUTAM SINGH/);
   assert.match(homeHtml, /Welcome To<br>My <span>Portfolio\.<\/span>/);
   assert.doesNotMatch(homeHtml, /<footer\b|site-footer|footer-nav|footer-top/);
   assert.match(homeHtml, /Pull the cord to switch on the light and see my resume\./);
@@ -125,6 +127,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.equal(introScriptResponse.status, 200);
   const introScript = await introScriptResponse.text();
   assert.match(introScript, /new Audio\("\/assets\/playht-voice-over\.mp3"\)/);
+  assert.match(introScript, /lampAudio\.preload = "none"/);
   assert.match(introScript, /lampAudio\.play\(\)/);
   assert.match(contactSection, /<form\b[^>]*action="https:\/\/api\.web3forms\.com\/submit"/);
   assert.match(contactSection, /name="access_key" value="42b80d09-1d02-4158-acd9-ca392cd6a5e8"/);
@@ -157,12 +160,25 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     "MKCL Certificate",
     "Astrovega Robotics Certificate",
   ]);
-  assert.match(certificateSection, /Choose a certificate and enter the six-digit PIN to view it\./);
+  assert.match(certificateSection, /Choose a certificate and enter the four-digit PIN to view it\./);
   assert.match(certificateSection, /data-certificate-id="class-x"/);
   assert.match(certificateSection, /data-certificate-id="class-xii"/);
+  assert.match(certificateSection, /data-certificate-id="mkcl"/);
+  assert.match(certificateSection, /data-certificate-id="astrovega"/);
+  const certificateStyles = await (await fetch(`${baseUrl}/css/style.css`)).text();
+  assert.match(certificateStyles, /data-certificate-id="class-x"[^}]*>\s*\.neon-frame,\s*#certificates \.certificate-card\[data-certificate-id="class-xii"\] > \.neon-frame \{\s*opacity: 1;/);
+  assert.match(certificateStyles, /data-certificate-id="class-x"[^}]*::after,\s*#certificates \.certificate-card\[data-certificate-id="class-xii"\] > \.neon-frame::after \{\s*animation: neon-trail 2\.4s linear infinite;/);
+  assert.match(certificateStyles, /data-certificate-id="mkcl"[^}]*--neon-color: #ff4d5a; border-color: rgba\(255,77,90/);
+  assert.match(certificateStyles, /data-certificate-id="astrovega"[^}]*--neon-color: #ff9b45; border-color: rgba\(255,155,69/);
   assert.equal((certificateSection.match(/class="certificate-card certificate-card--inactive" aria-disabled="true"/g) ?? []).length, 0);
   assert.match(homeHtml, /id="certificate-dialog"/);
-  assert.equal((homeHtml.match(/aria-label="PIN digit \d"/g) ?? []).length, 6);
+  assert.match(homeHtml, /<h2 id="certificate-dialog-title">Protected Certificate<\/h2>/);
+  assert.match(homeHtml, /Please enter your PIN to access this certificate\./);
+  assert.match(homeHtml, /type="password" inputmode="numeric" autocomplete="one-time-code" pattern="\[0-9\]\{4\}" maxlength="4"/);
+  assert.match(homeHtml, />Unlock Certificate<\/button>/);
+  assert.match(homeHtml, />Cancel<\/button>/);
+  const certificateAccessScript = await (await fetch(`${baseUrl}/js/certificate-access.js`)).text();
+  assert.doesNotMatch(certificateAccessScript, /CERTIFICATE_PIN|1357/);
   assert.equal((certificateSection.match(/class="certificate-card certificate-card--inactive"/g) ?? []).length, 0);
   for (const certificateId of ["class-x", "class-xii", "scout-guide", "ai-agentic", "mkcl", "astrovega"]) {
     assert.match(certificateSection, new RegExp(`data-certificate-id="${certificateId}"`));
@@ -214,7 +230,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const invalidCertificatePin = await fetch(`${baseUrl}/api/certificates/class-x`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ pin: "000000" }),
+    body: JSON.stringify({ pin: "0000" }),
   });
   assert.equal(invalidCertificatePin.status, 401);
   assert.match((await invalidCertificatePin.json()).error, /incorrect/i);
@@ -222,14 +238,14 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const malformedCertificatePin = await fetch(`${baseUrl}/api/certificates/class-x`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ pin: "12345" }),
+    body: JSON.stringify({ pin: "123" }),
   });
   assert.equal(malformedCertificatePin.status, 400);
 
   const missingCertificate = await fetch(`${baseUrl}/api/certificates/constructor`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ pin: "135790" }),
+    body: JSON.stringify({ pin: "1357" }),
   });
   assert.equal(missingCertificate.status, 404);
 
@@ -237,22 +253,13 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     const accessResponse = await fetch(`${baseUrl}/api/certificates/${certificateId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pin: "135790" }),
+      body: JSON.stringify({ pin: "1357" }),
     });
     assert.equal(accessResponse.status, 200);
     assert.equal(accessResponse.headers.get("cache-control"), "no-store");
-    const { documentUrl } = await accessResponse.json();
-    assert.match(documentUrl, new RegExp(`^/api/certificates/${certificateId}/document\\?token=\\d{10}\\.[A-Za-z0-9_-]{43}$`));
-
-    const certificate = await fetch(`${baseUrl}${documentUrl}`);
-    assert.equal(certificate.status, 200);
-    assert.match(certificate.headers.get("content-type"), /application\/pdf/);
-    assert.equal(certificate.headers.get("cache-control"), "no-store");
-    assert.equal(certificate.headers.get("content-disposition"), "inline");
-    assert.equal(Buffer.from(await certificate.arrayBuffer()).toString("ascii", 0, 5), "%PDF-");
-
-    const forgedDocument = await fetch(`${baseUrl}/api/certificates/${certificateId}/document?token=1999999999.${"A".repeat(43)}`);
-    assert.equal(forgedDocument.status, 404);
+    assert.match(accessResponse.headers.get("content-type"), /application\/pdf/);
+    assert.equal(accessResponse.headers.get("content-disposition"), "inline");
+    assert.equal(Buffer.from(await accessResponse.arrayBuffer()).toString("ascii", 0, 5), "%PDF-");
   }
 
   const missingAsset = await fetch(`${baseUrl}/assets/missing-image.png`);
@@ -277,7 +284,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   });
   assert.equal(disabledContactEndpoint.status, 404);
 
-  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/cosmic-background.js", "/js/skill-orbit.js", "/js/contact.js", "/js/certificate-access.js"]) {
+  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/cosmic-background.js", "/js/skill-orbit.js", "/js/contact.js", "/js/intro.js", "/js/certificate-access.js"]) {
     const asset = await fetch(`${baseUrl}${localPath}`);
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
@@ -285,15 +292,22 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(portfolioStyles, /\.hero__orbit--outer\s*\{\s*width:\s*87%;/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*2;/);
   assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*8px;[^}]*height:\s*8px;/);
-  assert.match(portfolioStyles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.hero__orbit-travel \{\s*animation: orbit-travel var\(--orbit-duration\) linear infinite !important;/);
+  assert.match(portfolioStyles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\[data-reveal\] \{\s*opacity: 1;/);
   const skillOrbitScript = await (await fetch(`${baseUrl}/js/skill-orbit.js`)).text();
-  assert.doesNotMatch(skillOrbitScript, /prefers-reduced-motion/);
+  assert.match(skillOrbitScript, /prefers-reduced-motion/);
+  assert.equal((skillOrbitScript.match(/addEventListener\("visibilitychange"/g) ?? []).length, 1);
+  assert.match(skillOrbitScript, /reducedMotionQuery\.addEventListener\("change", updateAnimationState\)/);
+  const cosmicScript = await (await fetch(`${baseUrl}/js/cosmic-background.js`)).text();
+  assert.match(cosmicScript, /visibilityObserver\.observe\(hero\)/);
+  assert.match(cosmicScript, /portfolio:intro-complete/);
   assert.match(portfolioStyles, /height:\s*min\(700px,\s*calc\(100svh - 150px\)\)/);
   const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
   assert.match(responsiveStyles, /height:\s*min\(680px,\s*calc\(100svh - 150px\)\)/);
   assert.match(responsiveStyles, /grid-template-columns:\s*minmax\(0,\s*1fr\);\s*grid-template-rows:\s*auto minmax\(390px,\s*1fr\)/);
   assert.match(responsiveStyles, /height:\s*auto;\s*min-height:\s*max\(740px,\s*100svh\)/);
   assert.match(responsiveStyles, /padding:\s*max\(82px,\s*calc\(env\(safe-area-inset-top\) \+ 72px\)\)\s+18px\s+26px/);
+  assert.match(responsiveStyles, /@media \(max-width: 380px\) \{\s*body \{\s*min-width: 0;/);
+  assert.match(responsiveStyles, /backdrop-filter:\s*blur\(8px\)\s+saturate\(125%\)/);
 
   const threeModule = await fetch(`${baseUrl}/vendor/three/three.module.js`);
   assert.equal(threeModule.status, 200);

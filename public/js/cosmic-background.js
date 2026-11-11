@@ -43,6 +43,11 @@ export async function initCosmicBackground() {
   addHeroTwinkles();
   if (!canvas || reducedMotion.matches) return;
 
+  let introFinished = !document.body.classList.contains("intro-open");
+  document.addEventListener("portfolio:intro-complete", () => {
+    introFinished = true;
+  }, { once: true });
+
   try {
     const THREE = await import("/vendor/three/three.module.js");
     const renderer = new THREE.WebGLRenderer({
@@ -54,6 +59,8 @@ export async function initCosmicBackground() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 100);
     camera.position.z = 25;
+    const hero = document.querySelector(".hero");
+    if (!hero) return;
 
     const points = [];
     const colors = [];
@@ -101,62 +108,84 @@ export async function initCosmicBackground() {
       camera.updateProjectionMatrix();
     };
 
+    let resizeFrame = 0;
+    const scheduleResize = () => {
+      if (resizeFrame) return;
+      resizeFrame = window.requestAnimationFrame(() => {
+        resizeFrame = 0;
+        resize();
+      });
+    };
     resize();
-    window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("resize", scheduleResize, { passive: true });
 
     let pointerX = 0;
     let pointerY = 0;
     let animationFrame = 0;
-    let sceneVisible = true;
+    let sceneVisible = false;
     let pageVisible = !document.hidden;
     let lastRenderTime = 0;
+    let initialized = false;
     const frameInterval = 1000 / 30;
-    window.addEventListener("pointermove", (event) => {
-      pointerX = (event.clientX / window.innerWidth - 0.5) * 0.28;
-      pointerY = (event.clientY / window.innerHeight - 0.5) * 0.18;
-    }, { passive: true });
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      window.addEventListener("pointermove", (event) => {
+        pointerX = (event.clientX / window.innerWidth - 0.5) * 0.28;
+        pointerY = (event.clientY / window.innerHeight - 0.5) * 0.18;
+      }, { passive: true });
+    }
 
-    const animate = (timestamp = performance.now()) => {
-      if (!sceneVisible || !pageVisible) return;
+    const animate = (timestamp) => {
+      animationFrame = 0;
+      if (!initialized || !introFinished || !sceneVisible || !pageVisible) return;
+      if (timestamp - lastRenderTime >= frameInterval) {
+        lastRenderTime = timestamp;
+        stars.rotation.y += 0.00012;
+        camera.position.x += (pointerX - camera.position.x) * 0.018;
+        camera.position.y += (-pointerY - camera.position.y) * 0.018;
+        renderer.render(scene, camera);
+      }
       animationFrame = window.requestAnimationFrame(animate);
-      if (timestamp - lastRenderTime < frameInterval) return;
-      lastRenderTime = timestamp;
-      stars.rotation.y += 0.00012;
-      camera.position.x += (pointerX - camera.position.x) * 0.018;
-      camera.position.y += (-pointerY - camera.position.y) * 0.018;
-      renderer.render(scene, camera);
     };
 
-    document.addEventListener("visibilitychange", () => {
+    const updateAnimationState = () => {
       pageVisible = !document.hidden;
-      if (!pageVisible) window.cancelAnimationFrame(animationFrame);
-      else {
-        lastRenderTime = 0;
-        animate();
+      if (!pageVisible || !introFinished || !sceneVisible) {
+        if (animationFrame) window.cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+        return;
       }
-    });
+      if (!animationFrame) {
+        lastRenderTime = 0;
+        animationFrame = window.requestAnimationFrame(animate);
+      }
+    };
+    document.addEventListener("visibilitychange", updateAnimationState);
+    document.addEventListener("portfolio:intro-complete", updateAnimationState, { once: true });
 
     if ("IntersectionObserver" in window) {
       const visibilityObserver = new IntersectionObserver(([entry]) => {
         sceneVisible = entry.isIntersecting;
-        if (!sceneVisible) window.cancelAnimationFrame(animationFrame);
-        else animate();
+        updateAnimationState();
       });
-      visibilityObserver.observe(canvas);
+      visibilityObserver.observe(hero);
     } else {
-      sceneVisible = window.scrollY < canvas.clientHeight;
-      if (sceneVisible) animate();
-      window.addEventListener("scroll", () => {
-        const isVisible = window.scrollY < canvas.clientHeight;
-        if (isVisible === sceneVisible) return;
-        sceneVisible = isVisible;
-        if (sceneVisible) {
-          lastRenderTime = 0;
-          animate();
-        }
-        else window.cancelAnimationFrame(animationFrame);
-      }, { passive: true });
+      let visibilityFrame = 0;
+      const scheduleVisibilityCheck = () => {
+        if (visibilityFrame) return;
+        visibilityFrame = window.requestAnimationFrame(() => {
+          visibilityFrame = 0;
+          const bounds = hero.getBoundingClientRect();
+          sceneVisible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+          updateAnimationState();
+        });
+      };
+      window.addEventListener("scroll", scheduleVisibilityCheck, { passive: true });
+      window.addEventListener("resize", scheduleVisibilityCheck, { passive: true });
+      scheduleVisibilityCheck();
     }
+
+    initialized = true;
+    updateAnimationState();
   } catch (error) {
     console.warn("Cosmic canvas is unavailable; the CSS background remains active.", error);
   }

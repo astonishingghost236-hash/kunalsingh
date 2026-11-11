@@ -1,17 +1,14 @@
 export function initCertificateAccess() {
   const dialog = document.querySelector("#certificate-dialog");
-  const pinView = document.querySelector("#certificate-pin-view");
   const form = document.querySelector("#certificate-pin-form");
-  const pinInputs = [...document.querySelectorAll(".certificate-pin-inputs input")];
+  const pinInput = document.querySelector("#certificate-pin");
   const pinGroup = document.querySelector("#certificate-pin-inputs");
   const status = document.querySelector("#certificate-pin-status");
-  const documentView = document.querySelector("#certificate-document-view");
-  const documentFrame = document.querySelector("#certificate-document");
   const closeButton = document.querySelector(".certificate-dialog__close");
+  const cancelButton = document.querySelector("#certificate-pin-cancel");
   let activeCertificate;
   let opener;
-  let documentUrl;
-  let revealTimeout;
+  let documentWindow;
   let pinRequest;
   let isSubmitting = false;
 
@@ -26,62 +23,42 @@ export function initCertificateAccess() {
     setStatus("");
   }
 
-  function preparePinRetry() {
-    isSubmitting = false;
-    pinInputs.forEach((input) => {
-      input.value = "";
-      input.disabled = false;
-    });
-    pinInputs[0].focus();
-  }
-
   function resetDialog() {
     pinRequest?.abort();
     pinRequest = undefined;
-    window.clearTimeout(revealTimeout);
-    documentUrl = "";
-    documentFrame.removeAttribute("src");
-    documentFrame.title = "Certificate document";
-    documentView.hidden = true;
-    pinView.hidden = false;
+    if (documentWindow && !documentWindow.closed) documentWindow.close();
+    documentWindow = undefined;
     form.reset();
-    pinInputs.forEach((input) => {
-      input.disabled = false;
-    });
+    pinInput.disabled = false;
     clearFeedback();
     activeCertificate = undefined;
     isSubmitting = false;
   }
 
-  function distributeDigits(value, startIndex = 0) {
-    const digits = value.replace(/\D/g, "");
-    for (let offset = 0; offset < digits.length && startIndex + offset < pinInputs.length; offset += 1) {
-      pinInputs[startIndex + offset].value = digits[offset];
-    }
-
-    const nextInput = pinInputs[Math.min(startIndex + digits.length, pinInputs.length - 1)];
-    nextInput.focus();
-    updatePin();
-  }
-
-  function updatePin() {
-    if (isSubmitting) return;
-    clearFeedback();
-    if (pinInputs.every((input) => input.value.length === 1)) submitPin();
-  }
-
   async function submitPin() {
     if (isSubmitting || !activeCertificate) return;
 
-    const pin = pinInputs.map((input) => input.value).join("");
-    if (!/^\d{6}$/.test(pin)) return;
+    const pin = pinInput.value;
+    if (!/^\d{4}$/.test(pin)) {
+      pinGroup.dataset.state = "invalid";
+      setStatus("Enter your 4-digit PIN.", "invalid");
+      pinInput.focus();
+      return;
+    }
+
+    const openedWindow = window.open("about:blank", "_blank");
+    if (!openedWindow) {
+      setStatus("Please allow pop-ups to open your certificate, then try again.", "invalid");
+      pinGroup.dataset.state = "invalid";
+      return;
+    }
+    openedWindow.opener = null;
+    documentWindow = openedWindow;
 
     const requestedCertificate = activeCertificate;
     pinRequest = new AbortController();
     isSubmitting = true;
-    pinInputs.forEach((input) => {
-      input.disabled = true;
-    });
+    pinInput.disabled = true;
     setStatus("Checking PIN…");
 
     try {
@@ -93,46 +70,53 @@ export function initCertificateAccess() {
       });
 
       if (!response.ok) {
-        const result = await response.json();
         if (activeCertificate !== requestedCertificate) return;
+        const result = await response.json();
         pinRequest = undefined;
+        if (documentWindow && !documentWindow.closed) documentWindow.close();
+        documentWindow = undefined;
         pinGroup.dataset.state = "invalid";
-        setStatus(response.status === 503
-          ? "Certificate access is not configured on the server."
+        setStatus(response.status === 401
+          ? "Incorrect PIN! Please try again."
           : result.error || "Unable to verify this PIN.", "invalid");
-        preparePinRetry();
+        isSubmitting = false;
+        pinInput.value = "";
+        pinInput.disabled = false;
+        pinInput.focus();
         return;
       }
 
-      const result = await response.json();
-      if (typeof result.documentUrl !== "string" || !result.documentUrl.startsWith("/api/certificates/")) {
-        throw new Error("The certificate server returned an invalid document URL.");
+      if (!response.headers.get("content-type")?.includes("application/pdf")) {
+        throw new Error("The certificate server returned an invalid document.");
       }
 
-      documentUrl = result.documentUrl;
+      const documentBlob = await response.blob();
       if (activeCertificate !== requestedCertificate) {
-        documentUrl = "";
         return;
       }
       pinRequest = undefined;
+      const documentUrl = URL.createObjectURL(documentBlob);
+      documentWindow.location.replace(documentUrl);
+      window.setTimeout(() => URL.revokeObjectURL(documentUrl), 120_000);
+      documentWindow = undefined;
       pinGroup.dataset.state = "valid";
       setStatus("PIN accepted. Opening your certificate…", "valid");
-      revealTimeout = window.setTimeout(() => {
-        pinView.hidden = true;
-        documentView.hidden = false;
-        documentFrame.title = `${activeCertificate.label} document`;
-        documentFrame.src = documentUrl;
-        isSubmitting = false;
-      }, 2000);
+      isSubmitting = false;
+      dialog.close();
     } catch (error) {
       if (error.name === "AbortError" || activeCertificate !== requestedCertificate) return;
       pinRequest = undefined;
+      if (documentWindow && !documentWindow.closed) documentWindow.close();
+      documentWindow = undefined;
       console.error("Unable to load certificate.", error);
       pinGroup.dataset.state = "invalid";
       setStatus(error instanceof TypeError
         ? "Certificate server unavailable. Start it with npm start, then try again."
         : "Unable to load the certificate. Please try again.", "invalid");
-      preparePinRetry();
+      isSubmitting = false;
+      pinInput.value = "";
+      pinInput.disabled = false;
+      pinInput.focus();
     }
   }
 
@@ -141,44 +125,16 @@ export function initCertificateAccess() {
       resetDialog();
       activeCertificate = {
         id: button.dataset.certificateId,
-        label: button.getAttribute("aria-label")?.replace(/^View /, "") ?? "Certificate",
       };
       opener = button;
       dialog.showModal();
-      window.requestAnimationFrame(() => pinInputs[0].focus());
+      window.requestAnimationFrame(() => pinInput.focus());
     });
   });
 
-  pinInputs.forEach((input, index) => {
-    input.addEventListener("input", () => {
-      const digits = input.value.replace(/\D/g, "");
-      if (digits.length > 1) {
-        input.value = "";
-        distributeDigits(digits, index);
-        return;
-      }
-
-      input.value = digits;
-      if (digits && index < pinInputs.length - 1) pinInputs[index + 1].focus();
-      updatePin();
-    });
-
-    input.addEventListener("keydown", (event) => {
-      if (event.key === "Backspace" && !input.value && index > 0) {
-        pinInputs[index - 1].focus();
-      } else if (event.key === "ArrowLeft" && index > 0) {
-        pinInputs[index - 1].focus();
-      } else if (event.key === "ArrowRight" && index < pinInputs.length - 1) {
-        pinInputs[index + 1].focus();
-      }
-    });
-
-    input.addEventListener("paste", (event) => {
-      const pastedText = event.clipboardData?.getData("text") ?? "";
-      if (!/\d/.test(pastedText)) return;
-      event.preventDefault();
-      distributeDigits(pastedText, index);
-    });
+  pinInput.addEventListener("input", () => {
+    pinInput.value = pinInput.value.replace(/\D/g, "").slice(0, 4);
+    clearFeedback();
   });
 
   form.addEventListener("submit", (event) => {
@@ -187,6 +143,7 @@ export function initCertificateAccess() {
   });
 
   closeButton.addEventListener("click", () => dialog.close());
+  cancelButton.addEventListener("click", () => dialog.close());
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });

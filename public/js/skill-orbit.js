@@ -1,6 +1,7 @@
 export function initSkillOrbit() {
   if (typeof Element.prototype.animate !== "function") return;
 
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const orbiters = [...document.querySelectorAll(".hero__orbit-travel")];
   const animations = orbiters.map((orbiter) => {
     const computedStyle = window.getComputedStyle(orbiter);
@@ -74,7 +75,7 @@ export function initSkillOrbit() {
   }
 
   function updateAnimationState() {
-    stopped = document.hidden;
+    stopped = document.hidden || reducedMotionQuery.matches;
     if (stopped) {
       animations.forEach(({ animation, logoAnimation }) => {
         animation.pause();
@@ -89,6 +90,6 @@ export function initSkillOrbit() {
     });
   }
   document.addEventListener("visibilitychange", updateAnimationState);
-  document.addEventListener("visibilitychange", updateAnimationState);
+  reducedMotionQuery.addEventListener("change", updateAnimationState);
   updateAnimationState();
 }

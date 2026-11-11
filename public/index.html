@@ -18,7 +18,7 @@
     <a class="skip-link" href="#main-content">Skip to content</a>
     <section class="intro-screen" id="intro-screen" role="dialog" aria-modal="true" aria-labelledby="intro-title" tabindex="-1">
       <div class="intro-screen__content">
-        <p class="intro-screen__eyebrow">GAUTAM SINGH · PORTFOLIO</p>
+        <p class="intro-screen__eyebrow">KUNAL SINGH · PORTFOLIO</p>
         <div class="intro-screen__layout">
           <div class="intro-lamp">
             <div class="intro-lamp__glow"></div>
@@ -243,7 +243,7 @@
               <p class="eyebrow">CERTIFICATES</p>
               <h2 id="certificates-title">Proof of <span>practice.</span></h2>
             </div>
-            <p class="section-aside" role="status">Choose a certificate and enter the six-digit PIN to view it.</p>
+            <p class="section-aside" role="status">Choose a certificate and enter the four-digit PIN to view it.</p>
           </div>
           <div class="certificate-cards">
             <button class="certificate-card" type="button" data-certificate-id="class-x" aria-label="View 10th High School Certificate">
@@ -356,23 +356,24 @@
         <div class="certificate-dialog__body">
           <button class="certificate-dialog__close" type="button" aria-label="Close certificate viewer">×</button>
           <section class="certificate-pin-view" id="certificate-pin-view">
-            <p class="eyebrow">PRIVATE DOCUMENT</p>
-            <h2 id="certificate-dialog-title">Enter your <span>PIN.</span></h2>
-            <p class="certificate-dialog__hint">Enter the six-digit PIN to view this certificate.</p>
+            <svg class="certificate-dialog__lock" viewBox="0 0 48 48" aria-hidden="true">
+              <rect x="10" y="21" width="28" height="22" rx="5"></rect>
+              <path d="M16 21v-7a8 8 0 0 1 16 0v7"></path>
+              <circle cx="24" cy="31" r="2"></circle>
+              <path d="M24 33v4"></path>
+            </svg>
+            <h2 id="certificate-dialog-title">Protected Certificate</h2>
+            <p class="certificate-dialog__hint">Please enter your PIN to access this certificate.</p>
             <form class="certificate-pin-form" id="certificate-pin-form" novalidate>
-              <div class="certificate-pin-inputs" id="certificate-pin-inputs" aria-label="Six-digit PIN">
-                <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="PIN digit 1" required>
-                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 2" required>
-                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 3" required>
-                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 4" required>
-                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 5" required>
-                <input type="text" inputmode="numeric" autocomplete="off" maxlength="1" aria-label="PIN digit 6" required>
+              <div class="certificate-pin-inputs" id="certificate-pin-inputs">
+                <input class="certificate-pin-input" id="certificate-pin" type="password" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4}" maxlength="4" aria-label="4-digit PIN" enterkeyhint="done" required>
               </div>
               <p class="certificate-pin-status" id="certificate-pin-status" role="status" aria-live="polite"></p>
+              <div class="certificate-dialog__actions">
+                <button class="button button--primary" type="submit">Unlock Certificate</button>
+                <button class="button button--quiet" id="certificate-pin-cancel" type="button">Cancel</button>
+              </div>
             </form>
-          </section>
-          <section class="certificate-document-view" id="certificate-document-view" hidden>
-            <iframe class="certificate-document" id="certificate-document" title="Certificate document"></iframe>
           </section>
         </div>
       </dialog>

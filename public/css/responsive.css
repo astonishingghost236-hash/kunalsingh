@@ -62,10 +62,16 @@
   .education-card__content > p:last-child { font-size: 10px; }
   .certificate-cards { gap: 12px; }
   .certificate-card { min-height: 180px; }
-  .certificate-dialog__body { min-height: 0; padding: 62px 18px 22px; }
-  .certificate-pin-inputs { gap: 7px; margin-top: 24px; }
-  .certificate-pin-inputs input { height: 54px; font-size: 20px; }
-  .certificate-document { height: 70dvh; }
+  .certificate-dialog__body { padding: 58px 20px 24px; }
+  .certificate-pin-input { height: 54px; font-size: 23px; }
+  .education-card,
+  .certificate-card,
+  .technology-card,
+  .contact-section,
+  .project-card__art {
+    backdrop-filter: blur(8px) saturate(125%);
+    -webkit-backdrop-filter: blur(8px) saturate(125%);
+  }
   .technology-cards { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
   .technology-card { min-height: 210px; }
   .technology-card__logo { width: 72px; height: 72px; }
@@ -84,6 +90,7 @@
 }
 
 @media (max-width: 380px) {
+  body { min-width: 0; }
   .technology-cards { grid-template-columns: 1fr; }
   .technology-card { min-height: 190px; }
 }
