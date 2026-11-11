@@ -421,7 +421,9 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 }
 
 .education-card:focus-visible > .neon-frame,
-.education-card:active > .neon-frame { opacity: 1; }
+.education-card:active > .neon-frame,
+.certificate-card:focus-visible > .neon-frame,
+.certificate-card:active > .neon-frame { opacity: 1; }
 
 .education-card:hover > .neon-frame::after,
 .certificate-card:hover > .neon-frame::after,
@@ -433,7 +435,9 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 }
 
 .education-card:focus-visible > .neon-frame::after,
-.education-card:active > .neon-frame::after { animation: neon-trail 2.4s linear infinite; }
+.education-card:active > .neon-frame::after,
+.certificate-card:focus-visible > .neon-frame::after,
+.certificate-card:active > .neon-frame::after { animation: neon-trail 2.4s linear infinite; }
 
 [data-reveal] { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s cubic-bezier(.2,.65,.25,1); }
 [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
@@ -504,10 +508,6 @@ body { background: var(--obsidian); }
 .certificate-card:nth-child(4n) .certificate-card__paper svg { stroke: var(--accent-secondary); }
 #certificates .certificate-card[data-certificate-id="class-x"],
 #certificates .certificate-card[data-certificate-id="class-xii"] { --neon-color: #ffd84a; }
-#certificates .certificate-card[data-certificate-id="class-x"] > .neon-frame,
-#certificates .certificate-card[data-certificate-id="class-xii"] > .neon-frame { opacity: 1; }
-#certificates .certificate-card[data-certificate-id="class-x"] > .neon-frame::after,
-#certificates .certificate-card[data-certificate-id="class-xii"] > .neon-frame::after { animation: neon-trail 2.4s linear infinite; }
 #certificates .certificate-card[data-certificate-id="mkcl"] { --neon-color: #ff4d5a; border-color: rgba(255,77,90,.72); }
 #certificates .certificate-card[data-certificate-id="astrovega"] { --neon-color: #ff9b45; border-color: rgba(255,155,69,.76); }
 .technology-card::before { background: radial-gradient(circle, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%); }
