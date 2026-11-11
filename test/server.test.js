@@ -144,9 +144,12 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(educationCards[0], /B\.Tech — Computer Science &amp; Engineering/);
   assert.match(educationCards[0], /CURRENTLY PURSUING/);
   assert.match(educationCards[1], /CLASS XII · SCIENCE/);
-  assert.match(educationCards[1], /<article class="education-card education-card--inactive" aria-disabled="true"/);
+  assert.match(educationCards[1], /<article class="education-card" tabindex="0"/);
   assert.match(educationCards[2], /S\.B\.V\.M/);
-  assert.match(educationCards[2], /<article class="education-card education-card--inactive" aria-disabled="true"/);
+  assert.match(educationCards[2], /<article class="education-card" tabindex="0"/);
+  const educationStyles = await (await fetch(`${baseUrl}/css/style.css`)).text();
+  assert.match(educationStyles, /\.education-card:focus-visible > \.neon-frame,\s*\.education-card:active > \.neon-frame \{\s*opacity: 1;/);
+  assert.match(educationStyles, /\.education-card:focus-visible > \.neon-frame::after,\s*\.education-card:active > \.neon-frame::after \{\s*animation: neon-trail 2\.4s linear infinite;/);
   assert.doesNotMatch(educationCards[1] + educationCards[2], /<a\b|href=|target="_blank"/);
   const certificateSection = homeHtml.match(/<section class="section certificates-section" id="certificates"[\s\S]*?<\/section>/)?.[0];
   assert.ok(certificateSection, "Certificates section should be present");
