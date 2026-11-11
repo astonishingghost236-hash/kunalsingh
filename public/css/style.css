@@ -506,8 +506,8 @@ body { background: var(--obsidian); }
 .certificate-card__paper, .certificate-card:nth-child(n) .certificate-card__paper { border-color: color-mix(in srgb, var(--chrome) 20%, transparent); }
 .certificate-card:nth-child(n) .certificate-card__paper svg { stroke: var(--chrome); }
 .certificate-card:nth-child(4n) .certificate-card__paper svg { stroke: var(--accent-secondary); }
-#certificates .certificate-card[data-certificate-id="class-x"],
-#certificates .certificate-card[data-certificate-id="class-xii"] { --neon-color: #ffd84a; }
+#certificates .certificate-card[data-certificate-id="class-x"] { --neon-color: #ffd84a; }
+#certificates .certificate-card[data-certificate-id="class-xii"] { --neon-color: #56c8ff; }
 #certificates .certificate-card[data-certificate-id="mkcl"] { --neon-color: #ff4d5a; }
 #certificates .certificate-card[data-certificate-id="mkcl"]:is(:hover, :focus-visible, :active) { border-color: rgba(255,77,90,.72); }
 #certificates .certificate-card[data-certificate-id="astrovega"] { --neon-color: #ff9b45; }
