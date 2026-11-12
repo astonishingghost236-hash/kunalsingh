@@ -325,9 +325,11 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const projectsResponse = await fetch(`${baseUrl}/api/projects`);
   assert.equal(projectsResponse.status, 200);
   const projects = await projectsResponse.json();
-  assert.equal(projects.length, 3);
+  assert.equal(projects.length, 1);
   assert.ok(projects.every((project) => project.slug && project.title && project.accent));
   assert.ok(projects.every((project) => project.slug !== "lumen-studio"));
+  assert.ok(projects.every((project) => project.slug !== "orbit-finance"));
+  assert.ok(projects.every((project) => project.slug !== "signal-notes"));
   const portfolioProject = projects.find((project) => project.slug === "kunal-singh-portfolio");
   assert.ok(portfolioProject, "The portfolio project should be available through the projects API");
   assert.equal(portfolioProject.title, "Kunal Singh Portfolio");
@@ -344,7 +346,7 @@ test("exports a working Vercel app without a database", () => {
     process.execPath,
     [
       "-e",
-      "(async () => { const app = require('./server'); const server = app.listen(0, async () => { try { const base = `http://127.0.0.1:${server.address().port}`; const home = await fetch(base); const projectsResponse = await fetch(`${base}/api/projects`); const projects = await projectsResponse.json(); if (home.status !== 200 || !(await home.text()).includes('Kunal Singh')) throw new Error('Vercel homepage failed'); if (projectsResponse.status !== 200 || projects.length !== 3) throw new Error('Vercel project API failed'); server.close(); } catch (error) { console.error(error); server.close(() => process.exitCode = 1); } }); })().catch(error => { console.error(error); process.exitCode = 1; })",
+      "(async () => { const app = require('./server'); const server = app.listen(0, async () => { try { const base = `http://127.0.0.1:${server.address().port}`; const home = await fetch(base); const projectsResponse = await fetch(`${base}/api/projects`); const projects = await projectsResponse.json(); if (home.status !== 200 || !(await home.text()).includes('Kunal Singh')) throw new Error('Vercel homepage failed'); if (projectsResponse.status !== 200 || projects.length !== 1) throw new Error('Vercel project API failed'); server.close(); } catch (error) { console.error(error); server.close(() => process.exitCode = 1); } }); })().catch(error => { console.error(error); process.exitCode = 1; })",
     ],
     {
       cwd: path.join(__dirname, ".."),

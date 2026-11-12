@@ -9,7 +9,7 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 3. Run `npm start`.
 4. Open [http://localhost:3000](http://localhost:3000).
 
-Three example projects, including this portfolio, are served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
+The portfolio project is served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
 
 The WebGL starfield starts after the welcome intro and pauses whenever the hero is offscreen or the tab is hidden. Intro audio loads only after the visitor activates the welcome screen. Animated skill orbits pause when the tab is hidden or reduced motion is enabled.
 
