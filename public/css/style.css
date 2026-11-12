@@ -81,7 +81,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .intro-screen.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
 .cosmic-scene__wash { position: absolute; inset: 0; background: radial-gradient(ellipse at 74% 22%, rgba(27,104,214,.19), transparent 37%), radial-gradient(ellipse at 18% 58%, rgba(22,86,176,.12), transparent 38%), linear-gradient(180deg, #07101d 6%, rgba(6,11,20,.96) 72%, #060b14 100%); }
 .cosmic-scene__network { position: absolute; inset: 0; background-image: url("/assets/neural-network.svg"); background-position: center top; background-repeat: repeat; background-size: 960px 720px; opacity: .08; }
-.cosmic-scene__green-flow { position: fixed; z-index: 0; inset: -3vh -3vw; background: url("/assets/green-triangle-flow.svg") center / cover no-repeat; opacity: .46; pointer-events: none; animation: green-flow-drift 36s ease-in-out infinite alternate; }
 .cosmic-scene__mesh { position: fixed; top: 50%; left: 68%; width: min(78vw, 760px); aspect-ratio: 1; background: url("/assets/blue-neural-mesh.svg") center / contain no-repeat; opacity: .52; pointer-events: none; transform: translate(-50%, -50%); animation: orbital-mesh-rotate 110s linear infinite; }
 .cosmic-scene__stars { position: absolute; inset: 0; opacity: .14; background-image: radial-gradient(1px 1px at 12% 8%, rgba(126,185,255,.85) 50%, transparent 100%), radial-gradient(1.3px 1.3px at 66% 12%, rgba(126,185,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 34% 27%, rgba(126,185,255,.8) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 93% 39%, rgba(126,185,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 77% 61%, rgba(126,185,255,.6) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 20% 72%, rgba(126,185,255,.65) 50%, transparent 100%), radial-gradient(1px 1px at 47% 88%, rgba(126,185,255,.65) 50%, transparent 100%); background-size: 347px 281px; }
 
@@ -441,7 +440,6 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .project-card[data-reveal]:nth-child(2) { transition-delay: .08s; }
 .project-card[data-reveal]:nth-child(3) { transition-delay: .16s; }
 @keyframes orbit-travel { from { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(0deg); } to { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(360deg); } }
-@keyframes green-flow-drift { from { transform: translate3d(-5.5%, 3%, 0) rotate(-1deg); } to { transform: translate3d(5.5%, -3%, 0) rotate(1deg); } }
 @keyframes orbital-mesh-rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
 @keyframes character-arrive { from { opacity: 0; transform: translateY(20px) scale(.975); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
@@ -452,8 +450,6 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Keep background motion visible but slow for reduced-motion preference. */
-  .cosmic-scene__green-flow { animation: green-flow-drift 90s ease-in-out infinite alternate !important; }
   .cosmic-scene__mesh { animation: orbital-mesh-rotate 220s linear infinite !important; }
 }
 
