@@ -15,20 +15,20 @@ export function initSkillOrbit() {
     if (!Number.isFinite(duration) || duration <= 0) {
       throw new Error("Skill orbit item must have a positive --orbit-duration.");
     }
-    const orbit = orbiter.parentElement;
-    if (!orbit) throw new Error("Skill orbit item must be inside an orbit path.");
+    if (orbiter.parentElement !== heroVisual) {
+      throw new Error("Skill orbit items must be direct children of the hero visual.");
+    }
 
-    const counterclockwise = orbit.classList.contains("hero__orbit--counterclockwise");
-    const siblings = [...orbit.querySelectorAll(".hero__orbit-travel")];
+    const siblings = [...heroVisual.querySelectorAll(".hero__orbit-travel")];
     const startTime = duration * siblings.indexOf(orbiter) / siblings.length;
-    const { angle, stretch } = updateOrbitScale(orbit, orbiter);
+    const { angle, stretch, tilt } = updateOrbitScale(orbiter);
     const animation = orbiter.animate(
-      orbitKeyframes(stretch, angle, counterclockwise),
+      orbitKeyframes(stretch, angle, tilt),
       { duration, iterations: Number.POSITIVE_INFINITY, easing: "linear" },
     );
     const logo = orbiter.querySelector(".hero__orbit-logo");
     const logoAnimation = logo?.animate(
-      logoKeyframes(stretch, angle, counterclockwise),
+      logoKeyframes(stretch, angle, tilt),
       { duration, iterations: Number.POSITIVE_INFINITY, easing: "linear" },
     );
     animation.pause();
@@ -38,7 +38,7 @@ export function initSkillOrbit() {
       logoAnimation.currentTime = startTime;
     }
     orbiter.style.animation = "none";
-    return { animation, logoAnimation, orbit, orbiter, counterclockwise };
+    return { animation, logoAnimation, orbiter };
   });
   document.documentElement.classList.add("skill-orbit-ready");
 
@@ -46,42 +46,50 @@ export function initSkillOrbit() {
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         for (const item of animations) {
-          if (item.orbit !== entry.target) continue;
-          const { angle, stretch } = updateOrbitScale(item.orbit, item.orbiter);
-          item.animation.effect?.setKeyframes(orbitKeyframes(stretch, angle, item.counterclockwise));
-          item.logoAnimation?.effect?.setKeyframes(logoKeyframes(stretch, angle, item.counterclockwise));
+          if (item.orbiter !== entry.target) continue;
+          const { angle, stretch, tilt } = updateOrbitScale(item.orbiter);
+          item.animation.effect?.setKeyframes(orbitKeyframes(stretch, angle, tilt));
+          item.logoAnimation?.effect?.setKeyframes(logoKeyframes(stretch, angle, tilt));
         }
       }
     });
-    for (const { orbit } of animations) resizeObserver.observe(orbit);
+    for (const { orbiter } of animations) resizeObserver.observe(orbiter);
   }
 
-  function orbitKeyframes(stretch, angle, counterclockwise) {
-    const endAngle = counterclockwise ? -360 : 360;
+  function orbitKeyframes(stretch, angle, tilt) {
+    const transformAt = (rotation) => `rotateX(${tilt}deg) rotate(${angle}deg) scaleX(${stretch}) rotate(${rotation}deg)`;
     return [
-      { transform: `rotate(${angle}deg) scaleX(${stretch}) rotate(0deg)` },
-      { transform: `rotate(${angle}deg) scaleX(${stretch}) rotate(${endAngle}deg)` },
+      { offset: 0, transform: transformAt(0), opacity: 0.68, zIndex: "0" },
+      { offset: 0.24, transform: transformAt(86.4), opacity: 0.86, zIndex: "0" },
+      { offset: 0.25, transform: transformAt(90), opacity: 0.9, zIndex: "0" },
+      { offset: 0.251, transform: transformAt(90.36), opacity: 0.9, zIndex: "2" },
+      { offset: 0.5, transform: transformAt(180), opacity: 1, zIndex: "2" },
+      { offset: 0.749, transform: transformAt(269.64), opacity: 0.9, zIndex: "2" },
+      { offset: 0.75, transform: transformAt(270), opacity: 0.9, zIndex: "0" },
+      { offset: 0.76, transform: transformAt(273.6), opacity: 0.86, zIndex: "0" },
+      { offset: 1, transform: transformAt(360), opacity: 0.68, zIndex: "0" },
     ];
   }
 
-  function logoKeyframes(stretch, angle, counterclockwise) {
-    const endAngle = counterclockwise ? 360 : -360;
+  function logoKeyframes(stretch, angle, tilt) {
     const inverseStretch = 1 / stretch;
+    const transformAt = (rotation) => `translate(-50%, -50%) rotate(${rotation}deg) scaleX(${inverseStretch}) rotate(${-angle}deg) rotateX(${-tilt}deg)`;
     return [
-      { transform: `translate(-50%, -50%) rotate(0deg) scaleX(${inverseStretch}) rotate(${-angle}deg)` },
-      { transform: `translate(-50%, -50%) rotate(${endAngle}deg) scaleX(${inverseStretch}) rotate(${-angle}deg)` },
+      { transform: transformAt(0) },
+      { transform: transformAt(-360) },
     ];
   }
 
-  function updateOrbitScale(orbit, orbiter) {
-    const style = window.getComputedStyle(orbit);
+  function updateOrbitScale(orbiter) {
+    const style = window.getComputedStyle(orbiter);
     const width = Number.parseFloat(style.width);
     const height = Number.parseFloat(style.height);
     const stretch = width > 0 && height > 0 ? width / height : 1;
     const angle = Number.parseFloat(style.getPropertyValue("--orbit-angle")) || 0;
+    const tilt = Number.parseFloat(style.getPropertyValue("--orbit-tilt")) || 0;
     orbiter.style.setProperty("--orbit-stretch", String(stretch));
     orbiter.querySelector(".hero__orbit-logo")?.style.setProperty("--orbit-counter-scale", String(1 / stretch));
-    return { angle, stretch };
+    return { angle, stretch, tilt };
   }
 
   function updateAnimationState() {

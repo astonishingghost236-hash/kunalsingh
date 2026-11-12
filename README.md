@@ -11,7 +11,7 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 
 The portfolio project is served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
 
-The background uses a subtle blue network and static CSS stars; it does not require WebGL. Hero skill orbits animate only while the hero is visible, pause during the welcome intro and when the tab is hidden, and slow down when reduced motion is enabled. Intro audio loads only after the visitor activates the welcome screen.
+The background uses a subtle blue network and static CSS stars; it does not require WebGL. Eight inline technology icons orbit through an invisible 3D path around the hero portrait, passing behind and in front of it with lightweight CSS perspective. Their motion pauses when the hero is out of view, during the welcome intro, and while the tab is hidden; it slows down when reduced motion is enabled. Intro audio loads only after the visitor activates the welcome screen.
 
 All six certificate cards open a four-digit PIN prompt. Set a private `CERTIFICATE_PIN` environment variable on the server before enabling access. Certificate PDFs are stored outside `public/` and are only returned after the server validates the PIN. The PIN is never embedded in frontend code. A four-digit PIN offers limited protection and should not be treated as strong authentication for highly sensitive documents.
 
