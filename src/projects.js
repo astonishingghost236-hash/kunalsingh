@@ -8,14 +8,6 @@ const projects = [
     accent: "#f21d3d",
   },
   {
-    slug: "lumen-studio",
-    title: "Lumen Studio",
-    category: "CREATIVE DEVELOPMENT · WEBGL",
-    year: "2024",
-    description: "An immersive digital home for ideas that do not sit still.",
-    accent: "#f21d3d",
-  },
-  {
     slug: "signal-notes",
     title: "Signal Notes",
     category: "FULL-STACK · SAAS",
