@@ -85,7 +85,7 @@ export function initSkillOrbit() {
   }
 
   function updateAnimationState() {
-    const shouldPause = document.hidden || reducedMotionQuery.matches || !introFinished || !orbitVisible;
+    const shouldPause = document.hidden || !introFinished || !orbitVisible;
     if (shouldPause) {
       animations.forEach(({ animation, logoAnimation }) => {
         animation.pause();
@@ -94,7 +94,11 @@ export function initSkillOrbit() {
       return;
     }
 
+    // Keep this requested decorative motion, but slow it down for reduced-motion users.
+    const playbackRate = reducedMotionQuery.matches ? 0.45 : 1;
     animations.forEach(({ animation, logoAnimation }) => {
+      animation.playbackRate = playbackRate;
+      if (logoAnimation) logoAnimation.playbackRate = playbackRate;
       animation.play();
       logoAnimation?.play();
     });

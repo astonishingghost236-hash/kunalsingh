@@ -11,7 +11,7 @@ A responsive portfolio with a cinematic cosmic backdrop, a hero portrait and tec
 
 The portfolio project is served from `src/projects.js`. The contact form submits enquiries to Web3Forms for email delivery. Its access key is a public Web3Forms form key, intended for client-side use. Set `PORT` to change the web server port.
 
-The lightweight CSS starfield is static. Hero skill orbits animate only while the hero is visible and pause during the welcome intro, when the tab is hidden, or when reduced motion is enabled. Intro audio loads only after the visitor activates the welcome screen.
+The lightweight CSS starfield is static. Hero skill orbits animate only while the hero is visible, pause during the welcome intro and when the tab is hidden, and slow down when reduced motion is enabled. Intro audio loads only after the visitor activates the welcome screen.
 
 All six certificate cards open a four-digit PIN prompt. Set a private `CERTIFICATE_PIN` environment variable on the server before enabling access. Certificate PDFs are stored outside `public/` and are only returned after the server validates the PIN. The PIN is never embedded in frontend code. A four-digit PIN offers limited protection and should not be treated as strong authentication for highly sensitive documents.
 
