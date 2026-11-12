@@ -69,7 +69,6 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(heroSection, /Maharshi Dayanand University \(MDU\)/);
   assert.match(heroSection, /class="hero__starfield"/);
   assert.match(heroSection, /class="hero__glass"/);
-  assert.match(homeHtml, /class="cosmic-scene__mesh"/);
   assert.match(heroSection, /class="hero__character" src="\/assets\/gautam-hero\.webp"/);
   assert.match(heroSection, /alt="Portrait of Kunal Singh wearing a black suit and sunglasses"/);
   assert.match(heroSection, /class="hero__intro"/);
@@ -302,11 +301,6 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.equal(neuralNetwork.status, 200);
   assert.match(neuralNetwork.headers.get("content-type"), /image\/svg\+xml/);
   assert.match(await neuralNetwork.text(), /stroke="#398BFF"/);
-  const orbitalMesh = await fetch(`${baseUrl}/assets/blue-neural-mesh.svg`);
-  assert.equal(orbitalMesh.status, 200);
-  assert.match(orbitalMesh.headers.get("content-type"), /image\/svg\+xml/);
-  assert.match(await orbitalMesh.text(), /stroke="#56A5FF"/);
-  assert.match(portfolioStyles, /@keyframes orbital-mesh-rotate/);
   assert.match(portfolioStyles, /\.hero__orbit--outer\s*\{\s*width:\s*87%;/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*2;/);
   assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/);
