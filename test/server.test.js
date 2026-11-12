@@ -296,6 +296,11 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
   const portfolioStyles = await (await fetch(`${baseUrl}/css/style.css`)).text();
+  assert.match(portfolioStyles, /url\("\/assets\/neural-network\.svg"\)/);
+  const neuralNetwork = await fetch(`${baseUrl}/assets/neural-network.svg`);
+  assert.equal(neuralNetwork.status, 200);
+  assert.match(neuralNetwork.headers.get("content-type"), /image\/svg\+xml/);
+  assert.match(await neuralNetwork.text(), /stroke="#398BFF"/);
   assert.match(portfolioStyles, /\.hero__orbit--outer\s*\{\s*width:\s*87%;/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*2;/);
   assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/);
