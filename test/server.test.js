@@ -69,7 +69,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(heroSection, /Maharshi Dayanand University \(MDU\)/);
   assert.match(heroSection, /class="hero__starfield"/);
   assert.match(heroSection, /class="hero__glass"/);
-  assert.match(heroSection, /class="hero__character" src="\/assets\/gautam-hero\.png"/);
+  assert.match(heroSection, /class="hero__character" src="\/assets\/gautam-hero\.webp"/);
   assert.match(heroSection, /alt="Portrait of Kunal Singh wearing a black suit and sunglasses"/);
   assert.match(heroSection, /class="hero__intro"/);
   assert.match(heroSection, /class="hero__actions"/);
@@ -91,13 +91,12 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.doesNotMatch(homeHtml, /id="experience"|href="#experience"|experience-row/);
   assert.doesNotMatch(homeHtml, /class="brand"/);
   assert.doesNotMatch(homeHtml, /hero__float-card|Curiosity|drives everything/);
-  assert.equal((homeHtml.match(/class="hero__orbit-travel /g) ?? []).length, 6);
-  assert.equal((homeHtml.match(/class="hero__orbit hero__orbit--/g) ?? []).length, 3);
-  assert.equal((homeHtml.match(/hero__orbit-travel--python/g) ?? []).length, 2);
-  assert.equal((homeHtml.match(/hero__orbit-travel--node/g) ?? []).length, 2);
-  assert.match(homeHtml, /hero__orbit--additional hero__orbit--counterclockwise/);
-  assert.match(homeHtml, /font-size="3\.2"[^>]*>node<\/text>/);
-  assert.match(homeHtml, /cosmic-scene__twinkles/);
+  assert.equal((homeHtml.match(/class="hero__orbit-travel /g) ?? []).length, 4);
+  assert.equal((homeHtml.match(/class="hero__orbit hero__orbit--/g) ?? []).length, 2);
+  assert.equal((homeHtml.match(/hero__orbit-travel--python/g) ?? []).length, 1);
+  assert.equal((homeHtml.match(/hero__orbit-travel--node/g) ?? []).length, 1);
+  assert.doesNotMatch(homeHtml, /cosmic-scene__canvas|cosmic-scene__twinkles|hero__twinkles/);
+  assert.doesNotMatch(homeHtml, /fonts\.googleapis\.com/);
   assert.doesNotMatch(homeHtml, /brand__mark|section-number|education-card__index|experience-row__number/);
   assert.doesNotMatch(homeHtml, /Your Name|Independent by nature|Intentional by design|INDEPENDENTLY WORKING|AVAILABLE ONLINE|FIG\. 01|BUILT WITH CURIOSITY|AND A LOT OF CARE/);
   assert.match(homeHtml, /Kunal Singh, Full Stack Web Developer and B\.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University \(MDU\)/);
@@ -218,9 +217,9 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     assert.match(homeHtml, new RegExp(`id="${fragment}"`), `Missing in-page target #${fragment}`);
   }
 
-  const portrait = await fetch(`${baseUrl}/assets/gautam-hero.png`);
+  const portrait = await fetch(`${baseUrl}/assets/gautam-hero.webp`);
   assert.equal(portrait.status, 200);
-  assert.match(portrait.headers.get("content-type"), /image\/png/);
+  assert.match(portrait.headers.get("content-type"), /image\/webp/);
 
   const lampAudio = await fetch(`${baseUrl}/assets/playht-voice-over.mp3`);
   assert.equal(lampAudio.status, 200);
@@ -292,22 +291,22 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   });
   assert.equal(disabledContactEndpoint.status, 404);
 
-  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/cosmic-background.js", "/js/skill-orbit.js", "/js/contact.js", "/js/intro.js", "/js/certificate-access.js"]) {
+  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/skill-orbit.js", "/js/contact.js", "/js/intro.js", "/js/certificate-access.js"]) {
     const asset = await fetch(`${baseUrl}${localPath}`);
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
   const portfolioStyles = await (await fetch(`${baseUrl}/css/style.css`)).text();
   assert.match(portfolioStyles, /\.hero__orbit--outer\s*\{\s*width:\s*87%;/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*2;/);
-  assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*8px;[^}]*height:\s*8px;/);
+  assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/);
   assert.match(portfolioStyles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\[data-reveal\] \{\s*opacity: 1;/);
   const skillOrbitScript = await (await fetch(`${baseUrl}/js/skill-orbit.js`)).text();
   assert.match(skillOrbitScript, /prefers-reduced-motion/);
   assert.equal((skillOrbitScript.match(/addEventListener\("visibilitychange"/g) ?? []).length, 1);
   assert.match(skillOrbitScript, /reducedMotionQuery\.addEventListener\("change", updateAnimationState\)/);
-  const cosmicScript = await (await fetch(`${baseUrl}/js/cosmic-background.js`)).text();
-  assert.match(cosmicScript, /visibilityObserver\.observe\(hero\)/);
-  assert.match(cosmicScript, /portfolio:intro-complete/);
+  assert.match(skillOrbitScript, /portfolio:intro-complete/);
+  assert.match(skillOrbitScript, /visibilityObserver\.observe\(heroVisual\)/);
+  assert.match(skillOrbitScript, /"ResizeObserver" in window/);
   assert.match(portfolioStyles, /height:\s*min\(700px,\s*calc\(100svh - 150px\)\)/);
   const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
   assert.match(responsiveStyles, /height:\s*min\(680px,\s*calc\(100svh - 150px\)\)/);
@@ -315,12 +314,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(responsiveStyles, /height:\s*auto;\s*min-height:\s*max\(740px,\s*100svh\)/);
   assert.match(responsiveStyles, /padding:\s*max\(82px,\s*calc\(env\(safe-area-inset-top\) \+ 72px\)\)\s+18px\s+26px/);
   assert.match(responsiveStyles, /@media \(max-width: 380px\) \{\s*body \{\s*min-width: 0;/);
-  assert.match(responsiveStyles, /backdrop-filter:\s*blur\(8px\)\s+saturate\(125%\)/);
-
-  const threeModule = await fetch(`${baseUrl}/vendor/three/three.module.js`);
-  assert.equal(threeModule.status, 200);
-  assert.match(threeModule.headers.get("content-type"), /javascript/);
-  assert.match(await threeModule.text(), /export/);
+  assert.doesNotMatch(portfolioStyles + responsiveStyles, /backdrop-filter:\s*blur/);
 
   const projectsResponse = await fetch(`${baseUrl}/api/projects`);
   assert.equal(projectsResponse.status, 200);

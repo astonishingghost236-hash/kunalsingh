@@ -74,10 +74,6 @@ app.use("/api", (_request, response) => {
   response.status(404).json({ error: "API endpoint not found." });
 });
 
-app.use(
-  "/vendor/three",
-  express.static(path.join(__dirname, "node_modules", "three", "build")),
-);
 app.use(express.static(publicDirectory));
 
 app.use(["/assets", "/css", "/js", "/vendor"], (_request, response) => {

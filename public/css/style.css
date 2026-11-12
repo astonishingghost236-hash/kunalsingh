@@ -10,9 +10,9 @@
   --subtle: color-mix(in srgb, var(--chrome) 48%, transparent);
   --surface: #111720;
   --line: color-mix(in srgb, var(--chrome) 14%, transparent);
-  --display: "Manrope", sans-serif;
-  --body: "DM Sans", sans-serif;
-  --mono: "DM Mono", monospace;
+  --display: "Segoe UI", Arial, sans-serif;
+  --body: "Segoe UI", Arial, sans-serif;
+  --mono: Consolas, "Courier New", monospace;
   font-family: var(--body);
   background: var(--obsidian);
   color: var(--ink);
@@ -80,12 +80,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .lamp-cord__label { margin-top: 5px; color: #a0a5b1; font: 8px var(--mono); letter-spacing: .14em; white-space: nowrap; }
 .intro-screen.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
 .cosmic-scene__wash { position: absolute; inset: 0; background: radial-gradient(ellipse at 77% 31%, rgba(105, 78, 159, .19), transparent 34%), radial-gradient(ellipse at 53% 49%, rgba(54, 65, 115, .14), transparent 39%), linear-gradient(180deg, #080910 6%, rgba(8, 9, 16, .94) 72%, #080910 100%); }
-.cosmic-scene__stars { position: absolute; inset: 0; opacity: .24; background-image: radial-gradient(1px 1px at 12% 8%, rgba(222,220,255,.85) 50%, transparent 100%), radial-gradient(1.3px 1.3px at 66% 12%, rgba(222,220,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 34% 27%, rgba(205,215,255,.8) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 93% 39%, rgba(222,220,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 77% 61%, rgba(222,220,255,.6) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 20% 72%, rgba(222,220,255,.65) 50%, transparent 100%), radial-gradient(1px 1px at 47% 88%, rgba(222,220,255,.65) 50%, transparent 100%); background-size: 347px 281px; animation: cosmic-star-drift 150s linear infinite; }
-.cosmic-scene__twinkles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-.cosmic-scene__twinkle { position: absolute; top: var(--twinkle-y); left: var(--twinkle-x); width: var(--twinkle-size); aspect-ratio: 1; border-radius: 50%; background: rgba(224,220,255,.9); box-shadow: 0 0 6px rgba(187,169,255,.55); opacity: .12; animation: star-twinkle var(--twinkle-duration) ease-in-out var(--twinkle-delay) infinite alternate; }
-.cosmic-scene__canvas, .cosmic-scene__grain { position: absolute; inset: 0; width: 100%; height: 100%; }
-.cosmic-scene__canvas { opacity: .24; }
-.cosmic-scene__grain { opacity: .075; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.27'/%3E%3C/svg%3E"); }
+.cosmic-scene__stars { position: absolute; inset: 0; opacity: .24; background-image: radial-gradient(1px 1px at 12% 8%, rgba(222,220,255,.85) 50%, transparent 100%), radial-gradient(1.3px 1.3px at 66% 12%, rgba(222,220,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 34% 27%, rgba(205,215,255,.8) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 93% 39%, rgba(222,220,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 77% 61%, rgba(222,220,255,.6) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 20% 72%, rgba(222,220,255,.65) 50%, transparent 100%), radial-gradient(1px 1px at 47% 88%, rgba(222,220,255,.65) 50%, transparent 100%); background-size: 347px 281px; }
 
 .site-header { position: fixed; z-index: 30; top: 18px; left: 26px; display: flex; align-items: center; margin: 0; padding: 0; border: 0; background: transparent; }
 .brand { display: inline-flex; align-items: center; font-family: var(--display); font-size: 16px; font-weight: 800; letter-spacing: -.06em; }
@@ -111,10 +106,8 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .site-nav__arrow { margin-left: auto; font-size: 15px; }
 
 .hero { position: relative; display: grid; width: 100%; height: 100svh; min-height: 100svh; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-rows: 1fr; align-items: center; justify-items: stretch; gap: clamp(12px, 4vw, 48px); isolation: isolate; overflow: clip; margin: 0 auto; padding: 100px clamp(22px, 8vw, 140px) 55px; }
-.hero__starfield, .hero__twinkles, .hero__glass { position: absolute; pointer-events: none; }
-.hero__starfield { z-index: 0; inset: 0; opacity: .28; background-image: radial-gradient(1px 1px at 14px 21px, rgba(226,232,255,.9) 50%, transparent 100%), radial-gradient(1.3px 1.3px at 28px 39px, rgba(196,214,255,.85) 50%, transparent 100%), radial-gradient(1px 1px at 42px 12px, rgba(226,232,255,.8) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 8px 35px, rgba(206,221,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 33px 4px, rgba(226,232,255,.85) 50%, transparent 100%), radial-gradient(1px 1px at 4px 17px, rgba(205,218,255,.78) 50%, transparent 100%), radial-gradient(1px 1px at 21px 31px, rgba(226,232,255,.8) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 39px 27px, rgba(210,222,255,.9) 50%, transparent 100%), radial-gradient(1px 1px at 17px 8px, rgba(226,232,255,.8) 50%, transparent 100%); background-size: 137px 121px, 141px 137px, 143px 139px, 149px 141px, 153px 143px, 159px 149px, 167px 153px, 171px 159px, 177px 167px; background-position: 0 0; mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.9) 72%, transparent 100%); animation: hero-star-drift 180s linear infinite; }
-.hero__twinkles { z-index: 1; inset: 52px 0 0; overflow: hidden; }
-.hero__twinkle { position: absolute; top: var(--twinkle-y); left: var(--twinkle-x); width: var(--twinkle-size); aspect-ratio: 1; border-radius: 50%; background: rgba(235,240,255,.95); box-shadow: 0 0 8px rgba(173,197,255,.7); opacity: .12; animation: star-twinkle var(--twinkle-duration) ease-in-out var(--twinkle-delay) infinite alternate; }
+.hero__starfield, .hero__glass { position: absolute; pointer-events: none; }
+.hero__starfield { z-index: 0; inset: 0; opacity: .28; background-image: radial-gradient(1px 1px at 14px 21px, rgba(226,232,255,.9) 50%, transparent 100%), radial-gradient(1.3px 1.3px at 28px 39px, rgba(196,214,255,.85) 50%, transparent 100%), radial-gradient(1px 1px at 42px 12px, rgba(226,232,255,.8) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 8px 35px, rgba(206,221,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 33px 4px, rgba(226,232,255,.85) 50%, transparent 100%), radial-gradient(1px 1px at 4px 17px, rgba(205,218,255,.78) 50%, transparent 100%), radial-gradient(1px 1px at 21px 31px, rgba(226,232,255,.8) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 39px 27px, rgba(210,222,255,.9) 50%, transparent 100%), radial-gradient(1px 1px at 17px 8px, rgba(226,232,255,.8) 50%, transparent 100%); background-size: 137px 121px, 141px 137px, 143px 139px, 149px 141px, 153px 143px, 159px 149px, 167px 153px, 171px 159px, 177px 167px; background-position: 0 0; mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.9) 72%, transparent 100%); }
 .hero__glass { z-index: -1; inset: 0; border: 0; border-radius: 0; background: radial-gradient(ellipse at 75% 48%, rgba(38,51,78,.2), transparent 40%), linear-gradient(132deg, rgba(25,34,48,.12), transparent 48%, rgba(26,31,43,.1)); box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .hero__copy { position: relative; z-index: 2; align-self: center; max-width: 470px; padding: 0; }
 .eyebrow, .hero__location, .hero__caption, .hero__scroll, .fact-label, .contact-form label, .optional { font-family: var(--mono); font-size: 9px; font-weight: 400; letter-spacing: .095em; }
@@ -154,11 +147,10 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .location-pulse { width: 5px; height: 5px; }
 
 .hero__visual { position: relative; z-index: 2; width: 100%; max-width: 650px; height: min(700px, calc(100svh - 150px)); justify-self: center; }
-.hero__halo { position: absolute; top: 8%; left: 12%; width: 77%; height: 83%; border-radius: 50%; background: radial-gradient(ellipse, rgba(115,94,168,.22), rgba(45,44,76,.07) 48%, transparent 72%); filter: blur(22px); }
+.hero__halo { position: absolute; top: 8%; left: 12%; width: 77%; height: 83%; border-radius: 50%; background: radial-gradient(ellipse, rgba(115,94,168,.22), rgba(45,44,76,.07) 48%, transparent 72%); }
 .hero__orbit { position: absolute; top: 48%; left: 50%; border-radius: 50%; --orbit-angle: -10deg; --orbit-color: rgba(206,197,244,.15); transform: translate(-50%,-50%); }
 .hero__orbit--outer { width: 87%; height: auto; aspect-ratio: 1.57; --orbit-stretch: 1.57; --orbit-angle: -10deg; }
 .hero__orbit--inner { width: 78%; height: auto; aspect-ratio: 1.74; --orbit-stretch: 1.74; --orbit-angle: 29deg; --orbit-color: rgba(206,197,244,.1); }
-.hero__orbit--additional { width: 65%; height: auto; aspect-ratio: 1.62; --orbit-stretch: 1.62; --orbit-color: rgba(206,197,244,.08); }
 .hero__orbit::before { position: absolute; inset: 0; border: 1px solid var(--orbit-color); border-radius: inherit; transform: rotate(var(--orbit-angle)); content: ""; pointer-events: none; }
 .hero__orbit-travel { position: absolute; z-index: 2; inset: 0; --orbit-duration: 30s; transform-origin: center; animation: orbit-travel var(--orbit-duration) linear infinite; }
 .hero__orbit-travel { --orbit-stretch: 1; --orbit-counter-scale: 1; }
@@ -166,10 +158,8 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .hero__orbit-travel--react { --orbit-duration: 37s; }
 .hero__orbit-travel--python { --orbit-duration: 20s; }
 .hero__orbit-travel--node { --orbit-duration: 24s; }
-.hero__orbit-travel--copy.hero__orbit-travel--python { --orbit-duration: 28s; }
-.hero__orbit-travel--copy.hero__orbit-travel--node { --orbit-duration: 32s; }
 .hero__orbit--inner .hero__orbit-travel { animation-direction: reverse; }
-.hero__orbit-logo { position: absolute; top: 0; left: 50%; display: block; width: 8px; height: 8px; overflow: visible; padding: 1px; border: 1px solid rgba(206,197,244,.28); border-radius: 50%; background: rgba(12,13,22,.94); box-shadow: 0 1px 5px rgba(0,0,0,.4); transform: translate(-50%,-50%) scaleX(var(--orbit-counter-scale)); transform-box: fill-box; transform-origin: center; filter: drop-shadow(0 0 2px rgba(208,194,255,.6)); }
+.hero__orbit-logo { position: absolute; top: 0; left: 50%; display: block; width: 24px; height: 24px; overflow: visible; padding: 4px; border: 1px solid rgba(206,197,244,.38); border-radius: 50%; background: rgba(12,13,22,.96); box-shadow: 0 1px 5px rgba(0,0,0,.4); transform: translate(-50%,-50%) scaleX(var(--orbit-counter-scale)); transform-box: fill-box; transform-origin: center; }
 .hero__character-wrap { position: absolute; inset: 3% 10% 1%; display: flex; align-items: center; justify-content: center; }
 .hero__character { position: relative; z-index: 1; display: block; width: auto; max-width: 95%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 22px 43px rgba(0,0,0,.44)); animation: character-arrive .9s .08s both cubic-bezier(.2,.75,.25,1); }
 .hero__caption { position: absolute; z-index: 2; right: 2%; left: 2%; display: flex; justify-content: space-between; color: rgba(220,215,237,.48); font-size: 8px; }
@@ -227,7 +217,7 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .certificate-card:hover .certificate-card__paper { transform: rotate(0) scale(1.04); border-color: rgba(193,178,246,.36); }
 .certificate-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .certificate-dialog { width: min(480px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 0; overflow: auto; border: 1px solid rgba(193,178,246,.25); border-radius: 18px; color: var(--ink); background: linear-gradient(155deg, #171a24, #0d1118); box-shadow: 0 28px 90px rgba(0,0,0,.62), 0 0 45px rgba(164,139,226,.1); }
-.certificate-dialog::backdrop { background: rgba(4,6,10,.78); backdrop-filter: blur(7px); }
+.certificate-dialog::backdrop { background: rgba(4,6,10,.86); }
 .certificate-dialog__body { position: relative; padding: 36px; }
 .certificate-dialog__close { position: absolute; z-index: 1; top: 14px; right: 16px; display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--chrome); background: rgba(255,255,255,.04); font-size: 24px; cursor: pointer; }
 .certificate-pin-view { margin: 15px auto 4px; text-align: center; }
@@ -336,11 +326,7 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .certificate-card,
 .technology-card,
 .contact-section,
-.project-card__art {
-  position: relative;
-  backdrop-filter: blur(16px) saturate(135%);
-  -webkit-backdrop-filter: blur(16px) saturate(135%);
-}
+.project-card__art { position: relative; }
 
 .education-card,
 .technology-card,
@@ -451,9 +437,6 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .technology-card[data-reveal].is-visible:hover, .technology-card[data-reveal].is-visible:focus-within { transform: translateY(-5px); }
 .project-card[data-reveal]:nth-child(2) { transition-delay: .08s; }
 .project-card[data-reveal]:nth-child(3) { transition-delay: .16s; }
-@keyframes star-twinkle { 0%,100% { opacity: .1; transform: scale(.85); } 50% { opacity: .38; transform: scale(1.08); } }
-@keyframes cosmic-star-drift { to { background-position: 347px 281px; } }
-@keyframes hero-star-drift { to { background-position: 137px 121px, 141px 137px, 143px 139px, 149px 141px, 153px 143px, 159px 149px, 167px 153px, 171px 159px, 177px 167px; } }
 @keyframes orbit-travel { from { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(0deg); } to { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(360deg); } }
 @keyframes character-arrive { from { opacity: 0; transform: translateY(20px) scale(.975); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
@@ -461,7 +444,6 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition-duration: .01ms !important; }
   [data-reveal] { opacity: 1; transform: none; }
-  .cosmic-scene__twinkle { opacity: .4; }
 }
 
 :root {
@@ -476,7 +458,6 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 body { background: var(--obsidian); }
 .cosmic-scene { background: var(--obsidian); }
 .cosmic-scene__wash { background: radial-gradient(ellipse at 77% 31%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 34%), radial-gradient(ellipse at 53% 49%, color-mix(in srgb, var(--accent-secondary) 10%, transparent), transparent 39%), linear-gradient(180deg, var(--obsidian) 6%, color-mix(in srgb, var(--obsidian) 94%, transparent) 72%, var(--obsidian) 100%); }
-.cosmic-scene__twinkle { background: color-mix(in srgb, var(--chrome) 90%, white); box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 45%, transparent); }
 .hero h1 span, .section-heading h2 span, .contact-copy h2 span { color: var(--accent); }
 .menu-toggle:focus-visible, :focus-visible { outline-color: color-mix(in srgb, var(--accent) 82%, transparent); }
 .site-nav { border-right-color: color-mix(in srgb, var(--chrome) 16%, transparent); background: color-mix(in srgb, var(--surface) 97%, transparent); }
@@ -490,8 +471,7 @@ body { background: var(--obsidian); }
 .hero__halo { background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--accent-secondary) 7%, transparent) 48%, transparent 72%); }
 .hero__orbit { --orbit-color: color-mix(in srgb, var(--chrome) 18%, transparent); }
 .hero__orbit--inner { --orbit-color: color-mix(in srgb, var(--chrome) 12%, transparent); }
-.hero__orbit--additional { --orbit-color: color-mix(in srgb, var(--chrome) 9%, transparent); }
-.hero__orbit-logo { border-color: color-mix(in srgb, var(--chrome) 36%, transparent); filter: drop-shadow(0 0 2px color-mix(in srgb, var(--accent) 60%, transparent)); }
+.hero__orbit-logo { border-color: color-mix(in srgb, var(--chrome) 46%, transparent); }
 .hero__orbit::after { display: none; content: none; }
 .hero__scroll span::after { background: var(--accent); }
 .text-link { border-bottom-color: color-mix(in srgb, var(--accent) 44%, transparent); color: var(--chrome); }
@@ -524,8 +504,6 @@ body { background: var(--obsidian); }
 .form-status { color: var(--chrome); }
 .form-status.is-error { color: var(--accent-secondary); }
 .cosmic-scene__stars { opacity: .2; }
-.cosmic-scene__canvas { opacity: .22; }
-.cosmic-scene__grain { opacity: .035; }
 .hero__halo { opacity: .72; }
 .education-card,
 .technology-card,

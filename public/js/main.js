@@ -1,6 +1,5 @@
 import { initNavigation } from "./navigation.js";
 import { loadProjects } from "./projects.js";
-import { initCosmicBackground } from "./cosmic-background.js";
 import { initSkillOrbit } from "./skill-orbit.js";
 import { initContactForm } from "./contact.js";
 import { initWelcomeIntro } from "./intro.js";
@@ -10,7 +9,6 @@ initWelcomeIntro();
 initNavigation();
 initCertificateAccess();
 loadProjects();
-initCosmicBackground();
 initSkillOrbit();
 initContactForm();
 

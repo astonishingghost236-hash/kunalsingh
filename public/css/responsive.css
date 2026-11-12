@@ -3,7 +3,7 @@
   .hero { min-height: max(700px, 100svh); grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); grid-template-rows: 1fr; align-content: stretch; justify-items: stretch; gap: 12px; padding-right: 22px; padding-left: 22px; }
   .hero__visual { width: 100%; height: min(680px, calc(100svh - 150px)); align-self: center; justify-self: center; }
   .hero__character-wrap { inset: 0; }
-  .hero__character { max-width: none; }
+  .hero__character { max-width: none; filter: none; }
   .section { width: calc(100% - 90px); padding: 88px 0; }
   .about-grid { gap: 55px; }
   .certificate-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
@@ -29,7 +29,7 @@
   .menu-toggle { width: 42px; height: 42px; }
   .hero { width: 100%; height: auto; min-height: max(740px, 100svh); grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(390px, 1fr); align-content: stretch; justify-items: stretch; gap: 0; padding: max(82px, calc(env(safe-area-inset-top) + 72px)) 18px 26px; }
   .hero__glass { inset: 0; border-radius: 0; }
-  .hero__starfield, .hero__twinkles { top: 44px; }
+  .hero__starfield { top: 44px; }
   .hero__copy { align-self: center; max-width: 100%; padding: 0 2px; }
   .hero__eyebrow { align-items: center; justify-content: flex-start; gap: 7px; margin-bottom: 16px; font-size: 7px; }
   .hero h1 { font-size: clamp(46px, 12vw, 64px); }
@@ -64,14 +64,6 @@
   .certificate-card { min-height: 180px; }
   .certificate-dialog__body { padding: 58px 20px 24px; }
   .certificate-pin-input { height: 54px; font-size: 23px; }
-  .education-card,
-  .certificate-card,
-  .technology-card,
-  .contact-section,
-  .project-card__art {
-    backdrop-filter: blur(8px) saturate(125%);
-    -webkit-backdrop-filter: blur(8px) saturate(125%);
-  }
   .technology-cards { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
   .technology-card { min-height: 210px; }
   .technology-card__logo { width: 72px; height: 72px; }
