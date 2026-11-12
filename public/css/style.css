@@ -80,7 +80,22 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .lamp-cord__label { margin-top: 5px; color: #a0a5b1; font: 8px var(--mono); letter-spacing: .14em; white-space: nowrap; }
 .intro-screen.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
 .cosmic-scene__wash { position: absolute; inset: 0; background: radial-gradient(ellipse at 74% 22%, rgba(27,104,214,.19), transparent 37%), radial-gradient(ellipse at 18% 58%, rgba(22,86,176,.12), transparent 38%), linear-gradient(180deg, #07101d 6%, rgba(6,11,20,.96) 72%, #060b14 100%); }
-.cosmic-scene__network { position: absolute; inset: 0; background-image: url("/assets/neural-network.svg"); background-position: center top; background-repeat: repeat; background-size: 960px 720px; opacity: .34; }
+.cosmic-scene__network { position: absolute; inset: 0; background-image: url("/assets/neural-network.svg"); background-position: center top; background-repeat: repeat; background-size: 960px 720px; opacity: .2; }
+.cosmic-scene__particles { position: fixed; inset: 0; overflow: hidden; opacity: .72; pointer-events: none; }
+.cosmic-scene__particle { position: absolute; top: var(--particle-y); left: var(--particle-x); width: 6px; height: 6px; animation: network-particle-drift var(--particle-duration) ease-in-out var(--particle-delay) infinite alternate; }
+.cosmic-scene__particle::before { position: absolute; inset: 0; background: color-mix(in srgb, var(--accent) 72%, white); clip-path: polygon(50% 0, 0 100%, 100% 100%); transform: rotate(var(--particle-rotation)); content: ""; }
+.cosmic-scene__particle:nth-child(1) { --particle-x: 8%; --particle-y: 8%; --particle-duration: 25s; --particle-delay: -7s; --particle-offset-x: 36px; --particle-offset-y: 22px; --particle-rotation: 12deg; }
+.cosmic-scene__particle:nth-child(2) { --particle-x: 24%; --particle-y: 18%; --particle-duration: 30s; --particle-delay: -16s; --particle-offset-x: -30px; --particle-offset-y: -24px; --particle-rotation: 86deg; }
+.cosmic-scene__particle:nth-child(3) { --particle-x: 43%; --particle-y: 10%; --particle-duration: 27s; --particle-delay: -5s; --particle-offset-x: 42px; --particle-offset-y: -20px; --particle-rotation: 42deg; }
+.cosmic-scene__particle:nth-child(4) { --particle-x: 62%; --particle-y: 23%; --particle-duration: 33s; --particle-delay: -21s; --particle-offset-x: -35px; --particle-offset-y: 32px; --particle-rotation: 118deg; }
+.cosmic-scene__particle:nth-child(5) { --particle-x: 82%; --particle-y: 11%; --particle-duration: 23s; --particle-delay: -9s; --particle-offset-x: -26px; --particle-offset-y: -31px; --particle-rotation: 25deg; }
+.cosmic-scene__particle:nth-child(6) { --particle-x: 13%; --particle-y: 62%; --particle-duration: 29s; --particle-delay: -14s; --particle-offset-x: -28px; --particle-offset-y: -20px; --particle-rotation: 70deg; }
+.cosmic-scene__particle:nth-child(7) { --particle-x: 53%; --particle-y: 71%; --particle-duration: 26s; --particle-delay: -11s; --particle-offset-x: 37px; --particle-offset-y: -24px; --particle-rotation: 145deg; }
+.cosmic-scene__particle:nth-child(8) { --particle-x: 89%; --particle-y: 77%; --particle-duration: 31s; --particle-delay: -18s; --particle-offset-x: -41px; --particle-offset-y: 25px; --particle-rotation: 50deg; }
+.cosmic-scene__particle:nth-child(9) { --particle-x: 32%; --particle-y: 45%; --particle-duration: 32s; --particle-delay: -19s; --particle-offset-x: 32px; --particle-offset-y: -22px; --particle-rotation: 9deg; }
+.cosmic-scene__particle:nth-child(10) { --particle-x: 74%; --particle-y: 52%; --particle-duration: 27s; --particle-delay: -10s; --particle-offset-x: -32px; --particle-offset-y: 18px; --particle-rotation: 106deg; }
+.cosmic-scene__particle:nth-child(11) { --particle-x: 42%; --particle-y: 83%; --particle-duration: 24s; --particle-delay: -12s; --particle-offset-x: 40px; --particle-offset-y: -28px; --particle-rotation: 55deg; }
+.cosmic-scene__particle:nth-child(12) { --particle-x: 95%; --particle-y: 37%; --particle-duration: 34s; --particle-delay: -23s; --particle-offset-x: -35px; --particle-offset-y: 32px; --particle-rotation: 138deg; }
 .cosmic-scene__stars { position: absolute; inset: 0; opacity: .14; background-image: radial-gradient(1px 1px at 12% 8%, rgba(126,185,255,.85) 50%, transparent 100%), radial-gradient(1.3px 1.3px at 66% 12%, rgba(126,185,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 34% 27%, rgba(126,185,255,.8) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 93% 39%, rgba(126,185,255,.8) 50%, transparent 100%), radial-gradient(1px 1px at 77% 61%, rgba(126,185,255,.6) 50%, transparent 100%), radial-gradient(1.2px 1.2px at 20% 72%, rgba(126,185,255,.65) 50%, transparent 100%), radial-gradient(1px 1px at 47% 88%, rgba(126,185,255,.65) 50%, transparent 100%); background-size: 347px 281px; }
 
 .site-header { position: fixed; z-index: 30; top: 18px; left: 26px; display: flex; align-items: center; margin: 0; padding: 0; border: 0; background: transparent; }
@@ -354,6 +369,11 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .project-card:nth-child(4n + 4) .project-card__art { --neon-color: #54f0a8; }
 @keyframes neon-trail {
   to { offset-distance: 100%; }
+}
+
+@keyframes network-particle-drift {
+  from { transform: translate3d(0, 0, 0); opacity: .25; }
+  to { transform: translate3d(var(--particle-offset-x), var(--particle-offset-y), 0); opacity: .9; }
 }
 
 .neon-frame {
