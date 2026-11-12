@@ -11,8 +11,7 @@
 }
 
 @media (max-width: 760px) {
-  .cosmic-scene__network { background-size: 720px 540px; opacity: .16; }
-  .cosmic-scene__particles { opacity: .58; }
+  .cosmic-scene__network { background-size: 720px 540px; opacity: .24; }
   .intro-screen { padding: 24px 18px; }
   .intro-screen__content { width: min(100%, 520px); }
   .intro-screen__eyebrow { margin-bottom: 4px; text-align: center; }

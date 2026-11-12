@@ -62,8 +62,6 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(homeHtml, /class="intro-lamp__shade-rim"/);
   assert.doesNotMatch(homeHtml, /data-theme|theme-switcher|theme-option/);
   assert.doesNotMatch(homeHtml, /id="intro-switch"/);
-  assert.match(homeHtml, /class="cosmic-scene__particles" aria-hidden="true"/);
-  assert.match(homeHtml, /class="cosmic-scene__particle"/);
   const heroSection = homeHtml.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0];
   assert.ok(heroSection, "Hero section should be present");
   assert.match(heroSection, /FULL STACK WEB DEVELOPER/);
@@ -123,7 +121,6 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(styles, /\.contact-section\s*\{[^}]*border:\s*0/);
   assert.match(styles, /\.button--primary\s*\{[^}]*background:\s*#7aa9dc/);
   assert.match(styles, /\.intro-screen\.is-lit \.intro-lamp__bulb-glass\s*\{[^}]*fill:\s*#ffd58a/);
-  assert.match(styles, /@keyframes network-particle-drift/);
   assert.doesNotMatch(styles, /\.intro-screen\.is-lit \.lamp-cord(?:__line|__bulb)/);
   const introScriptResponse = await fetch(`${baseUrl}/js/intro.js`);
   assert.equal(introScriptResponse.status, 200);
