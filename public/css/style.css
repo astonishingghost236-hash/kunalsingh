@@ -147,9 +147,9 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .hero__location { display: flex; align-items: center; gap: 9px; margin-top: 39px; color: #777584; font-size: 8px; }
 .location-pulse { width: 5px; height: 5px; }
 
-.hero__visual { position: relative; z-index: 2; width: 100%; max-width: 650px; height: min(700px, calc(100svh - 150px)); justify-self: center; perspective: 1100px; perspective-origin: 50% 46%; }
+.hero__visual { position: relative; z-index: 2; width: 100%; max-width: 650px; height: min(700px, calc(100svh - 150px)); justify-self: center; perspective: 900px; perspective-origin: 50% 50%; }
 .hero__halo { position: absolute; top: 8%; left: 12%; width: 77%; height: 83%; border-radius: 50%; background: radial-gradient(ellipse, rgba(115,94,168,.22), rgba(45,44,76,.07) 48%, transparent 72%); }
-.hero__orbit-travel { position: absolute; z-index: 0; top: 15%; right: 6%; bottom: 15%; left: 6%; --orbit-angle: 0deg; --orbit-tilt-x: 90deg; --orbit-tilt-y: 0deg; --orbit-duration: 32s; --orbit-stretch: 1; --orbit-counter-scale: 1; --logo-accent: var(--accent); transform-origin: center; transform-style: preserve-3d; animation: orbit-travel var(--orbit-duration) linear infinite; }
+.hero__orbit-travel { position: absolute; z-index: 0; top: 50%; left: 50%; width: 0; height: 0; --orbit-duration: 32s; transform-style: preserve-3d; animation: orbit-travel var(--orbit-duration) linear infinite; }
 .hero__orbit-travel--js { --logo-accent: #F7DF1E; }
 .hero__orbit-travel--react { --logo-accent: #61DAFB; }
 .hero__orbit-travel--html5 { --logo-accent: #E34F26; }
@@ -158,8 +158,17 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .hero__orbit-travel--node { --logo-accent: #83CD29; }
 .hero__orbit-travel--typescript { --logo-accent: #3178C6; }
 .hero__orbit-travel--git { --logo-accent: #F05032; }
-.hero__orbit-logo { position: absolute; top: 0; left: 50%; display: grid; width: clamp(38px, 4vw, 52px); height: clamp(38px, 4vw, 52px); place-items: center; overflow: visible; border: 1px solid color-mix(in srgb, var(--logo-accent) 65%, white); border-radius: 8px; background: color-mix(in srgb, var(--logo-accent) 12%, #101722); box-shadow: 0 0 12px color-mix(in srgb, var(--logo-accent) 24%, transparent); transform: translate(-50%,-50%) scaleX(var(--orbit-counter-scale)); transform-origin: center; }
+.hero__orbit-logo { position: absolute; top: 0; left: 0; display: grid; width: clamp(38px, 4vw, 52px); height: clamp(38px, 4vw, 52px); place-items: center; overflow: visible; border: 1px solid color-mix(in srgb, var(--logo-accent) 65%, white); border-radius: 8px; background: color-mix(in srgb, var(--logo-accent) 12%, #101722); box-shadow: 0 0 12px color-mix(in srgb, var(--logo-accent) 24%, transparent); transform: translate(-50%,-50%); transform-origin: center; }
 .hero__orbit-mark { position: relative; z-index: 1; display: block; width: 60%; height: 60%; overflow: visible; }
+.hero__neural-network { position: absolute; z-index: 0; top: 5%; left: 50%; width: min(112%, 720px); height: 76%; overflow: visible; opacity: .78; pointer-events: none; transform: translateX(-50%); }
+.hero__neural-outline, .hero__neural-midline { fill: none; stroke: rgba(91,177,255,.44); stroke-linecap: round; stroke-linejoin: round; }
+.hero__neural-outline { stroke-width: 1.5; filter: drop-shadow(0 0 9px rgba(58,157,255,.45)); }
+.hero__neural-midline { stroke: rgba(112,201,255,.36); stroke-width: 1; stroke-dasharray: 3 6; }
+.hero__neural-links { fill: none; stroke: rgba(75,157,244,.38); stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+.hero__neural-pulse { fill: none; stroke: #9af4ff; stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 4 180; stroke-dashoffset: 184; filter: drop-shadow(0 0 5px #55dfff); animation: nerve-transfer 2.2s linear infinite; animation-delay: var(--pulse-delay, 0s); }
+.hero__neural-nodes circle { fill: #b0f5ff; filter: drop-shadow(0 0 6px #46cfff); animation: neuron-blink 1.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.hero__neural-nodes circle:nth-child(3n) { animation-delay: -.55s; }
+.hero__neural-nodes circle:nth-child(3n + 1) { animation-delay: -1.1s; }
 .hero__character-wrap { position: absolute; inset: 3% 10% 1%; display: flex; align-items: center; justify-content: center; }
 .hero__character { position: relative; z-index: 1; display: block; width: auto; max-width: 95%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 22px 43px rgba(0,0,0,.44)); animation: character-arrive .9s .08s both cubic-bezier(.2,.75,.25,1); }
 .hero__caption { position: absolute; z-index: 2; right: 2%; left: 2%; display: flex; justify-content: space-between; color: rgba(220,215,237,.48); font-size: 8px; }
@@ -439,17 +448,21 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .project-card[data-reveal]:nth-child(2) { transition-delay: .08s; }
 .project-card[data-reveal]:nth-child(3) { transition-delay: .16s; }
 @keyframes orbit-travel {
-  0% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(0deg); opacity: .72; z-index: 0; }
-  50% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(180deg); opacity: 1; z-index: 2; }
-  55% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(180deg); opacity: 1; z-index: 2; }
-  56% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(183.6deg); opacity: 1; z-index: 2; }
-  100% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(360deg); opacity: .72; z-index: 0; }
+  0% { transform: translate3d(0, 0, -160px); opacity: .72; z-index: 0; }
+  50% { transform: translate3d(0, 0, 160px); opacity: 1; z-index: 2; }
+  55% { transform: translate3d(0, 0, 160px); opacity: 1; z-index: 2; }
+  56% { transform: translate3d(0, 0, 156px); opacity: 1; z-index: 2; }
+  100% { transform: translate3d(0, 0, -160px); opacity: .72; z-index: 0; }
 }
+@keyframes nerve-transfer { to { stroke-dashoffset: -184; } }
+@keyframes neuron-blink { 0%,100% { opacity: .3; transform: scale(.75); } 50% { opacity: 1; transform: scale(1.35); } }
 @keyframes character-arrive { from { opacity: 0; transform: translateY(20px) scale(.975); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 @keyframes scroll-hint { 0%,100% { opacity: .4; transform: translateY(0); } 50% { opacity: 1; transform: translateY(8px); } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition-duration: .01ms !important; }
+  .hero__neural-pulse { stroke-dashoffset: 0; }
+  .hero__neural-nodes circle { opacity: .8; }
   [data-reveal] { opacity: 1; transform: none; }
 }
 

@@ -8,6 +8,7 @@ export function initSkillOrbit() {
 
   let introFinished = !document.body.classList.contains("intro-open");
   let orbitVisible = !("IntersectionObserver" in window);
+  const { radiusX, radiusZ } = getOrbitRadii(heroVisual);
   const animations = orbiters.map((orbiter) => {
     const computedStyle = window.getComputedStyle(orbiter);
     const durationValue = computedStyle.getPropertyValue("--orbit-duration").trim();
@@ -24,63 +25,39 @@ export function initSkillOrbit() {
     const phase = 360 * siblings.indexOf(orbiter) / orbitCount;
     const pauseDuration = 1600;
     const totalDuration = duration + pauseDuration * orbitCount;
-    const { angle, tiltX, tiltY, stretch } = updateOrbitScale(orbiter);
     const animation = orbiter.animate(
-      orbitKeyframes(stretch, angle, tiltX, tiltY, phase, duration, pauseDuration, orbitCount),
-      { duration: totalDuration, iterations: Number.POSITIVE_INFINITY, easing: "linear" },
-    );
-    const logo = orbiter.querySelector(".hero__orbit-logo");
-    const logoAnimation = logo?.animate(
-      logoKeyframes(stretch, angle, tiltX, tiltY, phase, duration, pauseDuration, orbitCount),
+      orbitKeyframes(radiusX, radiusZ, phase, duration, pauseDuration, orbitCount),
       { duration: totalDuration, iterations: Number.POSITIVE_INFINITY, easing: "linear" },
     );
     animation.pause();
     animation.currentTime = 0;
-    if (logoAnimation) {
-      logoAnimation.pause();
-      logoAnimation.currentTime = 0;
-    }
     orbiter.style.animation = "none";
-    return { animation, logoAnimation, orbiter, phase, duration, pauseDuration, orbitCount };
+    return { animation, orbiter, phase, duration, pauseDuration, orbitCount };
   });
   document.documentElement.classList.add("skill-orbit-ready");
 
   if ("ResizeObserver" in window) {
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        for (const item of animations) {
-          if (item.orbiter !== entry.target) continue;
-          const { angle, tiltX, tiltY, stretch } = updateOrbitScale(item.orbiter);
-          item.animation.effect?.setKeyframes(orbitKeyframes(
-            stretch, angle, tiltX, tiltY, item.phase, item.duration, item.pauseDuration, item.orbitCount,
-          ));
-          item.logoAnimation?.effect?.setKeyframes(logoKeyframes(
-            stretch, angle, tiltX, tiltY, item.phase, item.duration, item.pauseDuration, item.orbitCount,
-          ));
-        }
+    const resizeObserver = new ResizeObserver(() => {
+      const { radiusX, radiusZ } = getOrbitRadii(heroVisual);
+      for (const item of animations) {
+        item.animation.effect?.setKeyframes(orbitKeyframes(
+          radiusX, radiusZ, item.phase, item.duration, item.pauseDuration, item.orbitCount,
+        ));
       }
     });
-    for (const { orbiter } of animations) resizeObserver.observe(orbiter);
+    resizeObserver.observe(heroVisual);
   }
 
-  function orbitKeyframes(stretch, angle, tiltX, tiltY, phase, duration, pauseDuration, orbitCount) {
-    const transformAt = (rotation) => `rotateX(${tiltX}deg) rotateY(${tiltY}deg) rotateZ(${angle}deg) scaleX(${stretch}) rotateZ(${phase + rotation}deg)`;
+  function orbitKeyframes(radiusX, radiusZ, phase, duration, pauseDuration, orbitCount) {
     return synchronizedOrbitKeyframes(duration, pauseDuration, orbitCount, (rotation) => {
-      const frontness = -Math.cos((phase + rotation) * Math.PI / 180);
+      const angle = (phase + rotation) * Math.PI / 180;
+      const frontness = -Math.cos(angle);
       return {
-        transform: transformAt(rotation),
+        transform: `translate3d(${Math.sin(angle) * radiusX}px, 0px, ${-Math.cos(angle) * radiusZ}px)`,
         opacity: 0.72 + ((frontness + 1) / 2) * 0.28,
         zIndex: frontness > 0 ? "2" : "0",
       };
     });
-  }
-
-  function logoKeyframes(stretch, angle, tiltX, tiltY, phase, duration, pauseDuration, orbitCount) {
-    const inverseStretch = 1 / stretch;
-    const transformAt = (rotation) => `translate(-50%, -50%) rotateZ(${-phase - rotation}deg) scaleX(${inverseStretch}) rotateZ(${-angle}deg) rotateY(${-tiltY}deg) rotateX(${-tiltX}deg)`;
-    return synchronizedOrbitKeyframes(duration, pauseDuration, orbitCount, (rotation) => ({
-      transform: transformAt(rotation),
-    }));
   }
 
   function synchronizedOrbitKeyframes(duration, pauseDuration, orbitCount, frameAt) {
@@ -98,36 +75,27 @@ export function initSkillOrbit() {
     return keyframes;
   }
 
-  function updateOrbitScale(orbiter) {
-    const style = window.getComputedStyle(orbiter);
-    const width = Number.parseFloat(style.width);
-    const height = Number.parseFloat(style.height);
-    const stretch = width > 0 && height > 0 ? width / height : 1;
-    const angle = Number.parseFloat(style.getPropertyValue("--orbit-angle")) || 0;
-    const tiltX = Number.parseFloat(style.getPropertyValue("--orbit-tilt-x")) || 0;
-    const tiltY = Number.parseFloat(style.getPropertyValue("--orbit-tilt-y")) || 0;
-    orbiter.style.setProperty("--orbit-stretch", String(stretch));
-    orbiter.querySelector(".hero__orbit-logo")?.style.setProperty("--orbit-counter-scale", String(1 / stretch));
-    return { angle, tiltX, tiltY, stretch };
+  function getOrbitRadii(visual) {
+    return {
+      radiusX: visual.clientWidth * 0.38,
+      radiusZ: visual.clientHeight * 0.24,
+    };
   }
 
   function updateAnimationState() {
     const shouldPause = document.hidden || !introFinished || !orbitVisible;
     if (shouldPause) {
-      animations.forEach(({ animation, logoAnimation }) => {
+      animations.forEach(({ animation }) => {
         animation.pause();
-        logoAnimation?.pause();
       });
       return;
     }
 
     // Keep this requested decorative motion, but slow it down for reduced-motion users.
     const playbackRate = reducedMotionQuery.matches ? 0.45 : 1;
-    animations.forEach(({ animation, logoAnimation }) => {
+    animations.forEach(({ animation }) => {
       animation.playbackRate = playbackRate;
-      if (logoAnimation) logoAnimation.playbackRate = playbackRate;
       animation.play();
-      logoAnimation?.play();
     });
   }
   if ("IntersectionObserver" in window) {
