@@ -97,6 +97,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.doesNotMatch(homeHtml, /class="hero__orbit(?:\s|--)/);
   assert.equal((homeHtml.match(/class="hero__orbit-logo"/g) ?? []).length, 8);
   assert.equal((homeHtml.match(/class="hero__orbit-mark"/g) ?? []).length, 8);
+  const orbitNames = [...heroSection.matchAll(/class="hero__orbit-name" aria-hidden="true">([^<]+)<\/span>/g)].map(([, name]) => name);
+  assert.deepEqual(orbitNames, ["JavaScript", "React", "HTML5", "CSS3", "Python", "Node.js", "TypeScript", "Git"]);
   assert.equal((homeHtml.match(/hero__orbit-travel--python/g) ?? []).length, 1);
   assert.equal((homeHtml.match(/hero__orbit-travel--node/g) ?? []).length, 1);
   assert.equal((homeHtml.match(/hero__orbit-travel--html5/g) ?? []).length, 1);
@@ -119,6 +121,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(homeHtml, /68%/);
   const contactSection = homeHtml.match(/<section class="section contact-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(contactSection, "Contact section should be present");
+  assert.match(contactSection, /<h2 class="contact-statement" id="contact-title">Ideas into<br><span>impact\.<\/span><\/h2>/);
   assert.match(contactSection, /<p class="form-status" id="contact-status" role="status" aria-live="polite"><\/p>/);
   assert.doesNotMatch(contactSection, /contact-copy|THE NEXT CHAPTER|Have a good|dreaming up/);
   assert.doesNotMatch(contactSection, /Your enquiry will be sent|Web3Forms/);
@@ -128,6 +131,10 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(styles, /\.education-card--inactive\s*\{\s*pointer-events:\s*none;/);
   assert.match(styles, /\.certificate-card--inactive\s*\{\s*pointer-events:\s*none;/);
   assert.match(styles, /\.contact-section\s*\{[^}]*border:\s*0/);
+  assert.match(styles, /\.contact-section\s*\{[^}]*grid-template-columns:\s*minmax\(0, \.82fr\) minmax\(0, 1\.18fr\)/);
+  assert.match(styles, /\.hero__orbit-name\s*\{[^}]*color:\s*var\(--logo-accent\);/);
+  assert.match(styles, /\.hero__orbit-travel--python \{ --logo-accent: #3776AB; \}/);
+  assert.match(styles, /\.hero__orbit-travel--node \{ --logo-accent: #83CD29; \}/);
   assert.match(styles, /\.button--primary\s*\{[^}]*background:\s*#7aa9dc/);
   assert.match(styles, /\.intro-screen\.is-lit \.intro-lamp__bulb-glass\s*\{[^}]*fill:\s*#ffd58a/);
   assert.doesNotMatch(styles, /\.intro-screen\.is-lit \.lamp-cord(?:__line|__bulb)/);
@@ -344,6 +351,11 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(skillOrbitScript, /const phase = 360 \* siblings\.indexOf\(orbiter\) \/ orbitCount/);
   assert.match(skillOrbitScript, /const pauseDuration = 1600/);
   assert.match(skillOrbitScript, /const totalDuration = duration \+ pauseDuration \* orbitCount/);
+  assert.match(skillOrbitScript, /name\.animate\(\s*orbitLabelKeyframes\(phase, duration, pauseDuration, orbitCount\)/);
+  assert.match(skillOrbitScript, /function orbitLabelKeyframes\(phase, duration, pauseDuration, orbitCount\)/);
+  assert.match(skillOrbitScript, /const isFront = frontness > 0\.95/);
+  assert.match(skillOrbitScript, /easing: "steps\(1, end\)"/);
+  assert.match(skillOrbitScript, /labelAnimation\.playbackRate = playbackRate/);
   assert.match(skillOrbitScript, /animation\.currentTime = 0/);
   assert.match(skillOrbitScript, /for \(let stop = 0; stop <= orbitCount; stop\+\+\)/);
   assert.match(skillOrbitScript, /direct children of the hero visual/);
@@ -354,6 +366,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(skillOrbitScript, /"ResizeObserver" in window/);
   assert.match(portfolioStyles, /height:\s*min\(700px,\s*calc\(100svh - 150px\)\)/);
   const responsiveStyles = await (await fetch(`${baseUrl}/css/responsive.css`)).text();
+  assert.match(responsiveStyles, /contact-section \{ grid-template-columns: 1fr;/);
+  assert.match(responsiveStyles, /\.contact-statement \{ font-size: clamp\(39px, 10vw, 50px\); \}/);
   assert.match(responsiveStyles, /height:\s*min\(680px,\s*calc\(100svh - 150px\)\)/);
   assert.match(responsiveStyles, /grid-template-columns:\s*minmax\(0,\s*1fr\);\s*grid-template-rows:\s*auto minmax\(390px,\s*1fr\)/);
   assert.match(responsiveStyles, /height:\s*auto;\s*min-height:\s*max\(740px,\s*100svh\)/);

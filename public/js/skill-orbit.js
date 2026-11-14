@@ -20,6 +20,11 @@ export function initSkillOrbit() {
       throw new Error("Skill orbit items must be direct children of the hero visual.");
     }
 
+    const name = orbiter.querySelector(".hero__orbit-name");
+    if (!name) {
+      throw new Error("Skill orbit items must include a name label.");
+    }
+
     const siblings = [...heroVisual.querySelectorAll(".hero__orbit-travel")];
     const orbitCount = siblings.length;
     const phase = 360 * siblings.indexOf(orbiter) / orbitCount;
@@ -31,8 +36,14 @@ export function initSkillOrbit() {
     );
     animation.pause();
     animation.currentTime = 0;
+    const labelAnimation = name.animate(
+      orbitLabelKeyframes(phase, duration, pauseDuration, orbitCount),
+      { duration: totalDuration, iterations: Number.POSITIVE_INFINITY, easing: "linear" },
+    );
+    labelAnimation.pause();
+    labelAnimation.currentTime = 0;
     orbiter.style.animation = "none";
-    return { animation, orbiter, phase, duration, pauseDuration, orbitCount };
+    return { animation, labelAnimation, orbiter, phase, duration, pauseDuration, orbitCount };
   });
   document.documentElement.classList.add("skill-orbit-ready");
 
@@ -75,6 +86,34 @@ export function initSkillOrbit() {
     return keyframes;
   }
 
+  function orbitLabelKeyframes(phase, duration, pauseDuration, orbitCount) {
+    const totalDuration = duration + pauseDuration * orbitCount;
+    const keyframes = [];
+    for (let stop = 0; stop <= orbitCount; stop++) {
+      const rotation = 360 * stop / orbitCount;
+      const movementEnd = duration * stop / orbitCount + pauseDuration * stop;
+      const frontness = -Math.cos((phase + rotation) * Math.PI / 180);
+      const isFront = frontness > 0.95;
+      const labelFrame = {
+        opacity: isFront ? 1 : 0,
+        transform: isFront ? "translate(-50%, 0px)" : "translate(-50%, 4px)",
+        easing: "steps(1, end)",
+      };
+      keyframes.push({ offset: movementEnd / totalDuration, ...labelFrame });
+      if (stop < orbitCount) {
+        const pauseEnd = movementEnd + pauseDuration;
+        keyframes.push({ offset: pauseEnd / totalDuration, ...labelFrame });
+        keyframes.push({
+          offset: (pauseEnd + 1) / totalDuration,
+          opacity: 0,
+          transform: "translate(-50%, 4px)",
+          easing: "steps(1, end)",
+        });
+      }
+    }
+    return keyframes;
+  }
+
   function getOrbitRadii(visual) {
     return {
       radiusX: visual.clientWidth * 0.38,
@@ -85,17 +124,20 @@ export function initSkillOrbit() {
   function updateAnimationState() {
     const shouldPause = document.hidden || !introFinished || !orbitVisible;
     if (shouldPause) {
-      animations.forEach(({ animation }) => {
+      animations.forEach(({ animation, labelAnimation }) => {
         animation.pause();
+        labelAnimation.pause();
       });
       return;
     }
 
     // Keep this requested decorative motion, but slow it down for reduced-motion users.
     const playbackRate = reducedMotionQuery.matches ? 0.45 : 1;
-    animations.forEach(({ animation }) => {
+    animations.forEach(({ animation, labelAnimation }) => {
       animation.playbackRate = playbackRate;
+      labelAnimation.playbackRate = playbackRate;
       animation.play();
+      labelAnimation.play();
     });
   }
   if ("IntersectionObserver" in window) {

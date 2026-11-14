@@ -160,6 +160,7 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .hero__orbit-travel--git { --logo-accent: #F05032; }
 .hero__orbit-logo { position: absolute; top: 0; left: 0; display: grid; width: clamp(38px, 4vw, 52px); height: clamp(38px, 4vw, 52px); place-items: center; overflow: visible; border: 1px solid color-mix(in srgb, var(--logo-accent) 65%, white); border-radius: 8px; background: color-mix(in srgb, var(--logo-accent) 12%, #101722); box-shadow: 0 0 12px color-mix(in srgb, var(--logo-accent) 24%, transparent); transform: translate(-50%,-50%); transform-origin: center; }
 .hero__orbit-mark { position: relative; z-index: 1; display: block; width: 60%; height: 60%; overflow: visible; }
+.hero__orbit-name { position: absolute; top: calc(clamp(38px, 4vw, 52px) / 2 + 7px); left: 50%; color: var(--logo-accent); font: 700 9px var(--mono); letter-spacing: .025em; white-space: nowrap; text-shadow: 0 0 10px color-mix(in srgb, var(--logo-accent) 75%, transparent); opacity: 0; pointer-events: none; transform: translate(-50%, 4px); }
 .hero__character-wrap { position: absolute; inset: 3% 10% 1%; display: flex; align-items: center; justify-content: center; }
 .hero__character { position: relative; z-index: 1; display: block; width: auto; max-width: 95%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 22px 43px rgba(0,0,0,.44)); animation: character-arrive .9s .08s both cubic-bezier(.2,.75,.25,1); }
 .hero__caption { position: absolute; z-index: 2; right: 2%; left: 2%; display: flex; justify-content: space-between; color: rgba(220,215,237,.48); font-size: 8px; }
@@ -275,8 +276,10 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .project-card__description { max-width: 290px; margin: 0; color: #9b98a5; font-size: 10px; line-height: 1.7; }
 .project-card__year { flex: none; padding: 6px 8px; border: 1px solid var(--line); border-radius: 7px; }
 
-.contact-section { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-items: center; min-height: 560px; overflow: hidden; margin-bottom: 60px; padding: 56px 60px; border: 0; border-radius: 0; background: linear-gradient(125deg, rgba(23,21,34,.48), rgba(13,13,21,.28)); }
+.contact-section { position: relative; display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); gap: 58px; align-items: center; min-height: 560px; overflow: hidden; margin-bottom: 60px; padding: 56px 60px; border: 0; border-radius: 0; background: linear-gradient(125deg, rgba(23,21,34,.48), rgba(13,13,21,.28)); }
 .contact-glow { position: absolute; top: -100px; left: -190px; width: 460px; height: 460px; border-radius: 50%; background: radial-gradient(circle, rgba(123,98,185,.17), transparent 70%); pointer-events: none; }
+.contact-statement { position: relative; margin: 0; font-family: var(--display); font-size: clamp(42px, 5.2vw, 64px); font-weight: 600; line-height: 1.04; letter-spacing: -.075em; }
+.contact-statement span { color: var(--accent); }
 .contact-form { position: relative; width: min(100%, 560px); }
 .contact-email { display: inline-flex; gap: 10px; align-items: center; color: #ddd6ef; font-size: 12px; }
 .contact-email span { color: #c2afff; }

@@ -75,6 +75,7 @@
   .projects-grid > .project-card:nth-child(4):last-child { grid-column: auto; }
   .project-card__art { min-height: clamp(220px, 67vw, 310px); }
   .contact-section { grid-template-columns: 1fr; gap: 29px; min-height: 0; margin-bottom: 35px; padding: 32px 23px; }
+  .contact-statement { font-size: clamp(39px, 10vw, 50px); }
   .contact-form label { margin-top: 13px; }
   .project-card__category { font-size: 7px; }
 }
