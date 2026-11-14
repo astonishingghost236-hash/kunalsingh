@@ -82,7 +82,7 @@ export function initNeuralNetwork() {
 
   function animate(time) {
     animationFrame = 0;
-    if (document.hidden || !introFinished) return;
+    if (document.hidden) return;
 
     if (!activityScheduled) scheduleActivity(time);
 

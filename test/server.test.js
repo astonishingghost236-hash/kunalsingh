@@ -322,6 +322,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.equal((neuralNetworkSvg.match(/class="neural-link"/g) ?? []).length, 6);
   assert.match(neuralNetworkSvg, /pattern id="neural-network-pattern"/);
   const neuralNetworkScript = await (await fetch(`${baseUrl}/js/neural-network.js`)).text();
+  assert.doesNotMatch(neuralNetworkScript, /introFinished|portfolio:intro-complete/);
   assert.match(neuralNetworkScript, /node\.nextPulseAt = time \+ randomBetween/);
   assert.match(neuralNetworkScript, /node\.targetX = clamp\(node\.baseX \+ randomBetween/);
   assert.match(neuralNetworkScript, /link\.element\.setAttribute\("points", points\)/);
@@ -337,7 +338,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(orbitNameStyle, /font:\s*700 12px var\(--body\);/);
   assert.match(orbitNameStyle, /text-shadow:/);
   assert.doesNotMatch(orbitNameStyle, /\b(?:border|background|box-shadow)\s*:/);
-  assert.match(portfolioStyles, /\.hero__stand\s*\{[^}]*border-radius:\s*50%;[^}]*#d0d5d9/);
+  assert.match(portfolioStyles, /\.hero__stand\s*\{[^}]*border-radius:\s*50%;[^}]*#7d7e74[^}]*#53564e/);
+  assert.match(portfolioStyles, /\.hero__stand\s*\{[^}]*repeating-linear-gradient/);
   assert.match(portfolioStyles, /\.hero__stand\s*\{[^}]*width:\s*clamp\(260px,\s*84%,\s*520px\)/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*50%;\s*left:\s*50%;\s*width:\s*0;\s*height:\s*0;/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit::(?:before|after)/);
@@ -360,7 +362,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(skillOrbitScript, /easing: "cubic-bezier\(0\.42, 0, 0\.58, 1\)"/);
   assert.match(skillOrbitScript, /frontness > 0 \? "2" : "0"/);
   assert.match(skillOrbitScript, /const phase = 360 \* siblings\.indexOf\(orbiter\) \/ orbitCount/);
-  assert.match(skillOrbitScript, /const pauseDuration = 1600/);
+  assert.match(skillOrbitScript, /const pauseDuration = 1200/);
   assert.match(skillOrbitScript, /const totalDuration = duration \+ pauseDuration \* orbitCount/);
   assert.match(skillOrbitScript, /name\.animate\(\s*orbitLabelKeyframes\(phase, duration, pauseDuration, orbitCount\)/);
   assert.match(skillOrbitScript, /function orbitLabelKeyframes\(phase, duration, pauseDuration, orbitCount\)/);

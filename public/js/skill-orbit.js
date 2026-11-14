@@ -27,7 +27,7 @@ export function initSkillOrbit() {
     const siblings = [...heroVisual.querySelectorAll(".hero__orbit-travel")];
     const orbitCount = siblings.length;
     const phase = 360 * siblings.indexOf(orbiter) / orbitCount;
-    const pauseDuration = 1600;
+    const pauseDuration = 1200;
     const totalDuration = duration + pauseDuration * orbitCount;
     const animation = orbiter.animate(
       orbitKeyframes(radiusX, radiusZ, phase, duration, pauseDuration, orbitCount),
