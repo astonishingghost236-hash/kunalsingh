@@ -147,9 +147,9 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .hero__location { display: flex; align-items: center; gap: 9px; margin-top: 39px; color: #777584; font-size: 8px; }
 .location-pulse { width: 5px; height: 5px; }
 
-.hero__visual { position: relative; z-index: 2; width: 100%; max-width: 650px; height: min(700px, calc(100svh - 150px)); justify-self: center; }
+.hero__visual { position: relative; z-index: 2; width: 100%; max-width: 650px; height: min(700px, calc(100svh - 150px)); justify-self: center; perspective: 1100px; perspective-origin: 50% 46%; }
 .hero__halo { position: absolute; top: 8%; left: 12%; width: 77%; height: 83%; border-radius: 50%; background: radial-gradient(ellipse, rgba(115,94,168,.22), rgba(45,44,76,.07) 48%, transparent 72%); }
-.hero__orbit-travel { position: absolute; z-index: 0; top: 5%; right: 6%; bottom: 25%; left: 6%; --orbit-angle: 0deg; --orbit-duration: 32s; --orbit-stretch: 1; --orbit-counter-scale: 1; --logo-accent: var(--accent); transform-origin: center; animation: orbit-travel var(--orbit-duration) linear infinite; }
+.hero__orbit-travel { position: absolute; z-index: 0; top: 5%; right: 6%; bottom: 25%; left: 6%; --orbit-angle: 0deg; --orbit-tilt-x: 56deg; --orbit-tilt-y: -12deg; --orbit-duration: 32s; --orbit-stretch: 1; --orbit-counter-scale: 1; --logo-accent: var(--accent); transform-origin: center; transform-style: preserve-3d; animation: orbit-travel var(--orbit-duration) linear infinite; }
 .hero__orbit-travel--js { --logo-accent: #F7DF1E; }
 .hero__orbit-travel--react { --logo-accent: #61DAFB; }
 .hero__orbit-travel--html5 { --logo-accent: #E34F26; }
@@ -439,11 +439,11 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 .project-card[data-reveal]:nth-child(2) { transition-delay: .08s; }
 .project-card[data-reveal]:nth-child(3) { transition-delay: .16s; }
 @keyframes orbit-travel {
-  0% { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(0deg); }
-  50% { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(180deg); }
-  55% { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(180deg); }
-  56% { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(183.6deg); }
-  100% { transform: rotate(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotate(360deg); }
+  0% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(0deg); opacity: .72; z-index: 0; }
+  50% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(180deg); opacity: 1; z-index: 2; }
+  55% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(180deg); opacity: 1; z-index: 2; }
+  56% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(183.6deg); opacity: 1; z-index: 2; }
+  100% { transform: rotateX(var(--orbit-tilt-x)) rotateY(var(--orbit-tilt-y)) rotateZ(var(--orbit-angle)) scaleX(var(--orbit-stretch)) rotateZ(360deg); opacity: .72; z-index: 0; }
 }
 @keyframes character-arrive { from { opacity: 0; transform: translateY(20px) scale(.975); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
@@ -489,12 +489,16 @@ body { background: var(--obsidian); }
 .certificate-card__paper, .certificate-card:nth-child(n) .certificate-card__paper { border-color: color-mix(in srgb, var(--chrome) 20%, transparent); }
 .certificate-card:nth-child(n) .certificate-card__paper svg { stroke: var(--chrome); }
 .certificate-card:nth-child(4n) .certificate-card__paper svg { stroke: var(--accent-secondary); }
-#certificates .certificate-card[data-certificate-id="class-x"] { --neon-color: #ffd84a; }
-#certificates .certificate-card[data-certificate-id="class-xii"] { --neon-color: #56c8ff; }
-#certificates .certificate-card[data-certificate-id="mkcl"] { --neon-color: #ff4d5a; }
-#certificates .certificate-card[data-certificate-id="mkcl"]:is(:hover, :focus-visible, :active) { border-color: rgba(255,77,90,.72); }
-#certificates .certificate-card[data-certificate-id="astrovega"] { --neon-color: #ff9b45; }
-#certificates .certificate-card[data-certificate-id="astrovega"]:is(:hover, :focus-visible, :active) { border-color: rgba(255,155,69,.76); }
+#certificates .certificate-card { --neon-color: #ffd84a; border-color: color-mix(in srgb, var(--neon-color) 34%, transparent); }
+#certificates .certificate-card:nth-child(8n + 2) { --neon-color: #61dafb; }
+#certificates .certificate-card:nth-child(8n + 3) { --neon-color: #f45bdb; }
+#certificates .certificate-card:nth-child(8n + 4) { --neon-color: #54f0a8; }
+#certificates .certificate-card:nth-child(8n + 5) { --neon-color: #ff9b45; }
+#certificates .certificate-card:nth-child(8n + 6) { --neon-color: #ff647c; }
+#certificates .certificate-card:nth-child(8n + 7) { --neon-color: #b89cff; }
+#certificates .certificate-card:nth-child(8n) { --neon-color: #a0dd56; }
+#certificates .certificate-card::after { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--neon-color) 65%, transparent), transparent); }
+#certificates .certificate-card:is(:hover, :focus-visible, :active) { border-color: color-mix(in srgb, var(--neon-color) 82%, white); box-shadow: 0 16px 42px rgba(7,6,14,.2), 0 0 28px color-mix(in srgb, var(--neon-color) 26%, transparent), inset 0 1px rgba(255,255,255,.045); }
 .technology-card::before { background: radial-gradient(circle, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%); }
 .technology-card:hover, .technology-card:focus-within { background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 8%, transparent), rgba(255, 255, 255, .015)); }
 .technology-card:hover .technology-card__logo, .technology-card:focus-within .technology-card__logo { filter: drop-shadow(0 8px 24px color-mix(in srgb, var(--accent) 22%, transparent)); }
