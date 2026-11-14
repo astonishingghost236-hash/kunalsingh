@@ -11,7 +11,7 @@
 }
 
 @media (max-width: 760px) {
-  .cosmic-scene__network { background-size: 720px 540px; opacity: .08; }
+  .cosmic-scene__network { background-size: 720px 540px; opacity: .16; }
   .intro-screen { padding: 24px 18px; }
   .intro-screen__content { width: min(100%, 520px); }
   .intro-screen__eyebrow { margin-bottom: 4px; text-align: center; }
@@ -49,7 +49,6 @@
   .section-heading { margin-bottom: 36px; }
   .section-heading--inline { align-items: start; flex-direction: column; gap: 17px; }
   .section-heading h2 { font-size: clamp(39px, 9vw, 55px); }
-  .section-aside { font-size: 10px; }
   .about-grid { grid-template-columns: 1fr; gap: 21px; }
   .about-lead { max-width: 530px; font-size: 12px; line-height: 1.75; }
   .about-detail p { font-size: 12px; }
@@ -75,9 +74,7 @@
   .projects-grid { grid-template-columns: 1fr; gap: 27px; }
   .projects-grid > .project-card:nth-child(4):last-child { grid-column: auto; }
   .project-card__art { min-height: clamp(220px, 67vw, 310px); }
-  .projects-all-link { margin: 0; }
   .contact-section { grid-template-columns: 1fr; gap: 29px; min-height: 0; margin-bottom: 35px; padding: 32px 23px; }
-  .contact-copy h2 { font-size: clamp(44px, 10vw, 60px); }
   .contact-form label { margin-top: 13px; }
   .project-card__category { font-size: 7px; }
 }

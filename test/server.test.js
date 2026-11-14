@@ -69,15 +69,16 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(heroSection, /Maharshi Dayanand University \(MDU\)/);
   assert.match(heroSection, /class="hero__starfield"/);
   assert.match(heroSection, /class="hero__glass"/);
-  assert.match(heroSection, /class="hero__neural-network"/);
+  assert.doesNotMatch(heroSection, /hero__neural-network/);
   assert.match(heroSection, /class="hero__character" src="\/assets\/gautam-hero\.webp"/);
   assert.match(heroSection, /alt="Portrait of Kunal Singh wearing a black suit and sunglasses"/);
   assert.match(heroSection, /class="hero__intro"/);
   assert.match(heroSection, /class="hero__actions"/);
-  assert.match(homeHtml, /pursuing a B\.Tech in Computer Science &amp; Engineering at Maharshi Dayanand University \(MDU\)/);
-  assert.match(homeHtml, /started in 2024 and expect to graduate in 2028/);
-  assert.match(homeHtml, /learning Python, JavaScript, React and Node\.js through coding and building web projects/);
-  assert.match(homeHtml, /This portfolio is one of them/);
+  assert.match(homeHtml, /pursuing a <span class="highlight">B\.Tech in Computer Science &amp; Engineering<\/span> at <span class="highlight">Maharshi Dayanand University \(MDU\)<\/span>/);
+  assert.match(homeHtml, /I started in <span class="highlight">2024<\/span> and expect to graduate in <span class="highlight">2028<\/span>/);
+  assert.match(homeHtml, /learning <span class="highlight">Python<\/span>, <span class="highlight">JavaScript<\/span>, <span class="highlight">React<\/span> and <span class="highlight">Node\.js<\/span> through coding and building web projects/);
+  assert.doesNotMatch(homeHtml, /This portfolio is one of them/);
+  assert.doesNotMatch(homeHtml, /A LITTLE CONTEXT|My academic journey in computer science|resume opens without a PIN|four-digit PIN|A focused mix of languages and modern tools|Have something in mind\?|THE NEXT CHAPTER|The best projects start with a conversation|dreaming up/);
   const navigation = homeHtml.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)?.[0];
   assert.ok(navigation, "Section navigation drawer should be present");
   assert.equal((navigation.match(/class="site-nav__link/g) ?? []).length, 7);
@@ -106,7 +107,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.doesNotMatch(homeHtml, /fonts\.googleapis\.com/);
   assert.doesNotMatch(homeHtml, /brand__mark|section-number|education-card__index|experience-row__number/);
   assert.doesNotMatch(homeHtml, /Your Name|Independent by nature|Intentional by design|INDEPENDENTLY WORKING|AVAILABLE ONLINE|FIG\. 01|BUILT WITH CURIOSITY|AND A LOT OF CARE/);
-  assert.match(homeHtml, /Kunal Singh, Full Stack Web Developer and B\.Tech Computer Science &amp; Engineering student at Maharshi Dayanand University \(MDU\)/);
+  assert.match(homeHtml, /I’m <span class="highlight">Kunal Singh<\/span>, pursuing a <span class="highlight">B\.Tech in Computer Science &amp; Engineering<\/span>/);
   assert.match(homeHtml, /Full Stack Developer/);
   assert.match(homeHtml, /Computer Science &amp; Engineering/);
   assert.match(homeHtml, /href="mailto:astonishing\.ghost\.236@gmail\.com"/);
@@ -119,6 +120,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const contactSection = homeHtml.match(/<section class="section contact-section"[\s\S]*?<\/section>/)?.[0];
   assert.ok(contactSection, "Contact section should be present");
   assert.match(contactSection, /<p class="form-status" id="contact-status" role="status" aria-live="polite"><\/p>/);
+  assert.doesNotMatch(contactSection, /contact-copy|THE NEXT CHAPTER|Have a good|dreaming up/);
   assert.doesNotMatch(contactSection, /Your enquiry will be sent|Web3Forms/);
   const stylesResponse = await fetch(`${baseUrl}/css/style.css`);
   assert.equal(stylesResponse.status, 200);
@@ -170,7 +172,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     "MKCL Certificate",
     "Astrovega Robotics Certificate",
   ]);
-  assert.match(certificateSection, /The resume opens without a PIN\. Certificates require a four-digit PIN\./);
+  assert.doesNotMatch(certificateSection, /The resume opens without a PIN\. Certificates require a four-digit PIN\./);
   assert.match(certificateSection, /href="\/assets\/kunal-singh-resume\.pdf" target="_blank" rel="noopener"/);
   assert.doesNotMatch(certificateSection.match(/<a class="certificate-card"[\s\S]*?<\/a>/)?.[0] ?? "", /data-certificate-id/);
   assert.match(certificateSection, /data-certificate-id="class-x"/);
@@ -315,12 +317,17 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const neuralNetwork = await fetch(`${baseUrl}/assets/neural-network.svg`);
   assert.equal(neuralNetwork.status, 200);
   assert.match(neuralNetwork.headers.get("content-type"), /image\/svg\+xml/);
-  assert.match(await neuralNetwork.text(), /stroke="#398BFF"/);
+  const neuralNetworkSvg = await neuralNetwork.text();
+  assert.match(neuralNetworkSvg, /stroke="#398BFF"/);
+  const neuralNodes = [...neuralNetworkSvg.matchAll(/class="neural-node"[^>]*animation-delay:\s*(-[\d.]+)s/g)];
+  assert.equal(neuralNodes.length, 20);
+  assert.equal(new Set(neuralNodes.map(([, delay]) => delay)).size, 20);
+  assert.match(neuralNetworkSvg, /@keyframes node-blink/);
+  assert.match(neuralNetworkSvg, /prefers-reduced-motion: reduce/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*50%;\s*left:\s*50%;\s*width:\s*0;\s*height:\s*0;/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit::(?:before|after)/);
   assert.match(portfolioStyles, /\.hero__visual\s*\{[^}]*perspective:\s*900px;/);
-  assert.match(portfolioStyles, /\.hero__neural-pulse\s*\{[^}]*animation:\s*nerve-transfer 2\.2s linear infinite/);
-  assert.match(portfolioStyles, /@keyframes neuron-blink/);
+  assert.doesNotMatch(portfolioStyles, /hero__neural|nerve-transfer|neuron-blink/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit-logo::(?:before|after)\s*\{/);
   assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*clamp\(38px,\s*4vw,\s*52px\);[^}]*height:\s*clamp\(38px,\s*4vw,\s*52px\);/);
   assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*border-radius:\s*8px;/);
