@@ -315,7 +315,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.equal(neuralNetwork.status, 200);
   assert.match(neuralNetwork.headers.get("content-type"), /image\/svg\+xml/);
   assert.match(await neuralNetwork.text(), /stroke="#398BFF"/);
-  assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*5%;/);
+  assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*15%;/);
+  assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{[^}]*--orbit-tilt-x:\s*90deg;\s*--orbit-tilt-y:\s*0deg;/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit::(?:before|after)/);
   assert.match(portfolioStyles, /\.hero__visual\s*\{[^}]*perspective:\s*1100px;/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit-logo::(?:before|after)\s*\{/);
@@ -328,6 +329,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const skillOrbitScript = await (await fetch(`${baseUrl}/js/skill-orbit.js`)).text();
   assert.match(skillOrbitScript, /prefers-reduced-motion/);
   assert.match(skillOrbitScript, /rotateX\(\$\{tiltX\}deg\) rotateY\(\$\{tiltY\}deg\)/);
+  assert.match(skillOrbitScript, /const frontness = -Math\.cos\(\(phase \+ rotation\) \* Math\.PI \/ 180\)/);
   assert.match(skillOrbitScript, /frontness > 0 \? "2" : "0"/);
   assert.match(skillOrbitScript, /const phase = 360 \* siblings\.indexOf\(orbiter\) \/ orbitCount/);
   assert.match(skillOrbitScript, /const pauseDuration = 1600/);

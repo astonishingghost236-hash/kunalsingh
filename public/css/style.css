@@ -149,7 +149,7 @@ body.menu-open .nav-backdrop { opacity: 1; visibility: visible; }
 
 .hero__visual { position: relative; z-index: 2; width: 100%; max-width: 650px; height: min(700px, calc(100svh - 150px)); justify-self: center; perspective: 1100px; perspective-origin: 50% 46%; }
 .hero__halo { position: absolute; top: 8%; left: 12%; width: 77%; height: 83%; border-radius: 50%; background: radial-gradient(ellipse, rgba(115,94,168,.22), rgba(45,44,76,.07) 48%, transparent 72%); }
-.hero__orbit-travel { position: absolute; z-index: 0; top: 5%; right: 6%; bottom: 25%; left: 6%; --orbit-angle: 0deg; --orbit-tilt-x: 56deg; --orbit-tilt-y: -12deg; --orbit-duration: 32s; --orbit-stretch: 1; --orbit-counter-scale: 1; --logo-accent: var(--accent); transform-origin: center; transform-style: preserve-3d; animation: orbit-travel var(--orbit-duration) linear infinite; }
+.hero__orbit-travel { position: absolute; z-index: 0; top: 15%; right: 6%; bottom: 15%; left: 6%; --orbit-angle: 0deg; --orbit-tilt-x: 90deg; --orbit-tilt-y: 0deg; --orbit-duration: 32s; --orbit-stretch: 1; --orbit-counter-scale: 1; --logo-accent: var(--accent); transform-origin: center; transform-style: preserve-3d; animation: orbit-travel var(--orbit-duration) linear infinite; }
 .hero__orbit-travel--js { --logo-accent: #F7DF1E; }
 .hero__orbit-travel--react { --logo-accent: #61DAFB; }
 .hero__orbit-travel--html5 { --logo-accent: #E34F26; }
@@ -497,8 +497,10 @@ body { background: var(--obsidian); }
 #certificates .certificate-card:nth-child(8n + 6) { --neon-color: #ff647c; }
 #certificates .certificate-card:nth-child(8n + 7) { --neon-color: #b89cff; }
 #certificates .certificate-card:nth-child(8n) { --neon-color: #a0dd56; }
+#certificates .certificate-card .certificate-card__paper { border-color: color-mix(in srgb, var(--neon-color) 24%, transparent); }
 #certificates .certificate-card::after { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--neon-color) 65%, transparent), transparent); }
 #certificates .certificate-card:is(:hover, :focus-visible, :active) { border-color: color-mix(in srgb, var(--neon-color) 82%, white); box-shadow: 0 16px 42px rgba(7,6,14,.2), 0 0 28px color-mix(in srgb, var(--neon-color) 26%, transparent), inset 0 1px rgba(255,255,255,.045); }
+#certificates .certificate-card:is(:hover, :focus-visible, :active) .certificate-card__paper { border-color: color-mix(in srgb, var(--neon-color) 78%, white); box-shadow: 0 12px 32px rgba(0,0,0,.16), 0 0 24px color-mix(in srgb, var(--neon-color) 22%, transparent), inset 0 1px rgba(255,255,255,.05); }
 .technology-card::before { background: radial-gradient(circle, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%); }
 .technology-card:hover, .technology-card:focus-within { background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 8%, transparent), rgba(255, 255, 255, .015)); }
 .technology-card:hover .technology-card__logo, .technology-card:focus-within .technology-card__logo { filter: drop-shadow(0 8px 24px color-mix(in srgb, var(--accent) 22%, transparent)); }
