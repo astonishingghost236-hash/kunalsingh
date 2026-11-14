@@ -22,6 +22,10 @@ export function initNeuralNetwork() {
       baseY: y,
       x,
       y,
+      lastX: element.getAttribute("cx"),
+      lastY: element.getAttribute("cy"),
+      lastRadius: element.getAttribute("r"),
+      lastOpacity: element.getAttribute("opacity"),
       fromX: x,
       fromY: y,
       targetX: x,
@@ -45,13 +49,20 @@ export function initNeuralNetwork() {
     if (indexes.length < 2 || indexes.some((index) => !Number.isInteger(index) || !nodes[index])) {
       throw new Error("Neural network lines must reference valid points.");
     }
-    return { element, indexes };
+    return { element, indexes, lastPoints: element.getAttribute("points") };
   });
+
+  const lowPowerDevice = (
+    Number.isFinite(navigator.deviceMemory) && navigator.deviceMemory <= 2
+  ) || (
+    Number.isFinite(navigator.hardwareConcurrency) && navigator.hardwareConcurrency <= 2
+  );
+  if (lowPowerDevice) document.documentElement.classList.add("low-power");
 
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   let introFinished = !document.body.classList.contains("intro-open");
   let animationFrame = 0;
-  let lastFrame = 0;
+  let frameTimer = 0;
   let activityScheduled = false;
 
   function scheduleActivity(time) {
@@ -76,69 +87,124 @@ export function initNeuralNetwork() {
 
     if (!activityScheduled) scheduleActivity(time);
 
-    if (time - lastFrame >= 1000 / 30) {
-      lastFrame = time;
-      const reducedMotion = reducedMotionQuery.matches;
+    const reducedMotion = reducedMotionQuery.matches;
+    const frameDelay = lowPowerDevice || reducedMotion ? 34 : 16;
+    let active = false;
+    let positionsChanged = false;
+    let nextActivityAt = Number.POSITIVE_INFINITY;
 
-      for (const node of nodes) {
-        if (time >= node.nextMoveAt) {
-          const movementRange = reducedMotion ? 12 : 30;
-          node.fromX = node.x;
-          node.fromY = node.y;
-          node.targetX = clamp(node.baseX + randomBetween(-movementRange, movementRange), 8, 952);
-          node.targetY = clamp(node.baseY + randomBetween(-movementRange, movementRange), 8, 712);
-          node.moveStart = time;
-          node.moveDuration = reducedMotion ? randomBetween(5000, 8500) : randomBetween(1900, 3900);
-          node.nextMoveAt = time + node.moveDuration + randomBetween(400, 2400);
-        }
-
-        const progress = clamp((time - node.moveStart) / node.moveDuration, 0, 1);
-        const easedProgress = progress * progress * (3 - 2 * progress);
-        node.x = node.fromX + (node.targetX - node.fromX) * easedProgress;
-        node.y = node.fromY + (node.targetY - node.fromY) * easedProgress;
-
-        if (time >= node.nextPulseAt) {
-          node.pulseStart = time;
-          node.pulseDuration = reducedMotion ? randomBetween(700, 1300) : randomBetween(250, 650);
-          const restDuration = reducedMotion ? randomBetween(1300, 3200) : randomBetween(600, 4400);
-          node.nextPulseAt = time + node.pulseDuration + restDuration;
-        }
-
-        const pulseProgress = (time - node.pulseStart) / node.pulseDuration;
-        const pulse = pulseProgress >= 0 && pulseProgress <= 1
-          ? Math.sin(Math.PI * pulseProgress)
-          : 0;
-        node.element.setAttribute("cx", node.x.toFixed(2));
-        node.element.setAttribute("cy", node.y.toFixed(2));
-        node.element.setAttribute("r", (node.baseRadius + pulse * 2.4).toFixed(2));
-        node.element.setAttribute("opacity", (node.baseOpacity + pulse * 0.72).toFixed(2));
+    for (const node of nodes) {
+      if (time >= node.nextMoveAt) {
+        const movementRange = reducedMotion ? 12 : lowPowerDevice ? 18 : 30;
+        node.fromX = node.x;
+        node.fromY = node.y;
+        node.targetX = clamp(node.baseX + randomBetween(-movementRange, movementRange), 8, 952);
+        node.targetY = clamp(node.baseY + randomBetween(-movementRange, movementRange), 8, 712);
+        node.moveStart = time;
+        node.moveDuration = reducedMotion
+          ? randomBetween(5000, 8500)
+          : lowPowerDevice
+            ? randomBetween(2800, 5000)
+            : randomBetween(1900, 3900);
+        node.nextMoveAt = time + node.moveDuration + randomBetween(400, 2400);
       }
 
+      const progress = clamp((time - node.moveStart) / node.moveDuration, 0, 1);
+      const easedProgress = progress * progress * (3 - 2 * progress);
+      node.x = node.fromX + (node.targetX - node.fromX) * easedProgress;
+      node.y = node.fromY + (node.targetY - node.fromY) * easedProgress;
+      const x = node.x.toFixed(2);
+      const y = node.y.toFixed(2);
+      if (x !== node.lastX || y !== node.lastY) positionsChanged = true;
+      if (x !== node.lastX) {
+        node.element.setAttribute("cx", x);
+        node.lastX = x;
+      }
+      if (y !== node.lastY) {
+        node.element.setAttribute("cy", y);
+        node.lastY = y;
+      }
+      if (progress < 1) active = true;
+
+      if (time >= node.nextPulseAt) {
+        node.pulseStart = time;
+        node.pulseDuration = reducedMotion
+          ? randomBetween(700, 1300)
+          : lowPowerDevice
+            ? randomBetween(500, 900)
+            : randomBetween(250, 650);
+        const restDuration = reducedMotion
+          ? randomBetween(1300, 3200)
+          : lowPowerDevice
+            ? randomBetween(1500, 5000)
+            : randomBetween(600, 4400);
+        node.nextPulseAt = time + node.pulseDuration + restDuration;
+      }
+
+      const pulseProgress = (time - node.pulseStart) / node.pulseDuration;
+      const pulse = pulseProgress >= 0 && pulseProgress <= 1
+        ? Math.sin(Math.PI * pulseProgress)
+        : 0;
+      const radius = (node.baseRadius + pulse * 2.4).toFixed(2);
+      const opacity = (node.baseOpacity + pulse * 0.72).toFixed(2);
+      if (radius !== node.lastRadius) {
+        node.element.setAttribute("r", radius);
+        node.lastRadius = radius;
+      }
+      if (opacity !== node.lastOpacity) {
+        node.element.setAttribute("opacity", opacity);
+        node.lastOpacity = opacity;
+      }
+      if (pulseProgress >= 0 && pulseProgress <= 1) active = true;
+
+      nextActivityAt = Math.min(nextActivityAt, node.nextMoveAt, node.nextPulseAt);
+    }
+
+    if (positionsChanged) {
       for (const link of links) {
         const points = link.indexes
           .map((index) => `${nodes[index].x.toFixed(2)},${nodes[index].y.toFixed(2)}`)
           .join(" ");
+        if (points === link.lastPoints) continue;
         link.element.setAttribute("points", points);
+        link.lastPoints = points;
       }
     }
 
+    scheduleNextFrame(active ? frameDelay : Math.max(0, nextActivityAt - time));
+  }
+
+  function scheduleNextFrame(delay = 0) {
+    if (animationFrame || frameTimer || document.hidden || !introFinished) return;
+    if (delay > 0) {
+      frameTimer = window.setTimeout(() => {
+        frameTimer = 0;
+        if (!document.hidden && introFinished) {
+          animationFrame = window.requestAnimationFrame(animate);
+        }
+      }, delay);
+      return;
+    }
     animationFrame = window.requestAnimationFrame(animate);
   }
 
   function updateAnimationState() {
     if (document.hidden || !introFinished) {
       if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      if (frameTimer) window.clearTimeout(frameTimer);
       animationFrame = 0;
+      frameTimer = 0;
       return;
     }
 
-    if (!animationFrame) {
+    if (!animationFrame && !frameTimer) {
       if (activityScheduled) scheduleActivity(performance.now());
-      animationFrame = window.requestAnimationFrame(animate);
+      scheduleNextFrame();
     }
   }
 
   document.addEventListener("visibilitychange", updateAnimationState);
+  reducedMotionQuery.addEventListener("change", updateAnimationState);
   document.addEventListener("portfolio:intro-complete", () => {
     introFinished = true;
     updateAnimationState();

@@ -330,8 +330,14 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(neuralNetworkScript, /node\.nextPulseAt = time \+ randomBetween/);
   assert.match(neuralNetworkScript, /node\.targetX = clamp\(node\.baseX \+ randomBetween/);
   assert.match(neuralNetworkScript, /link\.element\.setAttribute\("points", points\)/);
+  assert.match(neuralNetworkScript, /navigator\.deviceMemory <= 2/);
+  assert.match(neuralNetworkScript, /navigator\.hardwareConcurrency <= 2/);
+  assert.match(neuralNetworkScript, /scheduleNextFrame\(active \? frameDelay : Math\.max\(0, nextActivityAt - time\)\)/);
+  assert.match(neuralNetworkScript, /if \(positionsChanged\)/);
   assert.match(neuralNetworkScript, /if \(activityScheduled\) scheduleActivity\(performance\.now\(\)\)/);
   assert.match(portfolioStyles, /\.cosmic-scene__network\s*\{[^}]*width:\s*100%;[^}]*height:\s*100%;/);
+  assert.match(portfolioStyles, /\.low-power \.neural-node,\s*\.low-power \.hero__character/);
+  assert.match(portfolioStyles, /\.low-power \.neon-frame::after\s*\{\s*display:\s*none;/);
   const orbitNameStyle = portfolioStyles.match(/\.hero__orbit-name\s*\{[^}]*\}/)?.[0] ?? "";
   assert.match(orbitNameStyle, /font:\s*700 12px var\(--body\);/);
   assert.match(orbitNameStyle, /text-shadow:/);
