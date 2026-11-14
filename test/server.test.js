@@ -97,6 +97,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.doesNotMatch(homeHtml, /class="hero__orbit(?:\s|--)/);
   assert.equal((homeHtml.match(/class="hero__orbit-logo"/g) ?? []).length, 8);
   assert.equal((homeHtml.match(/class="hero__orbit-mark"/g) ?? []).length, 8);
+  assert.match(homeHtml, /<div class="hero__stand" aria-hidden="true"><\/div>/);
   const orbitNames = [...heroSection.matchAll(/class="hero__orbit-name" aria-hidden="true">([^<]+)<\/span>/g)].map(([, name]) => name);
   assert.deepEqual(orbitNames, ["JavaScript", "React", "HTML5", "CSS3", "Python", "Node.js", "TypeScript", "Git"]);
   assert.equal((homeHtml.match(/hero__orbit-travel--python/g) ?? []).length, 1);
@@ -331,7 +332,11 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(neuralNetworkScript, /link\.element\.setAttribute\("points", points\)/);
   assert.match(neuralNetworkScript, /if \(activityScheduled\) scheduleActivity\(performance\.now\(\)\)/);
   assert.match(portfolioStyles, /\.cosmic-scene__network\s*\{[^}]*width:\s*100%;[^}]*height:\s*100%;/);
-  assert.match(portfolioStyles, /\.hero__orbit-name\s*\{[^}]*background:\s*rgba\(6,11,20,\.96\);[^}]*font:\s*700 11px var\(--body\);/);
+  const orbitNameStyle = portfolioStyles.match(/\.hero__orbit-name\s*\{[^}]*\}/)?.[0] ?? "";
+  assert.match(orbitNameStyle, /font:\s*700 12px var\(--body\);/);
+  assert.match(orbitNameStyle, /text-shadow:/);
+  assert.doesNotMatch(orbitNameStyle, /\b(?:border|background|box-shadow)\s*:/);
+  assert.match(portfolioStyles, /\.hero__stand\s*\{[^}]*border-radius:\s*50%;[^}]*#d0d5d9/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*50%;\s*left:\s*50%;\s*width:\s*0;\s*height:\s*0;/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit::(?:before|after)/);
   assert.match(portfolioStyles, /\.hero__visual\s*\{[^}]*perspective:\s*900px;/);
@@ -347,7 +352,10 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(skillOrbitScript, /translate3d\(\$\{Math\.sin\(angle\) \* radiusX\}px, 0px, \$\{-Math\.cos\(angle\) \* radiusZ\}px\)/);
   assert.match(skillOrbitScript, /radiusX: visual\.clientWidth \* 0\.38/);
   assert.match(skillOrbitScript, /radiusZ: visual\.clientHeight \* 0\.24/);
+  assert.match(skillOrbitScript, /const angle = \(phase - rotation\) \* Math\.PI \/ 180/);
   assert.match(skillOrbitScript, /const frontness = -Math\.cos\(angle\)/);
+  assert.match(skillOrbitScript, /const frontness = -Math\.cos\(\(phase - rotation\) \* Math\.PI \/ 180\)/);
+  assert.match(skillOrbitScript, /easing: "cubic-bezier\(0\.42, 0, 0\.58, 1\)"/);
   assert.match(skillOrbitScript, /frontness > 0 \? "2" : "0"/);
   assert.match(skillOrbitScript, /const phase = 360 \* siblings\.indexOf\(orbiter\) \/ orbitCount/);
   assert.match(skillOrbitScript, /const pauseDuration = 1600/);

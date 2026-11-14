@@ -61,7 +61,7 @@ export function initSkillOrbit() {
 
   function orbitKeyframes(radiusX, radiusZ, phase, duration, pauseDuration, orbitCount) {
     return synchronizedOrbitKeyframes(duration, pauseDuration, orbitCount, (rotation) => {
-      const angle = (phase + rotation) * Math.PI / 180;
+      const angle = (phase - rotation) * Math.PI / 180;
       const frontness = -Math.cos(angle);
       return {
         transform: `translate3d(${Math.sin(angle) * radiusX}px, 0px, ${-Math.cos(angle) * radiusZ}px)`,
@@ -80,7 +80,11 @@ export function initSkillOrbit() {
       const frame = frameAt(rotation);
       keyframes.push({ offset: movementEnd / totalDuration, ...frame });
       if (stop < orbitCount) {
-        keyframes.push({ offset: (movementEnd + pauseDuration) / totalDuration, ...frame });
+        keyframes.push({
+          offset: (movementEnd + pauseDuration) / totalDuration,
+          ...frame,
+          easing: "cubic-bezier(0.42, 0, 0.58, 1)",
+        });
       }
     }
     return keyframes;
@@ -92,7 +96,7 @@ export function initSkillOrbit() {
     for (let stop = 0; stop <= orbitCount; stop++) {
       const rotation = 360 * stop / orbitCount;
       const movementEnd = duration * stop / orbitCount + pauseDuration * stop;
-      const frontness = -Math.cos((phase + rotation) * Math.PI / 180);
+      const frontness = -Math.cos((phase - rotation) * Math.PI / 180);
       const isFront = frontness > 0.95;
       const labelFrame = {
         opacity: isFront ? 1 : 0,
