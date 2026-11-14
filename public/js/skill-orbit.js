@@ -64,6 +64,8 @@ export function initSkillOrbit() {
       { offset: 0.25, transform: transformAt(90), opacity: 0.9, zIndex: "0" },
       { offset: 0.251, transform: transformAt(90.36), opacity: 0.9, zIndex: "2" },
       { offset: 0.5, transform: transformAt(180), opacity: 1, zIndex: "2" },
+      { offset: 0.55, transform: transformAt(180), opacity: 1, zIndex: "2" },
+      { offset: 0.56, transform: transformAt(183.6), opacity: 1, zIndex: "2" },
       { offset: 0.749, transform: transformAt(269.64), opacity: 0.9, zIndex: "2" },
       { offset: 0.75, transform: transformAt(270), opacity: 0.9, zIndex: "0" },
       { offset: 0.76, transform: transformAt(273.6), opacity: 0.86, zIndex: "0" },
@@ -75,8 +77,11 @@ export function initSkillOrbit() {
     const inverseStretch = 1 / stretch;
     const transformAt = (rotation) => `translate(-50%, -50%) rotate(${rotation}deg) scaleX(${inverseStretch}) rotate(${-angle}deg) rotateX(${-tilt}deg)`;
     return [
-      { transform: transformAt(0) },
-      { transform: transformAt(-360) },
+      { offset: 0, transform: transformAt(0) },
+      { offset: 0.5, transform: transformAt(-180) },
+      { offset: 0.55, transform: transformAt(-180) },
+      { offset: 0.56, transform: transformAt(-183.6) },
+      { offset: 1, transform: transformAt(-360) },
     ];
   }
 

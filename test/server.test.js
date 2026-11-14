@@ -313,11 +313,15 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(portfolioStyles, /\.hero__orbit-logo::before\s*\{/);
   assert.match(portfolioStyles, /\.hero__orbit-logo::after\s*\{/);
   assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*width:\s*clamp\(34px,\s*3\.8vw,\s*48px\);[^}]*height:\s*clamp\(34px,\s*3\.8vw,\s*48px\);/);
+  assert.match(portfolioStyles, /\.hero__orbit-logo\s*\{[^}]*border-radius:\s*8px;/);
+  assert.match(portfolioStyles, /55%\s*\{\s*transform:[^}]*rotate\(180deg\);/);
   assert.match(portfolioStyles, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\[data-reveal\] \{\s*opacity: 1;/);
   const skillOrbitScript = await (await fetch(`${baseUrl}/js/skill-orbit.js`)).text();
   assert.match(skillOrbitScript, /prefers-reduced-motion/);
   assert.match(skillOrbitScript, /rotateX\(\$\{tilt\}deg\)/);
   assert.match(skillOrbitScript, /zIndex: "2"/);
+  assert.match(skillOrbitScript, /\{ offset: 0\.55, transform: transformAt\(180\), opacity: 1, zIndex: "2" \}/);
+  assert.match(skillOrbitScript, /\{ offset: 0\.55, transform: transformAt\(-180\) \}/);
   assert.match(skillOrbitScript, /direct children of the hero visual/);
   assert.equal((skillOrbitScript.match(/addEventListener\("visibilitychange"/g) ?? []).length, 1);
   assert.match(skillOrbitScript, /reducedMotionQuery\.addEventListener\("change", updateAnimationState\)/);
