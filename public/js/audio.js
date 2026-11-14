@@ -30,5 +30,10 @@ export function initVoiceover() {
     void playVoiceover();
   });
   voiceover.addEventListener("ended", () => showPlaybackButton("Replay voice-over"));
+  window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+    if (voiceover.ended) voiceover.currentTime = 0;
+    if (voiceover.paused) void playVoiceover();
+  });
   void playVoiceover();
 }

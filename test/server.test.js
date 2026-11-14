@@ -139,6 +139,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(audioScript, /error instanceof DOMException && error\.name === "NotAllowedError"/);
   assert.match(audioScript, /showPlaybackButton\(autoplayBlocked \? "Play voice-over" : "Retry voice-over"\)/);
   assert.match(audioScript, /voiceover\.addEventListener\("ended"/);
+  assert.match(audioScript, /window\.addEventListener\("pageshow"/);
+  assert.match(audioScript, /if \(voiceover\.paused\) void playVoiceover\(\)/);
   assert.match(audioScript, /void playVoiceover\(\)/);
   assert.match(contactSection, /<form\b[^>]*action="https:\/\/api\.web3forms\.com\/submit"/);
   assert.match(contactSection, /name="access_key" value="42b80d09-1d02-4158-acd9-ca392cd6a5e8"/);
@@ -332,6 +334,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(neuralNetworkScript, /if \(positionsChanged\)/);
   assert.match(neuralNetworkScript, /if \(activityScheduled\) scheduleActivity\(performance\.now\(\)\)/);
   assert.match(portfolioStyles, /\.cosmic-scene__network\s*\{[^}]*width:\s*100%;[^}]*height:\s*100%;/);
+  assert.match(portfolioStyles, /\.cosmic-scene__network\s*\{[^}]*opacity:\s*\.36;/);
   assert.match(portfolioStyles, /\.low-power \.neural-node,\s*\.low-power \.hero__character/);
   assert.match(portfolioStyles, /\.low-power \.neon-frame::after\s*\{\s*display:\s*none;/);
   const orbitNameStyle = portfolioStyles.match(/\.hero__orbit-name\s*\{[^}]*\}/)?.[0] ?? "";

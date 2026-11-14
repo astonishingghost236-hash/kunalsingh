@@ -39,7 +39,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .audio-start:hover { border-color: rgba(226,231,237,.55); background: #111720; }
 .audio-start:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .cosmic-scene__wash { position: absolute; inset: 0; background: radial-gradient(ellipse at 74% 22%, rgba(27,104,214,.19), transparent 37%), radial-gradient(ellipse at 18% 58%, rgba(22,86,176,.12), transparent 38%), linear-gradient(180deg, #07101d 6%, rgba(6,11,20,.96) 72%, #060b14 100%); }
-.cosmic-scene__network { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: hidden; opacity: .23; pointer-events: none; }
+.cosmic-scene__network { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: hidden; opacity: .36; pointer-events: none; }
 .neural-node { filter: drop-shadow(0 0 7px rgba(104,180,255,.8)); }
 .low-power .neural-node,
 .low-power .hero__character,
