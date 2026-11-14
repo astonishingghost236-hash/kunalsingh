@@ -159,8 +159,9 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   const certificateSection = homeHtml.match(/<section class="section certificates-section" id="certificates"[\s\S]*?<\/section>/)?.[0];
   assert.ok(certificateSection, "Certificates section should be present");
   assert.ok(homeHtml.indexOf(educationSection) < homeHtml.indexOf(certificateSection), "Certificates should follow education");
-  const certificates = [...certificateSection.matchAll(/<(?:article|button) class="certificate-card(?: certificate-card--inactive)?"[^>]*>[\s\S]*?<span class="certificate-card__label">([^<]+)<\/span>[\s\S]*?<\/(?:article|button)>/g)];
+  const certificates = [...certificateSection.matchAll(/<(?:a|article|button) class="certificate-card(?: certificate-card--inactive)?"[^>]*>[\s\S]*?<span class="certificate-card__label">([^<]+)<\/span>[\s\S]*?<\/(?:a|article|button)>/g)];
   assert.deepEqual(certificates.map(([, title]) => title), [
+    "Resume",
     "10th High School Certificate",
     "12th Intermediate Certificate",
     "Scout Guide Training",
@@ -168,7 +169,9 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     "MKCL Certificate",
     "Astrovega Robotics Certificate",
   ]);
-  assert.match(certificateSection, /Choose a certificate and enter the four-digit PIN to view it\./);
+  assert.match(certificateSection, /The resume opens without a PIN\. Certificates require a four-digit PIN\./);
+  assert.match(certificateSection, /href="\/assets\/kunal-singh-resume\.pdf" target="_blank" rel="noopener"/);
+  assert.doesNotMatch(certificateSection.match(/<a class="certificate-card"[\s\S]*?<\/a>/)?.[0] ?? "", /data-certificate-id/);
   assert.match(certificateSection, /data-certificate-id="class-x"/);
   assert.match(certificateSection, /data-certificate-id="class-xii"/);
   assert.match(certificateSection, /data-certificate-id="mkcl"/);
@@ -197,7 +200,8 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
     assert.match(certificateSection, new RegExp(`data-certificate-id="${certificateId}"`));
   }
   assert.doesNotMatch(certificateSection, /data-reveal/);
-  assert.doesNotMatch(certificateSection, /READY TO UPDATE|Certificate details|title, issuer|TITLE · ISSUER|href=/);
+  assert.equal((certificateSection.match(/\bhref=/g) ?? []).length, 1);
+  assert.doesNotMatch(certificateSection, /READY TO UPDATE|Certificate details|title, issuer|TITLE · ISSUER/);
   assert.ok(homeHtml.indexOf(certificateSection) < homeHtml.indexOf('id="skills"'), "Certificates should precede skills");
   assert.doesNotMatch(homeHtml, /Y\/N/);
   const skillsSection = homeHtml.match(/<section class="section skills-section"[\s\S]*?<\/section>/)?.[0];
@@ -231,6 +235,13 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.equal(lampAudio.status, 200);
   assert.match(lampAudio.headers.get("content-type"), /audio\/mpeg/);
   assert.ok(Number(lampAudio.headers.get("content-length")) > 0);
+
+  const resume = await fetch(`${baseUrl}/assets/kunal-singh-resume.pdf`);
+  assert.equal(resume.status, 200);
+  assert.match(resume.headers.get("content-type"), /application\/pdf/);
+  const resumeBytes = Buffer.from(await resume.arrayBuffer());
+  assert.equal(resumeBytes.toString("ascii", 0, 5), "%PDF-");
+  assert.doesNotMatch(resumeBytes.toString("latin1"), /\/Encrypt\b/);
 
   for (const resultPath of [
     "/results/class-xii-result-2246968.pdf",
@@ -307,7 +318,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.equal(neuralNetwork.status, 200);
   assert.match(neuralNetwork.headers.get("content-type"), /image\/svg\+xml/);
   assert.match(await neuralNetwork.text(), /stroke="#398BFF"/);
-  assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*9%;/);
+  assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*5%;/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit::(?:before|after)/);
   assert.doesNotMatch(portfolioStyles, /\.hero__visual\s*\{[^}]*perspective:/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit-logo::(?:before|after)\s*\{/);
