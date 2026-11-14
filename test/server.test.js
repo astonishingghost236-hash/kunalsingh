@@ -343,7 +343,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(orbitNameStyle, /text-shadow:/);
   assert.doesNotMatch(orbitNameStyle, /\b(?:border|background|box-shadow)\s*:/);
   assert.match(portfolioStyles, /\.hero__stand\s*\{[^}]*border-radius:\s*50%;[^}]*#d0d5d9/);
-  assert.match(portfolioStyles, /\.hero__stand\s*\{[^}]*width:\s*clamp\(220px,\s*66%,\s*390px\)/);
+  assert.match(portfolioStyles, /\.hero__stand\s*\{[^}]*width:\s*clamp\(260px,\s*84%,\s*520px\)/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*50%;\s*left:\s*50%;\s*width:\s*0;\s*height:\s*0;/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit::(?:before|after)/);
   assert.match(portfolioStyles, /\.hero__visual\s*\{[^}]*perspective:\s*900px;/);
