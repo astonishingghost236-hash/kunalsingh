@@ -11,20 +11,7 @@
 }
 
 @media (max-width: 760px) {
-  .intro-screen { padding: 24px 18px; }
-  .intro-screen__content { width: min(100%, 520px); }
-  .intro-screen__eyebrow { margin-bottom: 4px; text-align: center; }
-  .intro-screen__layout { grid-template-columns: 1fr; justify-items: center; gap: 0; }
-  .intro-lamp { width: 100%; height: 310px; }
-  .intro-lamp__icon { width: min(280px, 85vw); height: min(280px, 85vw); }
-  .intro-lamp__glow { top: 55px; width: 220px; }
-  .intro-lamp__beam { top: 172px; width: min(85vw, 390px); height: 135px; }
-  .intro-lamp__projection { top: 255px; font-size: 25px; }
-  .intro-screen__copy { align-items: center; text-align: center; }
-  .intro-screen h1 { font-size: clamp(36px, 10vw, 50px); }
-  .intro-screen__hint { max-width: 320px; margin: 12px 0 14px; font-size: 12px; }
-  .lamp-cord { min-height: 170px; padding-bottom: 0; }
-  .lamp-cord__line { width: 54px; height: 150px; }
+  .audio-start { top: max(13px, env(safe-area-inset-top)); right: 15px; min-height: 38px; padding: 0 10px; font-size: 10px; }
   .site-header { top: max(13px, env(safe-area-inset-top)); left: 15px; }
   .menu-toggle { width: 42px; height: 42px; }
   .hero { width: 100%; height: auto; min-height: max(740px, 100svh); grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(390px, 1fr); align-content: stretch; justify-items: stretch; gap: 0; padding: max(82px, calc(env(safe-area-inset-top) + 72px)) 18px 26px; }

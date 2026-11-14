@@ -2,11 +2,11 @@ import { initNavigation } from "./navigation.js";
 import { loadProjects } from "./projects.js";
 import { initSkillOrbit } from "./skill-orbit.js";
 import { initContactForm } from "./contact.js";
-import { initWelcomeIntro } from "./intro.js";
+import { initVoiceover } from "./audio.js";
 import { initCertificateAccess } from "./certificate-access.js";
 import { initNeuralNetwork } from "./neural-network.js";
 
-initWelcomeIntro();
+initVoiceover();
 initNeuralNetwork();
 initNavigation();
 initCertificateAccess();

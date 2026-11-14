@@ -60,7 +60,6 @@ export function initNeuralNetwork() {
   if (lowPowerDevice) document.documentElement.classList.add("low-power");
 
   const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let introFinished = !document.body.classList.contains("intro-open");
   let animationFrame = 0;
   let frameTimer = 0;
   let activityScheduled = false;
@@ -175,11 +174,11 @@ export function initNeuralNetwork() {
   }
 
   function scheduleNextFrame(delay = 0) {
-    if (animationFrame || frameTimer || document.hidden || !introFinished) return;
+    if (animationFrame || frameTimer || document.hidden) return;
     if (delay > 0) {
       frameTimer = window.setTimeout(() => {
         frameTimer = 0;
-        if (!document.hidden && introFinished) {
+        if (!document.hidden) {
           animationFrame = window.requestAnimationFrame(animate);
         }
       }, delay);
@@ -189,7 +188,7 @@ export function initNeuralNetwork() {
   }
 
   function updateAnimationState() {
-    if (document.hidden || !introFinished) {
+    if (document.hidden) {
       if (animationFrame) window.cancelAnimationFrame(animationFrame);
       if (frameTimer) window.clearTimeout(frameTimer);
       animationFrame = 0;
@@ -205,10 +204,6 @@ export function initNeuralNetwork() {
 
   document.addEventListener("visibilitychange", updateAnimationState);
   reducedMotionQuery.addEventListener("change", updateAnimationState);
-  document.addEventListener("portfolio:intro-complete", () => {
-    introFinished = true;
-    updateAnimationState();
-  }, { once: true });
   updateAnimationState();
 }
 

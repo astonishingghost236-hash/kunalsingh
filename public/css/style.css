@@ -26,7 +26,6 @@
 body { min-width: 320px; margin: 0; background: var(--obsidian); }
 body, button, input, textarea { font-family: var(--body); }
 body.menu-open { overflow: hidden; }
-body.intro-open { overflow: hidden; }
 a { color: inherit; text-decoration: none; }
 button, input, textarea { color: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
@@ -35,50 +34,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .site-shell { position: relative; isolation: isolate; overflow: clip; }
 .cosmic-scene { position: absolute; z-index: -1; inset: 0; overflow: hidden; pointer-events: none; background: #060b14; }
-.intro-screen { position: fixed; z-index: 100; inset: 0; display: grid; overflow: hidden; place-items: center; padding: 32px 20px; color: #eef0f6; background: radial-gradient(ellipse at 24% 48%, rgba(28,78,130,.18), transparent 35%), #05060a; opacity: 1; visibility: visible; transition: opacity .65s ease, visibility .65s ease; }
-.intro-screen[hidden] { display: none; }
-.intro-screen__content { position: relative; display: flex; width: min(100%, 1080px); flex-direction: column; align-items: stretch; }
-.intro-screen__eyebrow { margin: 0 0 28px; color: #898da0; font: 9px var(--mono); letter-spacing: .2em; }
-.intro-screen__layout { display: grid; grid-template-columns: minmax(300px, .92fr) minmax(340px, 1fr); align-items: center; gap: clamp(32px, 8vw, 110px); }
-.intro-lamp { position: relative; display: grid; min-width: 0; height: 430px; place-items: start center; isolation: isolate; }
-.intro-lamp__glow, .intro-lamp__beam { position: absolute; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .65s ease; }
-.intro-lamp__glow { top: 130px; left: 50%; width: 330px; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(255,199,112,.48), rgba(255,160,63,.18) 38%, transparent 72%); filter: blur(15px); transform: translateX(-50%); }
-.intro-lamp__beam { top: 210px; left: 50%; width: min(68vw, 520px); height: 260px; background: linear-gradient(180deg, rgba(255,208,132,.34), rgba(255,179,88,.13) 52%, transparent); clip-path: polygon(22% 0, 78% 0, 100% 100%, 0 100%); transform: translateX(-50%); }
-.intro-lamp__icon { position: relative; z-index: 1; width: 350px; height: 350px; overflow: visible; }
-.intro-lamp__wire { stroke: #777f8e; stroke-linecap: round; stroke-width: 2.5; transition: stroke .4s ease, filter .4s ease; }
-.intro-lamp__socket { fill: #111318; stroke: #30323a; stroke-width: 2; }
-.intro-lamp__shade { fill: #111317; stroke: #383b43; stroke-width: 2; transition: fill .45s ease, stroke .45s ease, filter .45s ease; }
-.intro-lamp__shade-rim { fill: #33343a; stroke: #7a7b80; stroke-width: 2; }
-.intro-lamp__bulb-glass { fill: #24201a; stroke: #84745c; stroke-width: 2; transition: fill .45s ease, stroke .45s ease, filter .45s ease; }
-.intro-lamp__bulb-highlight { stroke: rgba(255,255,255,.25); stroke-linecap: round; stroke-width: 3; opacity: .25; transition: opacity .45s ease; }
-.intro-lamp__projection { position: absolute; z-index: 2; top: 330px; left: 0; width: 100%; margin: 0; color: #fff3dc; font-family: var(--display); font-size: clamp(23px, 3vw, 34px); font-weight: 700; letter-spacing: .02em; text-align: center; text-shadow: 0 0 18px rgba(255,196,104,.95), 0 0 38px rgba(255,166,68,.72); opacity: 0; transform: translateY(12px) scale(.96); transition: opacity .65s ease .18s, transform .65s ease .18s; }
-.intro-screen.is-lit .intro-lamp__glow, .intro-screen.is-lit .intro-lamp__beam { opacity: 1; }
-.intro-screen.is-lit .intro-lamp__bulb-glass { fill: #ffd58a; stroke: #fff0cb; filter: drop-shadow(0 0 24px rgba(255,187,86,.95)); }
-.intro-screen.is-lit .intro-lamp__shade { fill: #17191d; stroke: #5b5143; filter: drop-shadow(0 12px 24px rgba(255,174,79,.16)); }
-.intro-screen.is-lit .intro-lamp__shade-rim { fill: #696158; stroke: #f0c77e; }
-.intro-screen.is-lit .intro-lamp__bulb-highlight { opacity: .8; }
-.intro-screen.is-lit .intro-lamp__projection { opacity: 1; transform: translateY(0) scale(1); }
-.intro-screen__copy { display: flex; flex-direction: column; align-items: flex-start; }
-.intro-screen h1 { margin: 0; color: #eef0f6; font-family: var(--display); font-size: clamp(42px, 6vw, 70px); font-weight: 600; line-height: 1.08; letter-spacing: -.06em; }
-.intro-screen h1 span { color: var(--accent); }
-.intro-screen__hint { max-width: 430px; margin: 22px 0 28px; color: #a4a9b5; font-size: 14px; line-height: 1.7; }
-.lamp-cord { position: relative; z-index: 3; display: flex; min-width: 178px; min-height: 214px; flex-direction: column; align-items: center; padding: 0 14px 6px; border: 0; color: #b7a38a; background: transparent; cursor: grab; touch-action: none; transform: translateY(var(--cord-pull, 0px)); transition: transform .2s ease; }
-.lamp-cord:active, .lamp-cord.is-pulling { cursor: grabbing; }
-.lamp-cord:focus-visible { outline: none; }
-.lamp-cord:focus-visible .lamp-cord__label { color: #fff; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; }
-.lamp-cord__line { position: relative; display: block; width: 64px; height: 190px; }
-.lamp-cord__line svg { position: relative; z-index: 1; display: block; width: 100%; height: 100%; overflow: visible; }
-.lamp-cord__rope-shadow { stroke: #392e23; stroke-linecap: round; stroke-width: 9; }
-.lamp-cord__rope-strand { stroke: #9d8567; stroke-linecap: round; stroke-width: 3.5; }
-.lamp-cord__rope-strand--light { stroke: #c3ad8b; }
-.lamp-cord__ferrule { fill: #b8b2a7; stroke: #e0d5c3; stroke-width: 1; }
-.lamp-cord__socket { fill: #242323; stroke: #77736b; stroke-width: 1.5; }
-.lamp-cord__socket-ridge { stroke: #8d877d; stroke-width: 1.5; }
-.lamp-cord__bulb { fill: rgba(215,204,182,.07); stroke: #c2b9a7; stroke-width: 2; }
-.lamp-cord__bulb-detail { stroke: rgba(240,230,211,.5); stroke-linecap: round; stroke-width: 1.5; }
-.lamp-cord__filament { stroke: #d3b887; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
-.lamp-cord__label { margin-top: 5px; color: #a0a5b1; font: 8px var(--mono); letter-spacing: .14em; white-space: nowrap; }
-.intro-screen.is-leaving { opacity: 0; visibility: hidden; pointer-events: none; }
+.audio-start { position: fixed; z-index: 31; top: 18px; right: 22px; display: inline-flex; min-height: 40px; align-items: center; padding: 0 12px; border: 1px solid rgba(226,231,237,.25); border-radius: 999px; color: var(--ink); background: rgba(10,13,17,.88); font-size: 11px; cursor: pointer; }
+.audio-start[hidden] { display: none; }
+.audio-start:hover { border-color: rgba(226,231,237,.55); background: #111720; }
+.audio-start:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .cosmic-scene__wash { position: absolute; inset: 0; background: radial-gradient(ellipse at 74% 22%, rgba(27,104,214,.19), transparent 37%), radial-gradient(ellipse at 18% 58%, rgba(22,86,176,.12), transparent 38%), linear-gradient(180deg, #07101d 6%, rgba(6,11,20,.96) 72%, #060b14 100%); }
 .cosmic-scene__network { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: hidden; opacity: .23; pointer-events: none; }
 .neural-node { filter: drop-shadow(0 0 7px rgba(104,180,255,.8)); }

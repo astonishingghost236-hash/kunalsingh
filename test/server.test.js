@@ -49,17 +49,11 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.doesNotMatch(homeHtml, /Making the digital feel|A little about me/);
   assert.match(homeHtml, /Kunal Singh/);
   assert.match(homeHtml, /<title>Kunal Singh<\/title>/);
-  assert.match(homeHtml, /KUNAL SINGH · PORTFOLIO/);
   assert.doesNotMatch(homeHtml, /GAUTAM SINGH/);
-  assert.match(homeHtml, /Welcome To<br>My <span>Portfolio\.<\/span>/);
   assert.doesNotMatch(homeHtml, /<footer\b|site-footer|footer-nav|footer-top/);
-  assert.match(homeHtml, /Pull the cord to switch on the light and see my resume\./);
-  assert.match(homeHtml, /id="lamp-cord"/);
-  assert.match(homeHtml, /class="lamp-cord__rope-strand"/);
-  assert.match(homeHtml, /class="lamp-cord__bulb"/);
-  assert.match(homeHtml, /class="intro-lamp__projection"[^>]*>Kunal Singh<\/p>/);
-  assert.match(homeHtml, /class="intro-lamp__shade"/);
-  assert.match(homeHtml, /class="intro-lamp__shade-rim"/);
+  assert.doesNotMatch(homeHtml, /intro-screen|intro-lamp|lamp-cord/);
+  assert.match(homeHtml, /<audio id="voice-over" src="\/assets\/playht-voice-over\.mp3" preload="auto" autoplay><\/audio>/);
+  assert.match(homeHtml, /<button class="audio-start" id="audio-start" type="button" hidden>Play voice-over<\/button>/);
   assert.doesNotMatch(homeHtml, /data-theme|theme-switcher|theme-option/);
   assert.doesNotMatch(homeHtml, /id="intro-switch"/);
   const heroSection = homeHtml.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0];
@@ -137,14 +131,15 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(styles, /\.hero__orbit-travel--python \{ --logo-accent: #3776AB; \}/);
   assert.match(styles, /\.hero__orbit-travel--node \{ --logo-accent: #83CD29; \}/);
   assert.match(styles, /\.button--primary\s*\{[^}]*background:\s*#7aa9dc/);
-  assert.match(styles, /\.intro-screen\.is-lit \.intro-lamp__bulb-glass\s*\{[^}]*fill:\s*#ffd58a/);
-  assert.doesNotMatch(styles, /\.intro-screen\.is-lit \.lamp-cord(?:__line|__bulb)/);
-  const introScriptResponse = await fetch(`${baseUrl}/js/intro.js`);
-  assert.equal(introScriptResponse.status, 200);
-  const introScript = await introScriptResponse.text();
-  assert.match(introScript, /new Audio\("\/assets\/playht-voice-over\.mp3"\)/);
-  assert.match(introScript, /lampAudio\.preload = "none"/);
-  assert.match(introScript, /lampAudio\.play\(\)/);
+  assert.match(styles, /\.audio-start\[hidden\]\s*\{\s*display:\s*none;/);
+  const audioScriptResponse = await fetch(`${baseUrl}/js/audio.js`);
+  assert.equal(audioScriptResponse.status, 200);
+  const audioScript = await audioScriptResponse.text();
+  assert.match(audioScript, /await voiceover\.play\(\)/);
+  assert.match(audioScript, /error instanceof DOMException && error\.name === "NotAllowedError"/);
+  assert.match(audioScript, /showPlaybackButton\(autoplayBlocked \? "Play voice-over" : "Retry voice-over"\)/);
+  assert.match(audioScript, /voiceover\.addEventListener\("ended"/);
+  assert.match(audioScript, /void playVoiceover\(\)/);
   assert.match(contactSection, /<form\b[^>]*action="https:\/\/api\.web3forms\.com\/submit"/);
   assert.match(contactSection, /name="access_key" value="42b80d09-1d02-4158-acd9-ca392cd6a5e8"/);
   assert.doesNotMatch(contactSection, /type="file"|name="phone"|PHONE NUMBER/);
@@ -239,10 +234,10 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.equal(portrait.status, 200);
   assert.match(portrait.headers.get("content-type"), /image\/webp/);
 
-  const lampAudio = await fetch(`${baseUrl}/assets/playht-voice-over.mp3`);
-  assert.equal(lampAudio.status, 200);
-  assert.match(lampAudio.headers.get("content-type"), /audio\/mpeg/);
-  assert.ok(Number(lampAudio.headers.get("content-length")) > 0);
+  const voiceoverAudio = await fetch(`${baseUrl}/assets/playht-voice-over.mp3`);
+  assert.equal(voiceoverAudio.status, 200);
+  assert.match(voiceoverAudio.headers.get("content-type"), /audio\/mpeg/);
+  assert.ok(Number(voiceoverAudio.headers.get("content-length")) > 0);
 
   const resume = await fetch(`${baseUrl}/assets/kunal-singh-resume.pdf`);
   assert.equal(resume.status, 200);
@@ -316,7 +311,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   });
   assert.equal(disabledContactEndpoint.status, 404);
 
-  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/skill-orbit.js", "/js/neural-network.js", "/js/contact.js", "/js/intro.js", "/js/certificate-access.js"]) {
+  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/skill-orbit.js", "/js/neural-network.js", "/js/contact.js", "/js/audio.js", "/js/certificate-access.js"]) {
     const asset = await fetch(`${baseUrl}${localPath}`);
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
@@ -377,7 +372,7 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   assert.match(skillOrbitScript, /direct children of the hero visual/);
   assert.equal((skillOrbitScript.match(/addEventListener\("visibilitychange"/g) ?? []).length, 1);
   assert.match(skillOrbitScript, /reducedMotionQuery\.addEventListener\("change", updateAnimationState\)/);
-  assert.match(skillOrbitScript, /portfolio:intro-complete/);
+  assert.doesNotMatch(skillOrbitScript, /portfolio:intro-complete|introFinished/);
   assert.match(skillOrbitScript, /visibilityObserver\.observe\(heroVisual\)/);
   assert.match(skillOrbitScript, /"ResizeObserver" in window/);
   assert.match(portfolioStyles, /height:\s*min\(700px,\s*calc\(100svh - 150px\)\)/);

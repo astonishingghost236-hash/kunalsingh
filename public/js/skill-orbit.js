@@ -6,7 +6,6 @@ export function initSkillOrbit() {
   const orbiters = [...document.querySelectorAll(".hero__orbit-travel")];
   if (!heroVisual || orbiters.length === 0) return;
 
-  let introFinished = !document.body.classList.contains("intro-open");
   let orbitVisible = !("IntersectionObserver" in window);
   const { radiusX, radiusZ } = getOrbitRadii(heroVisual);
   const animations = orbiters.map((orbiter) => {
@@ -126,7 +125,7 @@ export function initSkillOrbit() {
   }
 
   function updateAnimationState() {
-    const shouldPause = document.hidden || !introFinished || !orbitVisible;
+    const shouldPause = document.hidden || !orbitVisible;
     if (shouldPause) {
       animations.forEach(({ animation, labelAnimation }) => {
         animation.pause();
@@ -152,10 +151,6 @@ export function initSkillOrbit() {
     visibilityObserver.observe(heroVisual);
   }
   document.addEventListener("visibilitychange", updateAnimationState);
-  document.addEventListener("portfolio:intro-complete", () => {
-    introFinished = true;
-    updateAnimationState();
-  }, { once: true });
   reducedMotionQuery.addEventListener("change", updateAnimationState);
   updateAnimationState();
 }
