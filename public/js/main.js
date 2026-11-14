@@ -4,8 +4,10 @@ import { initSkillOrbit } from "./skill-orbit.js";
 import { initContactForm } from "./contact.js";
 import { initWelcomeIntro } from "./intro.js";
 import { initCertificateAccess } from "./certificate-access.js";
+import { initNeuralNetwork } from "./neural-network.js";
 
 initWelcomeIntro();
+initNeuralNetwork();
 initNavigation();
 initCertificateAccess();
 loadProjects();

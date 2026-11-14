@@ -315,22 +315,23 @@ test("serves the portfolio, lists projects and enables the Web3Forms contact for
   });
   assert.equal(disabledContactEndpoint.status, 404);
 
-  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/skill-orbit.js", "/js/contact.js", "/js/intro.js", "/js/certificate-access.js"]) {
+  for (const localPath of ["/css/style.css", "/css/responsive.css", "/js/main.js", "/js/navigation.js", "/js/projects.js", "/js/skill-orbit.js", "/js/neural-network.js", "/js/contact.js", "/js/intro.js", "/js/certificate-access.js"]) {
     const asset = await fetch(`${baseUrl}${localPath}`);
     assert.equal(asset.status, 200, `${localPath} should load`);
   }
   const portfolioStyles = await (await fetch(`${baseUrl}/css/style.css`)).text();
-  assert.match(portfolioStyles, /url\("\/assets\/neural-network\.svg"\)/);
-  const neuralNetwork = await fetch(`${baseUrl}/assets/neural-network.svg`);
-  assert.equal(neuralNetwork.status, 200);
-  assert.match(neuralNetwork.headers.get("content-type"), /image\/svg\+xml/);
-  const neuralNetworkSvg = await neuralNetwork.text();
-  assert.match(neuralNetworkSvg, /stroke="#398BFF"/);
-  const neuralNodes = [...neuralNetworkSvg.matchAll(/class="neural-node"[^>]*animation-delay:\s*(-[\d.]+)s/g)];
-  assert.equal(neuralNodes.length, 20);
-  assert.equal(new Set(neuralNodes.map(([, delay]) => delay)).size, 20);
-  assert.match(neuralNetworkSvg, /@keyframes node-blink/);
-  assert.match(neuralNetworkSvg, /prefers-reduced-motion: reduce/);
+  const neuralNetworkSvg = homeHtml.match(/<svg class="cosmic-scene__network"[\s\S]*?<\/svg>/)?.[0];
+  assert.ok(neuralNetworkSvg, "Animated neural network should be present in the background");
+  assert.equal((neuralNetworkSvg.match(/class="neural-node"/g) ?? []).length, 20);
+  assert.equal((neuralNetworkSvg.match(/class="neural-link"/g) ?? []).length, 6);
+  assert.match(neuralNetworkSvg, /pattern id="neural-network-pattern"/);
+  const neuralNetworkScript = await (await fetch(`${baseUrl}/js/neural-network.js`)).text();
+  assert.match(neuralNetworkScript, /node\.nextPulseAt = time \+ randomBetween/);
+  assert.match(neuralNetworkScript, /node\.targetX = clamp\(node\.baseX \+ randomBetween/);
+  assert.match(neuralNetworkScript, /link\.element\.setAttribute\("points", points\)/);
+  assert.match(neuralNetworkScript, /if \(activityScheduled\) scheduleActivity\(performance\.now\(\)\)/);
+  assert.match(portfolioStyles, /\.cosmic-scene__network\s*\{[^}]*width:\s*100%;[^}]*height:\s*100%;/);
+  assert.match(portfolioStyles, /\.hero__orbit-name\s*\{[^}]*background:\s*rgba\(6,11,20,\.96\);[^}]*font:\s*700 11px var\(--body\);/);
   assert.match(portfolioStyles, /\.hero__orbit-travel\s*\{\s*position:\s*absolute;\s*z-index:\s*0;\s*top:\s*50%;\s*left:\s*50%;\s*width:\s*0;\s*height:\s*0;/);
   assert.doesNotMatch(portfolioStyles, /\.hero__orbit::(?:before|after)/);
   assert.match(portfolioStyles, /\.hero__visual\s*\{[^}]*perspective:\s*900px;/);
